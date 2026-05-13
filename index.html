@@ -11,7 +11,6 @@
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
     body { font-family: 'DM Sans', sans-serif; min-height: 100vh; transition: background 1s ease; }
 
     body.t-morning  { --bg:#fdf6e3; --surface:#f5ebc8; --border:#dfc98a; --text:#2e1e06; --muted:#a07840; --accent:#c4700a; --accent2:#4a8a50; --danger:#c03020; --card:#f5ebc8; }
@@ -23,14 +22,12 @@
 
     #app { max-width: 640px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 28px; }
 
-    /* CLOCK */
     #clock-section { text-align: center; padding: 32px 0 28px; border-bottom: 1px solid var(--border); }
     #period-icon { font-size: 36px; margin-bottom: 8px; display: block; }
     #time { font-family: 'DM Serif Display', serif; font-size: clamp(80px, 22vw, 130px); line-height: 1; letter-spacing: -2px; font-variant-numeric: tabular-nums; color: var(--text); }
     #day { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(22px, 6vw, 34px); color: var(--accent); margin-top: 10px; }
     #date { font-size: clamp(14px, 4vw, 18px); color: var(--muted); margin-top: 4px; font-weight: 300; }
 
-    /* NEXT BANNER */
     #next-banner { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 12px; padding: 16px 20px; display: none; }
     #next-banner.urgent { border-left-color: var(--danger); }
     #next-banner.gcal { border-left-color: #4a8ad4; }
@@ -39,13 +36,11 @@
     .banner-time { color: var(--accent); margin-top: 3px; font-size: clamp(13px, 3.5vw, 16px); }
     #next-banner.urgent .banner-time { color: var(--danger); }
 
-    /* SECTION */
     .section-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
     .sync-status { font-size: 11px; }
     .sync-status.ok { color: var(--accent2); }
     .sync-status.err { color: var(--danger); }
 
-    /* REMINDERS */
     #reminders-list { display: flex; flex-direction: column; gap: 8px; }
     .reminder { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 16px; }
     .reminder.past { opacity: 0.45; }
@@ -65,7 +60,6 @@
     .r-delete:active { color: var(--danger); }
     .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 15px; font-style: italic; }
 
-    /* ADD FORM */
     #add-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
     .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
     .form-row input, .form-row select { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
@@ -75,7 +69,6 @@
     #r-repeat { width: 130px; color: var(--text); }
     #add-btn { width: 100%; background: var(--accent); color: var(--bg); border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
 
-    /* CALENDAR SETTINGS */
     #cal-toggle { text-align: center; font-size: 13px; color: var(--muted); cursor: pointer; padding: 4px; }
     #cal-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: none; }
     #cal-section.open { display: block; }
@@ -91,7 +84,6 @@
 <body class="t-morning">
 
 <div id="app">
-
   <div id="clock-section">
     <span id="period-icon">☀️</span>
     <div id="time">--:--</div>
@@ -132,17 +124,17 @@
 
   <div id="cal-section">
     <div class="section-label">Google Calendar</div>
-    <p>Collez l'URL iCal publique de votre calendrier Google. Les événements du jour s'afficheront automatiquement.</p>
+    <p>Collez l'URL iCal publique de votre Google Calendar. Les événements du jour s'afficheront automatiquement.</p>
     <input type="text" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
     <button id="cal-save-btn" onclick="saveCalUrl()">Connecter</button>
     <div id="cal-status"></div>
   </div>
-
 </div>
 
 <script>
   const DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
   const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const PROXY = 'https://repere-liard.vercel.app/api/proxy?url=';
 
   let localReminders = [];
   let gcalEvents = [];
@@ -199,7 +191,6 @@
     render();
   }
 
-  // ICAL
   function toggleCal() {
     const s = document.getElementById('cal-section');
     s.classList.toggle('open');
@@ -231,12 +222,8 @@
 
   async function fetchIcal() {
     if (!calUrl) return;
-
-    // Use a CORS proxy for iCal
-    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(calUrl);
-
     try {
-      const res = await fetch(proxyUrl);
+      const res = await fetch(PROXY + encodeURIComponent(calUrl));
       if (!res.ok) throw new Error('fetch failed');
       const text = await res.text();
       gcalEvents = parseIcal(text);
@@ -246,7 +233,7 @@
       render();
     } catch(e) {
       setSync('Hors ligne', 'err');
-      setCalStatus('Erreur de connexion. Vérifiez l\'URL.', 'err');
+      setCalStatus('Erreur de connexion. Vérifiez l\'URL et que le calendrier est public.', 'err');
     }
   }
 
@@ -257,44 +244,47 @@
       String(today.getDate()).padStart(2,'0');
 
     const events = [];
-    const lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').split('\n');
+    const lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
     let inEvent = false, ev = {};
 
     for (const line of lines) {
       if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
       else if (line === 'END:VEVENT') {
-        if (inEvent && ev.summary) {
-          events.push(ev);
-        }
+        if (inEvent && ev.summary && ev.today) events.push(ev);
         inEvent = false; ev = {};
       } else if (inEvent) {
         if (line.startsWith('SUMMARY:')) ev.summary = line.slice(8).trim();
         else if (line.startsWith('DTSTART')) {
           const val = line.split(':').slice(1).join(':').trim();
-          const dateStr = val.replace(/T.*/, '');
+          const dateStr = val.replace(/T.*/, '').replace('Z','');
           if (dateStr === todayStr) {
+            ev.today = true;
             if (val.includes('T')) {
               const timePart = val.replace(/.*T/, '').replace('Z','');
               let h = parseInt(timePart.slice(0,2));
               const m = timePart.slice(2,4);
-              // crude UTC→local offset (won't be perfect but fine for display)
-              const offset = -today.getTimezoneOffset() / 60;
-              h = (h + offset + 24) % 24;
-              ev.time = String(h).padStart(2,'0') + ':' + m;
+              if (val.endsWith('Z')) {
+                const offset = -today.getTimezoneOffset() / 60;
+                h = (h + offset + 24) % 24;
+              }
+              ev.time = String(Math.floor(h)).padStart(2,'0') + ':' + m;
               ev.allDay = false;
             } else {
               ev.time = 'Toute la journée';
               ev.allDay = true;
             }
-            ev.today = true;
           }
         }
       }
     }
 
-    return events
-      .filter(e => e.today)
-      .map(e => ({ id: 'ical_' + Math.random(), time: e.time, text: e.summary, source: 'gcal', allDay: e.allDay }));
+    return events.map(e => ({
+      id: 'ical_' + e.summary + '_' + Math.random(),
+      time: e.time,
+      text: e.summary,
+      source: 'gcal',
+      allDay: e.allDay
+    }));
   }
 
   function render() {
@@ -353,7 +343,6 @@
     }).join('');
   }
 
-  // INIT
   loadLocal();
   calUrl = localStorage.getItem('repere_calurl') || '';
   render();
