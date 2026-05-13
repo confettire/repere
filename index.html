@@ -12,367 +12,88 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      transition: background 1s ease, color 0.5s ease;
-    }
+    body { font-family: 'DM Sans', sans-serif; min-height: 100vh; transition: background 1s ease; }
 
-    /* ── THEMES ── */
-    body.t-morning {
-      --bg: #fdf6e3;
-      --surface: #f5ebc8;
-      --surface2: #eedfa8;
-      --border: #dfc98a;
-      --text: #2e1e06;
-      --muted: #a07840;
-      --accent: #c4700a;
-      --accent2: #4a8a50;
-      --danger: #c03020;
-      --next-bg: #f0e4b0;
-      --card-bg: #f5ebc8;
-      --icon: '☀️';
-    }
-
-    body.t-afternoon {
-      --bg: #eef3f8;
-      --surface: #dde8f2;
-      --surface2: #ccdaec;
-      --border: #a8c4de;
-      --text: #0e2040;
-      --muted: #4a6a9a;
-      --accent: #1a5fa8;
-      --accent2: #1a7a50;
-      --danger: #c03020;
-      --next-bg: #cce0f5;
-      --card-bg: #dde8f2;
-      --icon: '🌤';
-    }
-
-    body.t-evening {
-      --bg: #f5925a;
-      --surface: rgba(255,255,255,0.22);
-      --surface2: rgba(255,255,255,0.15);
-      --border: rgba(90,30,0,0.2);
-      --text: #1a0800;
-      --muted: #5c2200;
-      --accent: #3d1200;
-      --accent2: #1a4a20;
-      --danger: #7a0a00;
-      --next-bg: rgba(255,255,255,0.25);
-      --card-bg: rgba(255,255,255,0.22);
-      --icon: '🌅';
-    }
-
-    body.t-night {
-      --bg: #141820;
-      --surface: #1e2430;
-      --surface2: #262e3e;
-      --border: #2e3a50;
-      --text: #c8d8f0;
-      --muted: #5a7aaa;
-      --accent: #7aaae0;
-      --accent2: #4aaa80;
-      --danger: #e07060;
-      --next-bg: #1a2a40;
-      --card-bg: #1e2430;
-      --icon: '🌙';
-    }
+    body.t-morning  { --bg:#fdf6e3; --surface:#f5ebc8; --border:#dfc98a; --text:#2e1e06; --muted:#a07840; --accent:#c4700a; --accent2:#4a8a50; --danger:#c03020; --card:#f5ebc8; }
+    body.t-afternoon{ --bg:#eef3f8; --surface:#dde8f2; --border:#a8c4de; --text:#0e2040; --muted:#4a6a9a; --accent:#1a5fa8; --accent2:#1a7a50; --danger:#c03020; --card:#dde8f2; }
+    body.t-evening  { --bg:#f5925a; --surface:rgba(255,255,255,0.22); --border:rgba(90,30,0,0.2); --text:#1a0800; --muted:#5c2200; --accent:#3d1200; --accent2:#1a4a20; --danger:#7a0a00; --card:rgba(255,255,255,0.22); }
+    body.t-night    { --bg:#141820; --surface:#1e2430; --border:#2e3a50; --text:#c8d8f0; --muted:#5a7aaa; --accent:#7aaae0; --accent2:#4aaa80; --danger:#e07060; --card:#1e2430; }
 
     body { background: var(--bg); color: var(--text); }
 
-    /* ── SETUP SCREEN ── */
-    #setup-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 20px;
-      background: #fdf6e3;
-    }
+    #app { max-width: 640px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 28px; }
 
-    #setup-card {
-      background: #f5ebc8;
-      border: 1px solid #dfc98a;
-      border-radius: 20px;
-      padding: 36px 28px;
-      width: 100%;
-      max-width: 480px;
-    }
+    /* CLOCK */
+    #clock-section { text-align: center; padding: 32px 0 28px; border-bottom: 1px solid var(--border); }
+    #period-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+    #time { font-family: 'DM Serif Display', serif; font-size: clamp(80px, 22vw, 130px); line-height: 1; letter-spacing: -2px; font-variant-numeric: tabular-nums; color: var(--text); }
+    #day { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(22px, 6vw, 34px); color: var(--accent); margin-top: 10px; }
+    #date { font-size: clamp(14px, 4vw, 18px); color: var(--muted); margin-top: 4px; font-weight: 300; }
 
-    #setup-card h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 36px;
-      color: #2e1e06;
-      margin-bottom: 6px;
-    }
-
-    #setup-card .subtitle {
-      color: #a07840;
-      font-size: 14px;
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-
-    .setup-field { margin-bottom: 16px; }
-
-    .setup-field label {
-      display: block;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #a07840;
-      margin-bottom: 8px;
-    }
-
-    .setup-field input {
-      width: 100%;
-      background: #fdf6e3;
-      border: 1px solid #dfc98a;
-      color: #2e1e06;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 15px;
-      font-family: 'DM Sans', sans-serif;
-      outline: none;
-    }
-
-    .setup-field input:focus { border-color: #c4700a; }
-
-    .setup-field .hint {
-      font-size: 11px;
-      color: #a07840;
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    .setup-field .hint a { color: #1a5fa8; }
-
-    #setup-btn {
-      width: 100%;
-      background: #c4700a;
-      color: #fdf6e3;
-      border: none;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 500;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    #setup-error {
-      color: #c03020;
-      font-size: 13px;
-      margin-top: 12px;
-      display: none;
-    }
-
-    /* ── MAIN APP ── */
-    #app { display: none; max-width: 640px; margin: 0 auto; padding: 40px 20px 60px; flex-direction: column; gap: 28px; }
-    #app.visible { display: flex; }
-
-    /* ── CLOCK ── */
-    #clock-section {
-      text-align: center;
-      padding: 32px 0 28px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    #period-icon {
-      font-size: 36px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    #time {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(80px, 22vw, 130px);
-      line-height: 1;
-      letter-spacing: -2px;
-      font-variant-numeric: tabular-nums;
-      color: var(--text);
-    }
-
-    #day {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: clamp(22px, 6vw, 34px);
-      color: var(--accent);
-      margin-top: 10px;
-    }
-
-    #date {
-      font-size: clamp(14px, 4vw, 18px);
-      color: var(--muted);
-      margin-top: 4px;
-      font-weight: 300;
-    }
-
-    /* ── NEXT BANNER ── */
-    #next-banner {
-      background: var(--next-bg);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--accent);
-      border-radius: 12px;
-      padding: 16px 20px;
-      display: none;
-    }
-
+    /* NEXT BANNER */
+    #next-banner { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 12px; padding: 16px 20px; display: none; }
     #next-banner.urgent { border-left-color: var(--danger); }
-    #next-banner.gcal { border-left-color: #1a5fa8; }
-
+    #next-banner.gcal { border-left-color: #4a8ad4; }
     .banner-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
     .banner-text { font-size: clamp(16px, 4.5vw, 22px); font-weight: 500; color: var(--text); }
     .banner-time { color: var(--accent); margin-top: 3px; font-size: clamp(13px, 3.5vw, 16px); }
     #next-banner.urgent .banner-time { color: var(--danger); }
 
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
+    /* SECTION */
+    .section-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
     .sync-status { font-size: 11px; }
     .sync-status.ok { color: var(--accent2); }
     .sync-status.err { color: var(--danger); }
-    .sync-status.loading { color: var(--muted); }
 
-    /* ── REMINDERS ── */
+    /* REMINDERS */
     #reminders-list { display: flex; flex-direction: column; gap: 8px; }
-
-    .reminder {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
+    .reminder { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 16px; }
     .reminder.past { opacity: 0.45; }
     .reminder.next { border-left: 4px solid var(--accent); }
     .reminder.urgent { border-left: 4px solid var(--danger); }
     .reminder.gcal-event { border-left: 4px solid #4a8ad4; }
-    .reminder.gcal-event.next { border-left-color: #1a5fa8; }
-
-    .r-time {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(22px, 6vw, 30px);
-      min-width: 76px;
-      color: var(--muted);
-    }
-
+    .r-time { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 6vw, 30px); min-width: 76px; color: var(--muted); }
     .reminder.next .r-time { color: var(--accent); }
     .reminder.urgent .r-time { color: var(--danger); }
     .reminder.gcal-event .r-time { color: #4a8ad4; }
-
     .r-body { flex: 1; }
     .r-text { font-size: clamp(16px, 4.5vw, 20px); color: var(--text); line-height: 1.3; }
     .reminder.past .r-text { color: var(--muted); }
     .r-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
     .r-source { font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #4a8ad4; margin-top: 2px; }
-
     .r-delete { background: none; border: none; color: var(--border); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; line-height: 1; }
     .r-delete:active { color: var(--danger); }
-
     .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 15px; font-style: italic; }
 
-    /* ── ADD FORM ── */
-    #add-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-    }
-
+    /* ADD FORM */
+    #add-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
     .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-
-    .form-row input, .form-row select {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 16px;
-      font-family: 'DM Sans', sans-serif;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
+    .form-row input, .form-row select { background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: 'DM Sans', sans-serif; outline: none; -webkit-appearance: none; }
     .form-row input:focus, .form-row select:focus { border-color: var(--accent); }
-
     #r-text { flex: 1; min-width: 160px; }
     #r-time { width: 120px; }
     #r-repeat { width: 130px; color: var(--text); }
+    #add-btn { width: 100%; background: var(--accent); color: var(--bg); border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
 
-    #add-btn {
-      width: 100%;
-      background: var(--accent);
-      color: var(--bg);
-      border: none;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 500;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-    }
-
-    #settings-link {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      cursor: pointer;
-      padding-top: 4px;
-      opacity: 0.6;
-    }
+    /* CALENDAR SETTINGS */
+    #cal-toggle { text-align: center; font-size: 13px; color: var(--muted); cursor: pointer; padding: 4px; }
+    #cal-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: none; }
+    #cal-section.open { display: block; }
+    #cal-section p { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+    #cal-section input { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; margin-bottom: 10px; }
+    #cal-section input:focus { border-color: var(--accent); }
+    #cal-save-btn { width: 100%; background: var(--accent); color: var(--bg); border: none; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+    #cal-status { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+    #cal-status.ok { color: var(--accent2); }
+    #cal-status.err { color: var(--danger); }
   </style>
 </head>
 <body class="t-morning">
 
-<!-- SETUP -->
-<div id="setup-screen">
-  <div id="setup-card">
-    <h1>Repère</h1>
-    <p class="subtitle">Connectez un Google Calendar pour afficher les événements automatiquement sur l'iPad.</p>
-
-    <div class="setup-field">
-      <label>Clé API Google Calendar</label>
-      <input type="text" id="setup-apikey" placeholder="AIzaSy..." autocomplete="off" autocorrect="off" spellcheck="false" />
-      <div class="hint">
-        Créez une clé sur <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> → APIs &amp; Services → Credentials
-      </div>
-    </div>
-
-    <div class="setup-field">
-      <label>ID du calendrier</label>
-      <input type="text" id="setup-calid" placeholder="exemple@gmail.com" autocomplete="off" autocorrect="off" spellcheck="false" />
-      <div class="hint">Google Calendar → ⚙️ Paramètres → "Intégrer le calendrier" → ID du calendrier</div>
-    </div>
-
-    <div class="setup-field">
-      <label>Prénom (optionnel)</label>
-      <input type="text" id="setup-name" placeholder="Mamie, Papi…" />
-    </div>
-
-    <button id="setup-btn" onclick="saveSetup()">Connecter →</button>
-    <div id="setup-error"></div>
-  </div>
-</div>
-
-<!-- APP -->
 <div id="app">
+
   <div id="clock-section">
-    <span id="period-icon"></span>
+    <span id="period-icon">☀️</span>
     <div id="time">--:--</div>
     <div id="day">---</div>
     <div id="date">---</div>
@@ -387,7 +108,7 @@
   <div>
     <div class="section-label">
       <span>Aujourd'hui</span>
-      <span class="sync-status loading" id="sync-status">…</span>
+      <span class="sync-status" id="sync-status"></span>
     </div>
     <div id="reminders-list"></div>
   </div>
@@ -407,7 +128,16 @@
     <button id="add-btn" onclick="addReminder()">+ Ajouter</button>
   </div>
 
-  <div id="settings-link" onclick="resetSetup()">⚙️ Changer de calendrier</div>
+  <div id="cal-toggle" onclick="toggleCal()">📅 Connecter Google Calendar (optionnel)</div>
+
+  <div id="cal-section">
+    <div class="section-label">Google Calendar</div>
+    <p>Collez l'URL iCal publique de votre calendrier Google. Les événements du jour s'afficheront automatiquement.</p>
+    <input type="text" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
+    <button id="cal-save-btn" onclick="saveCalUrl()">Connecter</button>
+    <div id="cal-status"></div>
+  </div>
+
 </div>
 
 <script>
@@ -416,7 +146,7 @@
 
   let localReminders = [];
   let gcalEvents = [];
-  let config = {};
+  let calUrl = '';
 
   function getTheme(h) {
     if (h >= 6 && h < 12) return { cls: 't-morning', icon: '☀️' };
@@ -426,94 +156,15 @@
   }
 
   function applyTheme() {
-    const h = new Date().getHours();
-    const { cls, icon } = getTheme(h);
+    const { cls, icon } = getTheme(new Date().getHours());
     document.body.className = cls;
     document.getElementById('period-icon').textContent = icon;
   }
 
-  function loadConfig() {
-    try { config = JSON.parse(localStorage.getItem('repere_config') || '{}'); } catch(e) { config = {}; }
-    return config.apiKey && config.calId;
-  }
-
-  async function saveSetup() {
-    const apiKey = document.getElementById('setup-apikey').value.trim();
-    const calId = document.getElementById('setup-calid').value.trim();
-    const name = document.getElementById('setup-name').value.trim();
-    const errEl = document.getElementById('setup-error');
-
-    if (!apiKey || !calId) {
-      errEl.textContent = 'Veuillez remplir la clé API et l\'ID du calendrier.';
-      errEl.style.display = 'block';
-      return;
-    }
-
-    document.getElementById('setup-btn').textContent = 'Vérification…';
-    errEl.style.display = 'none';
-
-    const ok = await testCalendar(apiKey, calId);
-    if (!ok) {
-      document.getElementById('setup-btn').textContent = 'Connecter →';
-      errEl.textContent = 'Impossible de se connecter. Vérifiez la clé API et l\'ID du calendrier.';
-      errEl.style.display = 'block';
-      return;
-    }
-
-    config = { apiKey, calId, name };
-    localStorage.setItem('repere_config', JSON.stringify(config));
-    startApp();
-  }
-
-  function resetSetup() {
-    document.getElementById('app').classList.remove('visible');
-    document.getElementById('setup-screen').style.display = 'flex';
-    document.getElementById('setup-apikey').value = config.apiKey || '';
-    document.getElementById('setup-calid').value = config.calId || '';
-    document.getElementById('setup-name').value = config.name || '';
-    document.getElementById('setup-btn').textContent = 'Connecter →';
-    document.getElementById('setup-error').style.display = 'none';
-  }
-
-  async function testCalendar(apiKey, calId) {
-    try {
-      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calId)}/events?key=${apiKey}&maxResults=1&timeMin=${new Date().toISOString()}&singleEvents=true`;
-      const res = await fetch(url);
-      return res.ok;
-    } catch(e) { return false; }
-  }
-
-  async function fetchGcalEvents() {
-    if (!config.apiKey || !config.calId) return;
-    const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString();
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(config.calId)}/events?key=${config.apiKey}&timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`;
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) { setSync('Erreur sync', 'err'); return; }
-      const data = await res.json();
-      gcalEvents = (data.items || []).map(e => {
-        let timeStr = 'Toute la journée';
-        if (e.start.dateTime) {
-          const d = new Date(e.start.dateTime);
-          timeStr = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
-        }
-        return { id: 'gcal_' + e.id, time: timeStr, text: e.summary || 'Événement', source: 'gcal', allDay: !e.start.dateTime };
-      });
-      const n = new Date();
-      setSync('Sync ' + String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0'), 'ok');
-      render();
-    } catch(e) {
-      setSync('Hors ligne', 'err');
-    }
-  }
-
-  function setSync(text, cls) {
-    const el = document.getElementById('sync-status');
-    el.textContent = text;
-    el.className = 'sync-status ' + cls;
+  function toMins(t) {
+    if (!t || t === 'Toute la journée') return -1;
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
   }
 
   function loadLocal() {
@@ -529,12 +180,6 @@
   }
 
   function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
-
-  function toMins(t) {
-    if (!t || t === 'Toute la journée') return -1;
-    const [h, m] = t.split(':').map(Number);
-    return h * 60 + m;
-  }
 
   function addReminder() {
     const text = document.getElementById('r-text').value.trim();
@@ -554,6 +199,104 @@
     render();
   }
 
+  // ICAL
+  function toggleCal() {
+    const s = document.getElementById('cal-section');
+    s.classList.toggle('open');
+    if (s.classList.contains('open') && calUrl) {
+      document.getElementById('cal-url').value = calUrl;
+    }
+  }
+
+  function saveCalUrl() {
+    const url = document.getElementById('cal-url').value.trim();
+    if (!url) return;
+    calUrl = url;
+    localStorage.setItem('repere_calurl', calUrl);
+    setCalStatus('Connexion…', '');
+    fetchIcal();
+  }
+
+  function setCalStatus(msg, cls) {
+    const el = document.getElementById('cal-status');
+    el.textContent = msg;
+    el.className = cls;
+  }
+
+  function setSync(text, cls) {
+    const el = document.getElementById('sync-status');
+    el.textContent = text;
+    el.className = 'sync-status ' + cls;
+  }
+
+  async function fetchIcal() {
+    if (!calUrl) return;
+
+    // Use a CORS proxy for iCal
+    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(calUrl);
+
+    try {
+      const res = await fetch(proxyUrl);
+      if (!res.ok) throw new Error('fetch failed');
+      const text = await res.text();
+      gcalEvents = parseIcal(text);
+      const n = new Date();
+      setSync('Sync ' + String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0'), 'ok');
+      setCalStatus('✓ Calendrier connecté', 'ok');
+      render();
+    } catch(e) {
+      setSync('Hors ligne', 'err');
+      setCalStatus('Erreur de connexion. Vérifiez l\'URL.', 'err');
+    }
+  }
+
+  function parseIcal(text) {
+    const today = new Date();
+    const todayStr = today.getFullYear().toString() +
+      String(today.getMonth()+1).padStart(2,'0') +
+      String(today.getDate()).padStart(2,'0');
+
+    const events = [];
+    const lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').split('\n');
+    let inEvent = false, ev = {};
+
+    for (const line of lines) {
+      if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
+      else if (line === 'END:VEVENT') {
+        if (inEvent && ev.summary) {
+          events.push(ev);
+        }
+        inEvent = false; ev = {};
+      } else if (inEvent) {
+        if (line.startsWith('SUMMARY:')) ev.summary = line.slice(8).trim();
+        else if (line.startsWith('DTSTART')) {
+          const val = line.split(':').slice(1).join(':').trim();
+          const dateStr = val.replace(/T.*/, '');
+          if (dateStr === todayStr) {
+            if (val.includes('T')) {
+              const timePart = val.replace(/.*T/, '').replace('Z','');
+              let h = parseInt(timePart.slice(0,2));
+              const m = timePart.slice(2,4);
+              // crude UTC→local offset (won't be perfect but fine for display)
+              const offset = -today.getTimezoneOffset() / 60;
+              h = (h + offset + 24) % 24;
+              ev.time = String(h).padStart(2,'0') + ':' + m;
+              ev.allDay = false;
+            } else {
+              ev.time = 'Toute la journée';
+              ev.allDay = true;
+            }
+            ev.today = true;
+          }
+        }
+      }
+    }
+
+    return events
+      .filter(e => e.today)
+      .map(e => ({ id: 'ical_' + Math.random(), time: e.time, text: e.summary, source: 'gcal', allDay: e.allDay }));
+  }
+
   function render() {
     applyTheme();
     const now = new Date();
@@ -562,55 +305,42 @@
     document.getElementById('date').textContent = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
 
     const curMins = now.getHours() * 60 + now.getMinutes();
-    const all = [...localReminders, ...gcalEvents].sort((a, b) => {
+    const all = [...localReminders, ...gcalEvents].sort((a,b) => {
       const am = toMins(a.time), bm = toMins(b.time);
-      if (am === -1) return -1;
-      if (bm === -1) return 1;
+      if (am === -1) return -1; if (bm === -1) return 1;
       return am - bm;
     });
 
     let next = null;
-    for (const r of all) {
-      const rm = toMins(r.time);
-      if (rm !== -1 && rm > curMins) { next = r; break; }
-    }
+    for (const r of all) { const rm = toMins(r.time); if (rm !== -1 && rm > curMins) { next = r; break; } }
 
     const banner = document.getElementById('next-banner');
     if (next) {
       const diff = toMins(next.time) - curMins;
-      const hh = Math.floor(diff / 60), mm = diff % 60;
+      const hh = Math.floor(diff/60), mm = diff%60;
       document.getElementById('banner-text').textContent = next.text;
-      document.getElementById('banner-time').textContent = next.time + ' · dans ' + (hh ? hh + 'h ' : '') + mm + 'min';
+      document.getElementById('banner-time').textContent = next.time + ' · dans ' + (hh ? hh+'h ' : '') + mm + 'min';
       banner.style.display = 'block';
       banner.className = diff <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
-    } else {
-      banner.style.display = 'none';
-    }
+    } else { banner.style.display = 'none'; }
 
     const list = document.getElementById('reminders-list');
-    if (!all.length) {
-      list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>';
-      return;
-    }
+    if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>'; return; }
 
     list.innerHTML = all.map(r => {
       const rMins = toMins(r.time);
       const diff = rMins === -1 ? 999 : rMins - curMins;
       let cls = r.source === 'gcal' ? 'gcal-event' : '';
       let meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
-
-      if (rMins !== -1 && diff < 0) {
-        cls += ' past';
-      } else if (next && r.id === next.id) {
-        const hh = Math.floor(diff / 60), mm = diff % 60;
+      if (rMins !== -1 && diff < 0) { cls += ' past'; }
+      else if (next && r.id === next.id) {
+        const hh = Math.floor(diff/60), mm = diff%60;
         cls += diff <= 30 ? ' urgent' : ' next';
         if (meta) meta += ' · ';
-        meta += 'dans ' + (hh ? hh + 'h ' : '') + mm + 'min';
+        meta += 'dans ' + (hh ? hh+'h ' : '') + mm + 'min';
       }
-
       const deleteBtn = r.source === 'local' ? `<button class="r-delete" onclick="deleteReminder(${r.id})">✕</button>` : '';
       const sourceTag = r.source === 'gcal' ? `<div class="r-source">Google Calendar</div>` : '';
-
       return `<div class="reminder ${cls.trim()}">
         <div class="r-time">${r.time}</div>
         <div class="r-body">
@@ -623,20 +353,13 @@
     }).join('');
   }
 
-  function startApp() {
-    document.getElementById('setup-screen').style.display = 'none';
-    document.getElementById('app').classList.add('visible');
-    loadLocal();
-    render();
-    fetchGcalEvents();
-    setInterval(render, 15000);
-    setInterval(applyTheme, 60000);
-    setInterval(fetchGcalEvents, 5 * 60 * 1000);
-  }
-
-  if (loadConfig()) {
-    startApp();
-  }
+  // INIT
+  loadLocal();
+  calUrl = localStorage.getItem('repere_calurl') || '';
+  render();
+  if (calUrl) fetchIcal();
+  setInterval(render, 15000);
+  setInterval(() => { if (calUrl) fetchIcal(); }, 5 * 60 * 1000);
 </script>
 </body>
 </html>
