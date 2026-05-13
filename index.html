@@ -4,64 +4,201 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Repère" />
   <title>Repère</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
 
-    :root {
-      --bg: #0e0e0e;
-      --surface: #1a1a1a;
-      --surface2: #222222;
-      --border: #2e2e2e;
-      --text: #f0ece4;
-      --muted: #888;
-      --accent: #e8c96a;
-      --accent2: #7ecfb8;
-      --danger: #e87a6a;
-      --past: #444;
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      overflow-x: hidden;
+      transition: background 1s ease, color 0.5s ease;
     }
 
-    #app {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 40px 20px 60px;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
+    /* ── THEMES ── */
+    body.t-morning {
+      --bg: #fdf6e3;
+      --surface: #f5ebc8;
+      --surface2: #eedfa8;
+      --border: #dfc98a;
+      --text: #2e1e06;
+      --muted: #a07840;
+      --accent: #c4700a;
+      --accent2: #4a8a50;
+      --danger: #c03020;
+      --next-bg: #f0e4b0;
+      --card-bg: #f5ebc8;
+      --icon: '☀️';
     }
+
+    body.t-afternoon {
+      --bg: #eef3f8;
+      --surface: #dde8f2;
+      --surface2: #ccdaec;
+      --border: #a8c4de;
+      --text: #0e2040;
+      --muted: #4a6a9a;
+      --accent: #1a5fa8;
+      --accent2: #1a7a50;
+      --danger: #c03020;
+      --next-bg: #cce0f5;
+      --card-bg: #dde8f2;
+      --icon: '🌤';
+    }
+
+    body.t-evening {
+      --bg: #f5925a;
+      --surface: rgba(255,255,255,0.22);
+      --surface2: rgba(255,255,255,0.15);
+      --border: rgba(90,30,0,0.2);
+      --text: #1a0800;
+      --muted: #5c2200;
+      --accent: #3d1200;
+      --accent2: #1a4a20;
+      --danger: #7a0a00;
+      --next-bg: rgba(255,255,255,0.25);
+      --card-bg: rgba(255,255,255,0.22);
+      --icon: '🌅';
+    }
+
+    body.t-night {
+      --bg: #141820;
+      --surface: #1e2430;
+      --surface2: #262e3e;
+      --border: #2e3a50;
+      --text: #c8d8f0;
+      --muted: #5a7aaa;
+      --accent: #7aaae0;
+      --accent2: #4aaa80;
+      --danger: #e07060;
+      --next-bg: #1a2a40;
+      --card-bg: #1e2430;
+      --icon: '🌙';
+    }
+
+    body { background: var(--bg); color: var(--text); }
+
+    /* ── SETUP SCREEN ── */
+    #setup-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      background: #fdf6e3;
+    }
+
+    #setup-card {
+      background: #f5ebc8;
+      border: 1px solid #dfc98a;
+      border-radius: 20px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    #setup-card h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      color: #2e1e06;
+      margin-bottom: 6px;
+    }
+
+    #setup-card .subtitle {
+      color: #a07840;
+      font-size: 14px;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .setup-field { margin-bottom: 16px; }
+
+    .setup-field label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #a07840;
+      margin-bottom: 8px;
+    }
+
+    .setup-field input {
+      width: 100%;
+      background: #fdf6e3;
+      border: 1px solid #dfc98a;
+      color: #2e1e06;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+    }
+
+    .setup-field input:focus { border-color: #c4700a; }
+
+    .setup-field .hint {
+      font-size: 11px;
+      color: #a07840;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .setup-field .hint a { color: #1a5fa8; }
+
+    #setup-btn {
+      width: 100%;
+      background: #c4700a;
+      color: #fdf6e3;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    #setup-error {
+      color: #c03020;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ── MAIN APP ── */
+    #app { display: none; max-width: 640px; margin: 0 auto; padding: 40px 20px 60px; flex-direction: column; gap: 28px; }
+    #app.visible { display: flex; }
 
     /* ── CLOCK ── */
     #clock-section {
       text-align: center;
-      padding: 32px 0 24px;
+      padding: 32px 0 28px;
       border-bottom: 1px solid var(--border);
+    }
+
+    #period-icon {
+      font-size: 36px;
+      margin-bottom: 8px;
+      display: block;
     }
 
     #time {
       font-family: 'DM Serif Display', serif;
       font-size: clamp(80px, 22vw, 130px);
       line-height: 1;
-      color: var(--text);
       letter-spacing: -2px;
       font-variant-numeric: tabular-nums;
+      color: var(--text);
     }
 
     #day {
       font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-size: clamp(22px, 6vw, 32px);
+      font-size: clamp(22px, 6vw, 34px);
       color: var(--accent);
       margin-top: 10px;
     }
@@ -71,88 +208,61 @@
       color: var(--muted);
       margin-top: 4px;
       font-weight: 300;
-      letter-spacing: 0.5px;
     }
 
-    /* ── NEXT REMINDER BANNER ── */
+    /* ── NEXT BANNER ── */
     #next-banner {
-      background: var(--surface);
+      background: var(--next-bg);
       border: 1px solid var(--border);
       border-left: 4px solid var(--accent);
       border-radius: 12px;
       padding: 16px 20px;
-      font-size: clamp(14px, 3.5vw, 17px);
-      color: var(--text);
       display: none;
     }
 
-    #next-banner.urgent {
-      border-left-color: var(--danger);
-      background: #1e1512;
-    }
+    #next-banner.urgent { border-left-color: var(--danger); }
+    #next-banner.gcal { border-left-color: #1a5fa8; }
 
-    #next-banner .banner-label {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-
-    #next-banner .banner-text {
-      font-size: clamp(16px, 4.5vw, 22px);
-      font-weight: 500;
-    }
-
-    #next-banner .banner-time {
-      color: var(--accent);
-      margin-top: 3px;
-      font-size: clamp(13px, 3.5vw, 16px);
-    }
-
+    .banner-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+    .banner-text { font-size: clamp(16px, 4.5vw, 22px); font-weight: 500; color: var(--text); }
+    .banner-time { color: var(--accent); margin-top: 3px; font-size: clamp(13px, 3.5vw, 16px); }
     #next-banner.urgent .banner-time { color: var(--danger); }
 
-    /* ── REMINDERS LIST ── */
-    #reminders-section {}
-
+    /* ── SECTION LABEL ── */
     .section-label {
       font-size: 11px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    #reminders-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .sync-status { font-size: 11px; }
+    .sync-status.ok { color: var(--accent2); }
+    .sync-status.err { color: var(--danger); }
+    .sync-status.loading { color: var(--muted); }
+
+    /* ── REMINDERS ── */
+    #reminders-list { display: flex; flex-direction: column; gap: 8px; }
 
     .reminder {
-      background: var(--surface);
+      background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px 18px;
       display: flex;
       align-items: center;
       gap: 16px;
-      transition: opacity 0.2s;
     }
 
-    .reminder.past {
-      opacity: 0.4;
-    }
-
-    .reminder.next {
-      border-color: var(--accent);
-      background: #1e1c12;
-    }
-
-    .reminder.urgent {
-      border-color: var(--danger);
-      background: #1e1210;
-    }
+    .reminder.past { opacity: 0.45; }
+    .reminder.next { border-left: 4px solid var(--accent); }
+    .reminder.urgent { border-left: 4px solid var(--danger); }
+    .reminder.gcal-event { border-left: 4px solid #4a8ad4; }
+    .reminder.gcal-event.next { border-left-color: #1a5fa8; }
 
     .r-time {
       font-family: 'DM Serif Display', serif;
@@ -163,67 +273,30 @@
 
     .reminder.next .r-time { color: var(--accent); }
     .reminder.urgent .r-time { color: var(--danger); }
+    .reminder.gcal-event .r-time { color: #4a8ad4; }
 
     .r-body { flex: 1; }
-
-    .r-text {
-      font-size: clamp(16px, 4.5vw, 20px);
-      color: var(--text);
-      line-height: 1.3;
-    }
-
+    .r-text { font-size: clamp(16px, 4.5vw, 20px); color: var(--text); line-height: 1.3; }
     .reminder.past .r-text { color: var(--muted); }
+    .r-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .r-source { font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: #4a8ad4; margin-top: 2px; }
 
-    .r-meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .reminder.next .r-meta { color: #9a8840; }
-    .reminder.urgent .r-meta { color: #9a5040; }
-
-    .r-delete {
-      background: none;
-      border: none;
-      color: var(--border);
-      font-size: 18px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: color 0.15s;
-      line-height: 1;
-    }
-
+    .r-delete { background: none; border: none; color: var(--border); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; line-height: 1; }
     .r-delete:active { color: var(--danger); }
 
-    .empty-state {
-      text-align: center;
-      padding: 32px;
-      color: var(--muted);
-      font-size: 15px;
-      font-style: italic;
-    }
+    .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 15px; font-style: italic; }
 
     /* ── ADD FORM ── */
     #add-section {
-      background: var(--surface);
+      background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 20px;
     }
 
-    #add-section .section-label { margin-bottom: 16px; }
+    .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
 
-    .form-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .form-row input,
-    .form-row select {
+    .form-row input, .form-row select {
       background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text);
@@ -235,21 +308,16 @@
       -webkit-appearance: none;
     }
 
-    .form-row input:focus,
-    .form-row select:focus {
-      border-color: var(--accent);
-    }
+    .form-row input:focus, .form-row select:focus { border-color: var(--accent); }
 
     #r-text { flex: 1; min-width: 160px; }
     #r-time { width: 120px; }
-    #r-repeat { width: 120px; color: var(--text); }
-
-    #r-repeat option { background: #1a1a1a; }
+    #r-repeat { width: 130px; color: var(--text); }
 
     #add-btn {
       width: 100%;
       background: var(--accent);
-      color: #0e0e0e;
+      color: var(--bg);
       border: none;
       border-radius: 10px;
       padding: 14px;
@@ -257,45 +325,73 @@
       font-weight: 500;
       font-family: 'DM Sans', sans-serif;
       cursor: pointer;
-      transition: opacity 0.15s;
     }
 
-    #add-btn:active { opacity: 0.8; }
-
-    /* ── FOOTER ── */
-    #footer {
+    #settings-link {
       text-align: center;
       font-size: 12px;
-      color: #333;
-      font-style: italic;
-      padding-top: 8px;
+      color: var(--muted);
+      cursor: pointer;
+      padding-top: 4px;
+      opacity: 0.6;
     }
   </style>
 </head>
-<body>
-<div id="app">
+<body class="t-morning">
 
-  <!-- Clock -->
+<!-- SETUP -->
+<div id="setup-screen">
+  <div id="setup-card">
+    <h1>Repère</h1>
+    <p class="subtitle">Connectez un Google Calendar pour afficher les événements automatiquement sur l'iPad.</p>
+
+    <div class="setup-field">
+      <label>Clé API Google Calendar</label>
+      <input type="text" id="setup-apikey" placeholder="AIzaSy..." autocomplete="off" autocorrect="off" spellcheck="false" />
+      <div class="hint">
+        Créez une clé sur <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a> → APIs &amp; Services → Credentials
+      </div>
+    </div>
+
+    <div class="setup-field">
+      <label>ID du calendrier</label>
+      <input type="text" id="setup-calid" placeholder="exemple@gmail.com" autocomplete="off" autocorrect="off" spellcheck="false" />
+      <div class="hint">Google Calendar → ⚙️ Paramètres → "Intégrer le calendrier" → ID du calendrier</div>
+    </div>
+
+    <div class="setup-field">
+      <label>Prénom (optionnel)</label>
+      <input type="text" id="setup-name" placeholder="Mamie, Papi…" />
+    </div>
+
+    <button id="setup-btn" onclick="saveSetup()">Connecter →</button>
+    <div id="setup-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
   <div id="clock-section">
+    <span id="period-icon"></span>
     <div id="time">--:--</div>
     <div id="day">---</div>
     <div id="date">---</div>
   </div>
 
-  <!-- Next reminder banner -->
   <div id="next-banner">
-    <div class="banner-label">Prochain rappel</div>
+    <div class="banner-label">Prochain</div>
     <div class="banner-text" id="banner-text"></div>
     <div class="banner-time" id="banner-time"></div>
   </div>
 
-  <!-- Reminders list -->
-  <div id="reminders-section">
-    <div class="section-label">Rappels du jour</div>
+  <div>
+    <div class="section-label">
+      <span>Aujourd'hui</span>
+      <span class="sync-status loading" id="sync-status">…</span>
+    </div>
     <div id="reminders-list"></div>
   </div>
 
-  <!-- Add form -->
   <div id="add-section">
     <div class="section-label">Ajouter un rappel</div>
     <div class="form-row">
@@ -311,104 +407,133 @@
     <button id="add-btn" onclick="addReminder()">+ Ajouter</button>
   </div>
 
-  <div id="footer">Repère · fait avec ❤️</div>
-
+  <div id="settings-link" onclick="resetSetup()">⚙️ Changer de calendrier</div>
 </div>
 
 <script>
   const DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
   const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 
-  let reminders = [];
+  let localReminders = [];
+  let gcalEvents = [];
+  let config = {};
 
-  function load() {
-    try {
-      reminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]');
-    } catch(e) { reminders = []; }
-    if (!reminders.length) {
-      reminders = [
-        { id: 1, time: '08:00', text: 'Médicaments du matin', repeat: 'daily' },
-        { id: 2, time: '12:30', text: 'Déjeuner', repeat: 'daily' },
-        { id: 3, time: '20:00', text: 'Médicaments du soir', repeat: 'daily' },
-      ];
-      save();
-    }
+  function getTheme(h) {
+    if (h >= 6 && h < 12) return { cls: 't-morning', icon: '☀️' };
+    if (h >= 12 && h < 18) return { cls: 't-afternoon', icon: '🌤' };
+    if (h >= 18 && h < 21) return { cls: 't-evening', icon: '🌅' };
+    return { cls: 't-night', icon: '🌙' };
   }
 
-  function save() {
-    localStorage.setItem('repere_reminders', JSON.stringify(reminders));
+  function applyTheme() {
+    const h = new Date().getHours();
+    const { cls, icon } = getTheme(h);
+    document.body.className = cls;
+    document.getElementById('period-icon').textContent = icon;
   }
 
-  function toMins(t) {
-    const [h, m] = t.split(':').map(Number);
-    return h * 60 + m;
+  function loadConfig() {
+    try { config = JSON.parse(localStorage.getItem('repere_config') || '{}'); } catch(e) { config = {}; }
+    return config.apiKey && config.calId;
   }
 
-  function render() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('time').textContent = h + ':' + m;
-    document.getElementById('day').textContent = DAYS[now.getDay()];
-    document.getElementById('date').textContent =
-      now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+  async function saveSetup() {
+    const apiKey = document.getElementById('setup-apikey').value.trim();
+    const calId = document.getElementById('setup-calid').value.trim();
+    const name = document.getElementById('setup-name').value.trim();
+    const errEl = document.getElementById('setup-error');
 
-    const curMins = now.getHours() * 60 + now.getMinutes();
-    const sorted = [...reminders].sort((a, b) => toMins(a.time) - toMins(b.time));
-
-    // Find next upcoming
-    let next = null;
-    for (const r of sorted) {
-      if (toMins(r.time) > curMins) { next = r; break; }
-    }
-
-    // Render banner
-    const banner = document.getElementById('next-banner');
-    if (next) {
-      const diff = toMins(next.time) - curMins;
-      const hh = Math.floor(diff / 60);
-      const mm = diff % 60;
-      const countdown = hh ? `dans ${hh}h ${mm}min` : `dans ${mm} min`;
-      document.getElementById('banner-text').textContent = next.text;
-      document.getElementById('banner-time').textContent = next.time + ' · ' + countdown;
-      banner.style.display = 'block';
-      banner.className = diff <= 30 ? 'urgent' : '';
-    } else {
-      banner.style.display = 'none';
-    }
-
-    // Render list
-    const list = document.getElementById('reminders-list');
-    if (!sorted.length) {
-      list.innerHTML = '<div class="empty-state">Aucun rappel. Ajoutez-en un ci-dessous.</div>';
+    if (!apiKey || !calId) {
+      errEl.textContent = 'Veuillez remplir la clé API et l\'ID du calendrier.';
+      errEl.style.display = 'block';
       return;
     }
 
-    list.innerHTML = sorted.map(r => {
-      const rMins = toMins(r.time);
-      const diff = rMins - curMins;
-      let cls = '';
-      let meta = r.repeat === 'daily' ? 'Quotidien' : 'Unique';
+    document.getElementById('setup-btn').textContent = 'Vérification…';
+    errEl.style.display = 'none';
 
-      if (diff < 0) {
-        cls = 'past';
-        meta += ' · passé';
-      } else if (next && r.id === next.id) {
-        const hh = Math.floor(diff / 60);
-        const mm = diff % 60;
-        cls = diff <= 30 ? 'urgent' : 'next';
-        meta += ' · dans ' + (hh ? hh + 'h ' : '') + mm + 'min';
-      }
+    const ok = await testCalendar(apiKey, calId);
+    if (!ok) {
+      document.getElementById('setup-btn').textContent = 'Connecter →';
+      errEl.textContent = 'Impossible de se connecter. Vérifiez la clé API et l\'ID du calendrier.';
+      errEl.style.display = 'block';
+      return;
+    }
 
-      return `<div class="reminder ${cls}">
-        <div class="r-time">${r.time}</div>
-        <div class="r-body">
-          <div class="r-text">${r.text}</div>
-          <div class="r-meta">${meta}</div>
-        </div>
-        <button class="r-delete" onclick="deleteReminder(${r.id})">✕</button>
-      </div>`;
-    }).join('');
+    config = { apiKey, calId, name };
+    localStorage.setItem('repere_config', JSON.stringify(config));
+    startApp();
+  }
+
+  function resetSetup() {
+    document.getElementById('app').classList.remove('visible');
+    document.getElementById('setup-screen').style.display = 'flex';
+    document.getElementById('setup-apikey').value = config.apiKey || '';
+    document.getElementById('setup-calid').value = config.calId || '';
+    document.getElementById('setup-name').value = config.name || '';
+    document.getElementById('setup-btn').textContent = 'Connecter →';
+    document.getElementById('setup-error').style.display = 'none';
+  }
+
+  async function testCalendar(apiKey, calId) {
+    try {
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calId)}/events?key=${apiKey}&maxResults=1&timeMin=${new Date().toISOString()}&singleEvents=true`;
+      const res = await fetch(url);
+      return res.ok;
+    } catch(e) { return false; }
+  }
+
+  async function fetchGcalEvents() {
+    if (!config.apiKey || !config.calId) return;
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString();
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(config.calId)}/events?key=${config.apiKey}&timeMin=${start}&timeMax=${end}&singleEvents=true&orderBy=startTime`;
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) { setSync('Erreur sync', 'err'); return; }
+      const data = await res.json();
+      gcalEvents = (data.items || []).map(e => {
+        let timeStr = 'Toute la journée';
+        if (e.start.dateTime) {
+          const d = new Date(e.start.dateTime);
+          timeStr = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+        }
+        return { id: 'gcal_' + e.id, time: timeStr, text: e.summary || 'Événement', source: 'gcal', allDay: !e.start.dateTime };
+      });
+      const n = new Date();
+      setSync('Sync ' + String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0'), 'ok');
+      render();
+    } catch(e) {
+      setSync('Hors ligne', 'err');
+    }
+  }
+
+  function setSync(text, cls) {
+    const el = document.getElementById('sync-status');
+    el.textContent = text;
+    el.className = 'sync-status ' + cls;
+  }
+
+  function loadLocal() {
+    try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
+    if (!localReminders.length) {
+      localReminders = [
+        { id: 1, time: '08:00', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
+        { id: 2, time: '12:30', text: 'Déjeuner', repeat: 'daily', source: 'local' },
+        { id: 3, time: '20:00', text: 'Médicaments du soir', repeat: 'daily', source: 'local' },
+      ];
+      saveLocal();
+    }
+  }
+
+  function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
+
+  function toMins(t) {
+    if (!t || t === 'Toute la journée') return -1;
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
   }
 
   function addReminder() {
@@ -416,22 +541,102 @@
     const time = document.getElementById('r-time').value;
     const repeat = document.getElementById('r-repeat').value;
     if (!text || !time) { alert('Veuillez entrer un horaire et une description.'); return; }
-    reminders.push({ id: Date.now(), time, text, repeat });
-    save();
+    localReminders.push({ id: Date.now(), time, text, repeat, source: 'local' });
+    saveLocal();
     document.getElementById('r-text').value = '';
     document.getElementById('r-time').value = '';
     render();
   }
 
   function deleteReminder(id) {
-    reminders = reminders.filter(r => r.id !== id);
-    save();
+    localReminders = localReminders.filter(r => r.id !== id);
+    saveLocal();
     render();
   }
 
-  load();
-  render();
-  setInterval(render, 15000);
+  function render() {
+    applyTheme();
+    const now = new Date();
+    document.getElementById('time').textContent = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('day').textContent = DAYS[now.getDay()];
+    document.getElementById('date').textContent = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+
+    const curMins = now.getHours() * 60 + now.getMinutes();
+    const all = [...localReminders, ...gcalEvents].sort((a, b) => {
+      const am = toMins(a.time), bm = toMins(b.time);
+      if (am === -1) return -1;
+      if (bm === -1) return 1;
+      return am - bm;
+    });
+
+    let next = null;
+    for (const r of all) {
+      const rm = toMins(r.time);
+      if (rm !== -1 && rm > curMins) { next = r; break; }
+    }
+
+    const banner = document.getElementById('next-banner');
+    if (next) {
+      const diff = toMins(next.time) - curMins;
+      const hh = Math.floor(diff / 60), mm = diff % 60;
+      document.getElementById('banner-text').textContent = next.text;
+      document.getElementById('banner-time').textContent = next.time + ' · dans ' + (hh ? hh + 'h ' : '') + mm + 'min';
+      banner.style.display = 'block';
+      banner.className = diff <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
+    } else {
+      banner.style.display = 'none';
+    }
+
+    const list = document.getElementById('reminders-list');
+    if (!all.length) {
+      list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>';
+      return;
+    }
+
+    list.innerHTML = all.map(r => {
+      const rMins = toMins(r.time);
+      const diff = rMins === -1 ? 999 : rMins - curMins;
+      let cls = r.source === 'gcal' ? 'gcal-event' : '';
+      let meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
+
+      if (rMins !== -1 && diff < 0) {
+        cls += ' past';
+      } else if (next && r.id === next.id) {
+        const hh = Math.floor(diff / 60), mm = diff % 60;
+        cls += diff <= 30 ? ' urgent' : ' next';
+        if (meta) meta += ' · ';
+        meta += 'dans ' + (hh ? hh + 'h ' : '') + mm + 'min';
+      }
+
+      const deleteBtn = r.source === 'local' ? `<button class="r-delete" onclick="deleteReminder(${r.id})">✕</button>` : '';
+      const sourceTag = r.source === 'gcal' ? `<div class="r-source">Google Calendar</div>` : '';
+
+      return `<div class="reminder ${cls.trim()}">
+        <div class="r-time">${r.time}</div>
+        <div class="r-body">
+          <div class="r-text">${r.text}</div>
+          ${meta ? `<div class="r-meta">${meta}</div>` : ''}
+          ${sourceTag}
+        </div>
+        ${deleteBtn}
+      </div>`;
+    }).join('');
+  }
+
+  function startApp() {
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    loadLocal();
+    render();
+    fetchGcalEvents();
+    setInterval(render, 15000);
+    setInterval(applyTheme, 60000);
+    setInterval(fetchGcalEvents, 5 * 60 * 1000);
+  }
+
+  if (loadConfig()) {
+    startApp();
+  }
 </script>
 </body>
 </html>
