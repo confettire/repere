@@ -7,335 +7,323 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Repère" />
   <title>Repère</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       min-height: 100vh;
-      -webkit-transition: background 1s ease;
-      transition: background 1s ease;
+      -webkit-transition: background 1.2s ease;
+      transition: background 1.2s ease;
     }
 
     /* ── THEMES ── */
-    body.t-morning {
-      background: #fdf6e3;
-      color: #2e1e06;
-    }
-    body.t-afternoon {
-      background: #eef3f8;
-      color: #0e2040;
-    }
-    body.t-evening {
-      background: #f5925a;
-      color: #1a0800;
-    }
-    body.t-night {
-      background: #141820;
-      color: #c8d8f0;
-    }
+    body.t-morning   { background: #fdf6e3; color: #2e1e06; }
+    body.t-afternoon { background: #eef3f8; color: #0e2040; }
+    body.t-evening   { background: #f5925a; color: #1a0800; }
+    body.t-night     { background: #141820; color: #c8d8f0; }
 
-    /* theme-specific colors via classes on elements */
-    .t-morning  .muted  { color: #a07840; }
-    .t-afternoon .muted { color: #4a6a9a; }
-    .t-evening  .muted  { color: #5c2200; }
-    .t-night    .muted  { color: #5a7aaa; }
+    /* accent colors per theme */
+    .t-morning   .accent { color: #c4700a; }
+    .t-afternoon .accent { color: #1a5fa8; }
+    .t-evening   .accent { color: #3d1200; }
+    .t-night     .accent { color: #7aaae0; }
+
+    .t-morning   .muted { color: #b08848; }
+    .t-afternoon .muted { color: #5a7aaa; }
+    .t-evening   .muted { color: #6c3210; }
+    .t-night     .muted { color: #5a7aaa; }
 
     /* ── LAYOUT ── */
     #app {
       max-width: 640px;
       margin: 0 auto;
-      padding: 32px 20px 100px;
+      padding: 40px 24px 120px;
     }
 
     /* ── CLOCK ── */
     #clock-section {
       text-align: center;
-      padding: 28px 0 28px;
-      margin-bottom: 24px;
+      padding: 20px 0 36px;
+      margin-bottom: 8px;
     }
 
     #period-icon {
-      font-size: 40px;
+      font-size: 44px;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
     }
 
     #time {
-      font-size: 100px;
-      font-weight: 100;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 120px;
+      font-weight: 900;
       line-height: 1;
       letter-spacing: -4px;
     }
 
     #day {
-      font-size: 30px;
-      font-weight: 300;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 700;
       font-style: italic;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
-    .t-morning  #day { color: #c4700a; }
+    .t-morning   #day { color: #c4700a; }
     .t-afternoon #day { color: #1a5fa8; }
-    .t-evening  #day { color: #3d1200; }
-    .t-night    #day { color: #7aaae0; }
+    .t-evening   #day { color: #3d1200; }
+    .t-night     #day { color: #7aaae0; }
 
     #date {
       font-size: 18px;
-      font-weight: 300;
+      font-weight: 500;
       margin-top: 6px;
+      letter-spacing: 0.3px;
     }
 
-    .t-morning  #date { color: #a07840; }
-    .t-afternoon #date { color: #4a6a9a; }
-    .t-evening  #date { color: #5c2200; }
-    .t-night    #date { color: #5a7aaa; }
+    .t-morning   #date { color: #b08848; }
+    .t-afternoon #date { color: #5a7aaa; }
+    .t-evening   #date { color: #6c3210; }
+    .t-night     #date { color: #5a7aaa; }
 
     /* ── DIVIDER ── */
-    .divider {
-      height: 1px;
-      margin-bottom: 24px;
-    }
-    .t-morning  .divider { background: #dfc98a; }
+    .divider { height: 1px; margin-bottom: 28px; }
+    .t-morning   .divider { background: #dfc98a; }
     .t-afternoon .divider { background: #a8c4de; }
-    .t-evening  .divider { background: rgba(90,30,0,0.25); }
-    .t-night    .divider { background: #2e3a50; }
+    .t-evening   .divider { background: rgba(90,30,0,0.3); }
+    .t-night     .divider { background: #2e3a50; }
 
     /* ── NEXT BANNER ── */
     #next-banner {
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 24px;
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
       display: none;
-      border-left: 5px solid;
+      border-left: 6px solid;
     }
 
-    .t-morning  #next-banner { background: #f5ebc8; border-color: #c4700a; }
+    .t-morning   #next-banner { background: #f5ebc8; border-color: #c4700a; }
     .t-afternoon #next-banner { background: #dde8f2; border-color: #1a5fa8; }
-    .t-evening  #next-banner { background: rgba(255,255,255,0.25); border-color: #3d1200; }
-    .t-night    #next-banner { background: #1e2430; border-color: #7aaae0; }
+    .t-evening   #next-banner { background: rgba(255,255,255,0.28); border-color: #3d1200; }
+    .t-night     #next-banner { background: #1e2430; border-color: #7aaae0; }
 
     #next-banner.urgent { border-color: #c03020 !important; }
     #next-banner.gcal   { border-color: #4a8ad4 !important; }
 
     .banner-label {
-      font-size: 11px;
-      letter-spacing: 1.5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      opacity: 0.6;
     }
-    .t-morning  .banner-label { color: #a07840; }
-    .t-afternoon .banner-label { color: #4a6a9a; }
-    .t-evening  .banner-label { color: #5c2200; }
-    .t-night    .banner-label { color: #5a7aaa; }
 
-    .banner-text { font-size: 20px; font-weight: 500; }
-    .banner-time { font-size: 14px; margin-top: 4px; }
-    .t-morning  .banner-time { color: #c4700a; }
-    .t-afternoon .banner-time { color: #1a5fa8; }
-    .t-evening  .banner-time { color: #3d1200; }
-    .t-night    .banner-time { color: #7aaae0; }
-    #next-banner.urgent .banner-time { color: #c03020 !important; }
+    .banner-text { font-size: 22px; font-weight: 600; }
+    .banner-time { font-size: 15px; font-weight: 500; margin-top: 4px; opacity: 0.75; }
 
-    /* ── SECTION LABEL ── */
+    /* ── SECTION HEADER ── */
     .section-header {
-      font-size: 11px;
-      letter-spacing: 1.5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 12px;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-pack: justify;
-      -webkit-justify-content: space-between;
-      justify-content: space-between;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-      align-items: center;
+      margin-bottom: 14px;
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
+      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+      opacity: 0.6;
     }
-    .t-morning  .section-header { color: #a07840; }
-    .t-afternoon .section-header { color: #4a6a9a; }
-    .t-evening  .section-header { color: #5c2200; }
-    .t-night    .section-header { color: #5a7aaa; }
 
-    .sync-ok  { color: #4a8a50 !important; }
-    .sync-err { color: #c03020 !important; }
+    .sync-ok  { color: #4a8a50 !important; opacity: 1 !important; }
+    .sync-err { color: #c03020 !important; opacity: 1 !important; }
 
     /* ── REMINDERS ── */
-    #reminders-list {
-      margin-bottom: 28px;
-    }
+    #reminders-list { margin-bottom: 32px; }
 
     .reminder {
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 8px;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-      gap: 14px;
-      border: 1px solid;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+      gap: 16px;
+      border: 1.5px solid;
     }
 
-    .t-morning  .reminder { background: #f5ebc8; border-color: #dfc98a; }
-    .t-afternoon .reminder { background: #dde8f2; border-color: #a8c4de; }
-    .t-evening  .reminder { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
-    .t-night    .reminder { background: #1e2430; border-color: #2e3a50; }
+    .t-morning   .reminder { background: #f5ebc8; border-color: #e8d090; }
+    .t-afternoon .reminder { background: #dde8f2; border-color: #b8d0e8; }
+    .t-evening   .reminder { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
+    .t-night     .reminder { background: #1e2430; border-color: #2e3a50; }
 
-    .reminder.past { opacity: 0.4; }
+    .reminder.past { opacity: 0.38; }
+    .reminder.r-next   { border-left-width: 6px; }
+    .reminder.r-urgent { border-left-width: 6px; border-left-color: #c03020 !important; }
+    .reminder.r-gcal   { border-left-width: 6px; border-left-color: #4a8ad4 !important; }
 
-    .reminder.r-next  { border-left-width: 5px; }
-    .t-morning  .reminder.r-next { border-left-color: #c4700a; }
+    .t-morning   .reminder.r-next { border-left-color: #c4700a; }
     .t-afternoon .reminder.r-next { border-left-color: #1a5fa8; }
-    .t-evening  .reminder.r-next { border-left-color: #3d1200; }
-    .t-night    .reminder.r-next { border-left-color: #7aaae0; }
-
-    .reminder.r-urgent { border-left-width: 5px; border-left-color: #c03020 !important; }
-    .reminder.r-gcal   { border-left-width: 5px; border-left-color: #4a8ad4 !important; }
+    .t-evening   .reminder.r-next { border-left-color: #3d1200; }
+    .t-night     .reminder.r-next { border-left-color: #7aaae0; }
 
     .r-time {
-      font-size: 26px;
-      font-weight: 200;
-      min-width: 72px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 30px;
+      font-weight: 700;
+      min-width: 80px;
+      opacity: 0.5;
     }
-    .t-morning  .r-time { color: #a07840; }
-    .t-afternoon .r-time { color: #4a6a9a; }
-    .t-evening  .r-time { color: #5c2200; }
-    .t-night    .r-time { color: #5a7aaa; }
 
-    .r-next .r-time  { color: inherit !important; }
-    .r-urgent .r-time { color: #c03020 !important; }
-    .r-gcal .r-time   { color: #4a8ad4 !important; }
+    .reminder.r-next .r-time,
+    .reminder.r-urgent .r-time { opacity: 1; }
+    .reminder.r-gcal .r-time   { color: #4a8ad4; opacity: 1; }
 
     .r-body { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-    .r-text { font-size: 18px; line-height: 1.3; }
-    .past .r-text { opacity: 0.6; }
-    .r-meta   { font-size: 11px; margin-top: 3px; opacity: 0.7; }
-    .r-source { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #4a8ad4; margin-top: 2px; }
+
+    .r-text {
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .reminder.past .r-text { opacity: 0.5; }
+
+    .r-meta {
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 3px;
+      opacity: 0.55;
+    }
+
+    .r-source {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #4a8ad4;
+      margin-top: 3px;
+    }
 
     .r-delete {
       background: none; border: none; font-size: 18px;
-      cursor: pointer; padding: 4px 8px; border-radius: 6px; opacity: 0.4;
+      cursor: pointer; padding: 4px 8px; border-radius: 8px; opacity: 0.3;
     }
     .r-delete:active { opacity: 1; color: #c03020; }
 
-    .empty-state { text-align: center; padding: 28px; font-size: 15px; font-style: italic; opacity: 0.5; }
+    .empty-state {
+      text-align: center; padding: 32px;
+      font-size: 16px; font-style: italic; opacity: 0.4;
+    }
 
-    /* ── CARD (edit mode) ── */
+    /* ── EDIT MODE ── */
+    #edit-sections { display: none; }
+    #edit-sections.open { display: block; }
+
     .card {
       border-radius: 16px;
-      padding: 18px;
+      padding: 20px;
       margin-bottom: 20px;
-      border: 1px solid;
+      border: 1.5px solid;
     }
-    .t-morning  .card { background: #f5ebc8; border-color: #dfc98a; }
-    .t-afternoon .card { background: #dde8f2; border-color: #a8c4de; }
-    .t-evening  .card { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
-    .t-night    .card { background: #1e2430; border-color: #2e3a50; }
+
+    .t-morning   .card { background: #f5ebc8; border-color: #e8d090; }
+    .t-afternoon .card { background: #dde8f2; border-color: #b8d0e8; }
+    .t-evening   .card { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
+    .t-night     .card { background: #1e2430; border-color: #2e3a50; }
+
+    .card p { font-size: 13px; font-weight: 400; opacity: 0.6; margin-bottom: 14px; line-height: 1.6; }
 
     .form-row {
       display: -webkit-box; display: -webkit-flex; display: flex;
-      gap: 10px; margin-bottom: 10px; -webkit-flex-wrap: wrap; flex-wrap: wrap;
+      gap: 10px; margin-bottom: 12px;
+      -webkit-flex-wrap: wrap; flex-wrap: wrap;
     }
 
     .form-row input,
     .form-row select,
-    .card input[type="text"] {
+    .card-input {
       background: transparent;
-      border: 1px solid;
+      border: 1.5px solid;
       border-radius: 10px;
       padding: 12px 14px;
       font-size: 16px;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      font-weight: 500;
+      font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       outline: none;
       -webkit-appearance: none;
       color: inherit;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    .t-morning  .form-row input,
-    .t-morning  .form-row select,
-    .t-morning  .card input[type="text"]  { border-color: #dfc98a; }
+    .t-morning   .form-row input,
+    .t-morning   .form-row select,
+    .t-morning   .card-input  { border-color: #e8d090; }
     .t-afternoon .form-row input,
     .t-afternoon .form-row select,
-    .t-afternoon .card input[type="text"] { border-color: #a8c4de; }
-    .t-evening  .form-row input,
-    .t-evening  .form-row select,
-    .t-evening  .card input[type="text"]  { border-color: rgba(90,30,0,0.3); }
-    .t-night    .form-row input,
-    .t-night    .form-row select,
-    .t-night    .card input[type="text"]  { border-color: #2e3a50; }
+    .t-afternoon .card-input  { border-color: #b8d0e8; }
+    .t-evening   .form-row input,
+    .t-evening   .form-row select,
+    .t-evening   .card-input  { border-color: rgba(90,30,0,0.3); }
+    .t-night     .form-row input,
+    .t-night     .form-row select,
+    .t-night     .card-input  { border-color: #2e3a50; }
 
     #r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 150px; width: auto; margin-bottom: 0; }
     #r-time   { width: 110px; margin-bottom: 0; }
-    #r-repeat { width: 140px; margin-bottom: 0; }
+    #r-repeat { width: 150px; margin-bottom: 0; }
 
     .btn {
       width: 100%;
       border: none;
-      border-radius: 10px;
-      padding: 14px;
+      border-radius: 12px;
+      padding: 15px;
       font-size: 16px;
-      font-weight: 500;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      font-weight: 600;
+      font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
       cursor: pointer;
+      letter-spacing: 0.3px;
     }
-    .t-morning  .btn { background: #c4700a; color: #fdf6e3; }
+
+    .t-morning   .btn { background: #c4700a; color: #fdf6e3; }
     .t-afternoon .btn { background: #1a5fa8; color: #eef3f8; }
-    .t-evening  .btn { background: #3d1200; color: #f5925a; }
-    .t-night    .btn { background: #7aaae0; color: #141820; }
+    .t-evening   .btn { background: #3d1200; color: #f5925a; }
+    .t-night     .btn { background: #7aaae0; color: #141820; }
 
-    .btn-sm { padding: 11px; font-size: 14px; }
+    .btn-sm { padding: 12px; font-size: 14px; }
 
-    .status-msg { font-size: 12px; margin-top: 8px; text-align: center; opacity: 0.7; }
+    .status-msg { font-size: 12px; font-weight: 500; margin-top: 10px; text-align: center; opacity: 0.6; }
     .status-ok  { color: #4a8a50 !important; opacity: 1 !important; }
     .status-err { color: #c03020 !important; opacity: 1 !important; }
 
-    .card p { font-size: 13px; opacity: 0.7; margin-bottom: 12px; line-height: 1.5; }
-
     .disconnect-btn {
-      background: none;
-      border: none;
-      font-size: 12px;
-      cursor: pointer;
-      opacity: 0.5;
-      display: block;
-      margin-top: 8px;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      background: none; border: none;
+      font-size: 12px; font-weight: 500;
+      cursor: pointer; opacity: 0.45;
+      display: block; margin-top: 10px;
+      font-family: 'Inter', -apple-system, sans-serif;
       color: inherit;
     }
     .disconnect-btn:active { opacity: 1; color: #c03020; }
 
-    /* ── EDIT SECTIONS ── */
-    #edit-sections { display: none; }
-    #edit-sections.open { display: block; }
-
-    /* ── LOCK BUTTON ── */
+    /* ── LOCK BTN ── */
     #lock-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 46px;
-      height: 46px;
-      border-radius: 23px;
-      border: 1px solid rgba(128,128,128,0.3);
-      background: rgba(128,128,128,0.15);
+      bottom: 22px; right: 22px;
+      width: 48px; height: 48px;
+      border-radius: 24px;
+      border: 1.5px solid rgba(128,128,128,0.25);
+      background: rgba(128,128,128,0.12);
       font-size: 20px;
       cursor: pointer;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-      -webkit-box-pack: center;
-      -webkit-justify-content: center;
-      justify-content: center;
-      opacity: 0.4;
+      display: -webkit-box; display: -webkit-flex; display: flex;
+      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+      -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+      opacity: 0.35;
       z-index: 100;
     }
     #lock-btn:active { opacity: 1; }
@@ -345,7 +333,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.65);
+      background: rgba(0,0,0,0.6);
       z-index: 200;
       -webkit-box-align: center; -webkit-align-items: center; align-items: center;
       -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
@@ -356,21 +344,31 @@
 
     #pin-card {
       background: #ffffff;
-      border-radius: 20px;
-      padding: 32px 24px 24px;
-      width: 300px;
+      border-radius: 24px;
+      padding: 36px 28px 28px;
+      width: 310px;
       text-align: center;
+      -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
 
-    #pin-card h2 { font-size: 20px; color: #1a1a1a; font-weight: 500; margin-bottom: 4px; }
-    #pin-card .pin-sub { font-size: 13px; color: #999; margin-bottom: 22px; }
+    #pin-card h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .pin-sub { font-size: 13px; font-weight: 500; color: #aaa; margin-bottom: 24px; }
 
     #pin-dots {
       display: -webkit-box; display: -webkit-flex; display: flex;
       -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
-      gap: 14px; margin-bottom: 24px;
+      gap: 16px; margin-bottom: 26px;
     }
-    .dot { width: 14px; height: 14px; border-radius: 7px; background: #e0e0e0; }
+
+    .dot { width: 15px; height: 15px; border-radius: 50%; background: #e8e8e8; }
     .dot.on { background: #c4700a; }
 
     #pin-keypad {
@@ -382,28 +380,27 @@
     }
 
     .k {
-      width: 76px; height: 56px;
-      border-radius: 12px;
-      border: 1px solid #e0e0e0;
-      background: #f5f5f5;
-      font-size: 24px;
+      width: 78px; height: 58px;
+      border-radius: 14px;
+      border: 1.5px solid #e8e8e8;
+      background: #f8f8f8;
+      font-size: 26px;
       font-weight: 300;
       color: #1a1a1a;
       cursor: pointer;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Playfair Display', Georgia, serif;
     }
-    .k:active { background: #e0e0e0; }
-    .k.del { font-size: 16px; color: #888; }
+    .k:active { background: #ebebeb; }
+    .k.del { font-size: 18px; color: #999; font-family: 'Inter', sans-serif; }
 
-    #pin-err { font-size: 13px; color: #c03020; min-height: 18px; margin-top: 6px; }
-    #pin-cancel { font-size: 13px; color: #aaa; margin-top: 14px; cursor: pointer; display: block; }
+    #pin-err { font-size: 13px; font-weight: 500; color: #c03020; min-height: 20px; margin-top: 8px; }
+    #pin-cancel { font-size: 13px; font-weight: 500; color: #bbb; margin-top: 16px; cursor: pointer; display: block; }
   </style>
 </head>
 <body class="t-morning">
 
 <div id="app">
 
-  <!-- CLOCK -->
   <div id="clock-section">
     <span id="period-icon">☀️</span>
     <div id="time">--:--</div>
@@ -413,31 +410,27 @@
 
   <div class="divider"></div>
 
-  <!-- NEXT BANNER -->
   <div id="next-banner">
     <div class="banner-label">Prochain</div>
     <div class="banner-text" id="banner-text"></div>
     <div class="banner-time" id="banner-time"></div>
   </div>
 
-  <!-- TODAY -->
   <div class="section-header">
     <span>Aujourd'hui</span>
     <span id="sync-status"></span>
   </div>
   <div id="reminders-list"></div>
 
-  <!-- EDIT MODE -->
   <div id="edit-sections">
 
-    <!-- ADD REMINDER -->
     <div class="card">
-      <div class="section-header" style="margin-bottom:14px;">Ajouter un rappel</div>
+      <div class="section-header" style="margin-bottom:16px;">Ajouter un rappel</div>
       <div class="form-row">
         <input type="text" id="r-text" placeholder="Médicaments, repas…" />
         <input type="time" id="r-time" />
       </div>
-      <div class="form-row" style="margin-bottom:12px;">
+      <div class="form-row" style="margin-bottom:14px;">
         <select id="r-repeat">
           <option value="daily">Tous les jours</option>
           <option value="once">Une seule fois</option>
@@ -446,24 +439,22 @@
       <button class="btn" onclick="addReminder()">+ Ajouter</button>
     </div>
 
-    <!-- GOOGLE CALENDAR -->
     <div class="card">
       <div class="section-header" style="margin-bottom:10px;">
         <span>Google Calendar</span>
         <span id="cal-sync-badge"></span>
       </div>
       <p>Collez l'URL iCal publique de votre calendrier Google.</p>
-      <input type="text" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
+      <input type="text" class="card-input" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
       <button class="btn btn-sm" onclick="saveCalUrl()">Connecter</button>
       <div class="status-msg" id="cal-status"></div>
       <button class="disconnect-btn" id="disconnect-btn" onclick="disconnectCal()" style="display:none;">✕ Déconnecter le calendrier</button>
     </div>
 
-    <!-- CHANGE PIN -->
     <div class="card">
       <div class="section-header" style="margin-bottom:10px;">Code PIN</div>
       <p>Code actuel : 4 chiffres. Par défaut : <strong>1234</strong></p>
-      <input type="password" id="new-pin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Nouveau code (4 chiffres)" style="letter-spacing:6px; text-align:center;" />
+      <input type="password" class="card-input" id="new-pin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Nouveau code (4 chiffres)" style="letter-spacing:8px; text-align:center;" />
       <button class="btn btn-sm" onclick="savePin()">Enregistrer</button>
       <div class="status-msg" id="pin-change-status"></div>
     </div>
@@ -471,14 +462,12 @@
   </div>
 </div>
 
-<!-- LOCK BUTTON -->
 <button id="lock-btn" onclick="handleLock()">🔒</button>
 
-<!-- PIN OVERLAY -->
 <div id="pin-overlay">
   <div id="pin-card">
-    <h2>Mode soignant</h2>
-    <div class="pin-sub">Entrez le code PIN</div>
+    <h2>Repère</h2>
+    <div class="pin-sub">Code soignant</div>
     <div id="pin-dots">
       <div class="dot" id="dot0"></div>
       <div class="dot" id="dot1"></div>
@@ -516,14 +505,11 @@
   var storedPin      = '1234';
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
   function toMins(t) {
     if (!t || t === 'Toute la journée') return -1;
-    var p = t.split(':');
-    return parseInt(p[0]) * 60 + parseInt(p[1]);
+    var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]);
   }
 
-  // ── THEME ──
   function applyTheme() {
     var h = new Date().getHours();
     var cls, icon;
@@ -535,7 +521,6 @@
     document.getElementById('period-icon').textContent = icon;
   }
 
-  // ── REMINDERS ──
   function loadLocal() {
     try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
     if (!localReminders.length) {
@@ -547,7 +532,6 @@
       saveLocal();
     }
   }
-
   function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
 
   function addReminder() {
@@ -568,11 +552,9 @@
       if (localReminders[i].id !== id) arr.push(localReminders[i]);
     }
     localReminders = arr;
-    saveLocal();
-    render();
+    saveLocal(); render();
   }
 
-  // ── CALENDAR ──
   function saveCalUrl() {
     var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g,'');
     if (!url) return;
@@ -584,8 +566,7 @@
   }
 
   function disconnectCal() {
-    calUrl = '';
-    gcalEvents = [];
+    calUrl = ''; gcalEvents = [];
     localStorage.removeItem('repere_calurl');
     document.getElementById('cal-url').value = '';
     document.getElementById('cal-status').textContent = 'Calendrier déconnecté.';
@@ -622,8 +603,6 @@
     xhr.onerror = function() {
       document.getElementById('sync-status').textContent = 'Hors ligne';
       document.getElementById('sync-status').className = 'sync-err';
-      document.getElementById('cal-status').textContent = 'Hors ligne.';
-      document.getElementById('cal-status').className = 'status-msg status-err';
     };
     xhr.send();
   }
@@ -648,18 +627,11 @@
           if (dateStr === todayStr) {
             ev.today = true;
             if (val.indexOf('T') >= 0) {
-              var tp  = val.replace(/.*T/,'').replace('Z','');
-              var h   = parseInt(tp.slice(0,2));
-              var m   = tp.slice(2,4);
-              if (val.charAt(val.length-1) === 'Z') {
-                h = (h + (-today.getTimezoneOffset()/60) + 24) % 24;
-              }
-              ev.time   = pad(Math.floor(h)) + ':' + m;
-              ev.allDay = false;
-            } else {
-              ev.time   = 'Toute la journée';
-              ev.allDay = true;
-            }
+              var tp = val.replace(/.*T/,'').replace('Z','');
+              var h  = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
+              if (val.charAt(val.length-1) === 'Z') { h = (h + (-today.getTimezoneOffset()/60) + 24) % 24; }
+              ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
+            } else { ev.time = 'Toute la journée'; ev.allDay = true; }
           }
         }
       }
@@ -669,18 +641,14 @@
     });
   }
 
-  // ── PIN ──
-  function loadPin() {
-    storedPin = localStorage.getItem('repere_pin') || '1234';
-  }
+  function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
 
   function savePin() {
     var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
     var el  = document.getElementById('pin-change-status');
     if (val.length !== 4 || isNaN(Number(val))) {
       el.textContent = 'Le code doit contenir exactement 4 chiffres.';
-      el.className   = 'status-msg status-err';
-      return;
+      el.className   = 'status-msg status-err'; return;
     }
     storedPin = val;
     localStorage.setItem('repere_pin', storedPin);
@@ -695,8 +663,7 @@
       document.getElementById('edit-sections').className = '';
       document.getElementById('lock-btn').textContent = '🔒';
     } else {
-      pinEntry = '';
-      updateDots();
+      pinEntry = ''; updateDots();
       document.getElementById('pin-err').textContent = '';
       document.getElementById('pin-overlay').className = 'open';
     }
@@ -704,20 +671,15 @@
 
   function pk(k) {
     if (pinEntry.length >= 4) return;
-    pinEntry += k;
-    updateDots();
+    pinEntry += k; updateDots();
     if (pinEntry.length === 4) setTimeout(checkPin, 150);
   }
 
-  function pd() {
-    pinEntry = pinEntry.slice(0, -1);
-    updateDots();
-  }
+  function pd() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
 
   function updateDots() {
     for (var i = 0; i < 4; i++) {
-      var d = document.getElementById('dot' + i);
-      d.className = i < pinEntry.length ? 'dot on' : 'dot';
+      document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot';
     }
   }
 
@@ -727,23 +689,19 @@
       editMode = true;
       document.getElementById('edit-sections').className = 'open';
       document.getElementById('lock-btn').textContent = '🔓';
-      if (calUrl) document.getElementById('cal-url').value = calUrl;
-      if (calUrl) document.getElementById('disconnect-btn').style.display = 'block';
+      if (calUrl) { document.getElementById('cal-url').value = calUrl; document.getElementById('disconnect-btn').style.display = 'block'; }
       render();
     } else {
-      document.getElementById('pin-err').textContent = 'Code incorrect. Réessayez.';
-      pinEntry = '';
-      updateDots();
+      document.getElementById('pin-err').textContent = 'Code incorrect.';
+      pinEntry = ''; updateDots();
     }
   }
 
   function closePIN() {
     document.getElementById('pin-overlay').className = '';
-    pinEntry = '';
-    updateDots();
+    pinEntry = ''; updateDots();
   }
 
-  // ── RENDER ──
   function render() {
     applyTheme();
     var now = new Date();
@@ -771,25 +729,18 @@
       document.getElementById('banner-time').textContent = next.time + ' · dans ' + (hh ? hh+'h ' : '') + mm + 'min';
       banner.style.display = 'block';
       banner.className = diff <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
-    } else {
-      banner.style.display = 'none';
-    }
+    } else { banner.style.display = 'none'; }
 
     var list = document.getElementById('reminders-list');
-    if (!all.length) {
-      list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>';
-      return;
-    }
+    if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>'; return; }
 
     var html = '';
     for (var j = 0; j < all.length; j++) {
       var r     = all[j];
       var rMins = toMins(r.time);
       var diff2 = rMins === -1 ? 999 : rMins - curMins;
-      var cls   = '';
+      var cls   = r.source === 'gcal' ? 'r-gcal' : '';
       var meta  = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
-
-      if (r.source === 'gcal') cls = 'r-gcal';
       if (rMins !== -1 && diff2 < 0) { cls += ' past'; }
       else if (next && r.id === next.id) {
         var hh2 = Math.floor(diff2/60), mm2 = diff2%60;
@@ -797,26 +748,18 @@
         if (meta) meta += ' · ';
         meta += 'dans ' + (hh2 ? hh2+'h ' : '') + mm2 + 'min';
       }
-
       var delBtn    = (editMode && r.source === 'local') ? '<button class="r-delete" onclick="deleteReminder(' + r.id + ')">✕</button>' : '';
       var sourceTag = r.source === 'gcal' ? '<div class="r-source">Google Calendar</div>' : '';
-
       html += '<div class="reminder ' + cls.replace(/^\s+|\s+$/g,'') + '">'
         + '<div class="r-time">' + r.time + '</div>'
-        + '<div class="r-body">'
-          + '<div class="r-text">' + r.text + '</div>'
-          + (meta ? '<div class="r-meta">' + meta + '</div>' : '')
-          + sourceTag
-        + '</div>'
-        + delBtn
-        + '</div>';
+        + '<div class="r-body"><div class="r-text">' + r.text + '</div>'
+        + (meta ? '<div class="r-meta">' + meta + '</div>' : '')
+        + sourceTag + '</div>' + delBtn + '</div>';
     }
     list.innerHTML = html;
   }
 
-  // ── INIT ──
-  loadPin();
-  loadLocal();
+  loadPin(); loadLocal();
   calUrl = localStorage.getItem('repere_calurl') || '';
   render();
   if (calUrl) fetchIcal();
