@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Repère" />
@@ -10,301 +10,406 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    body {
+    html, body {
+      width: 100%;
+      min-height: 100%;
       font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
-      min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
     }
 
-    /* THEMES */
-    body.t-morning   { background: #fdf6e3; color: #2e1e06; }
-    body.t-afternoon { background: #eef3f8; color: #0e2040; }
-    body.t-evening   { background: #f5925a; color: #1a0800; }
-    body.t-night     { background: #141820; color: #c8d8f0; }
-
-    /* CSS vars per theme */
-    body.t-morning   { --muted:#a07840; --accent:#c4700a; --accent2:#4a8a50; --danger:#c03020; --border:#dfc98a; --card:#f5ebc8; --bg:#fdf6e3; }
-    body.t-afternoon { --muted:#4a6a9a; --accent:#1a5fa8; --accent2:#1a7a50; --danger:#c03020; --border:#a8c4de; --card:#dde8f2; --bg:#eef3f8; }
-    body.t-evening   { --muted:#5c2200; --accent:#3d1200; --accent2:#1a4a20; --danger:#7a0a00; --border:rgba(90,30,0,0.25); --card:rgba(255,255,255,0.25); --bg:#f5925a; }
-    body.t-night     { --muted:#5a7aaa; --accent:#7aaae0; --accent2:#4aaa80; --danger:#e07060; --border:#2e3a50; --card:#1e2430; --bg:#141820; }
+    /* THEMES — applied via JS directly on body style, not CSS vars (iOS 9 compat) */
+    body { background: #eef3f8; color: #0e2040; }
 
     #app {
+      width: 100%;
       max-width: 640px;
       margin: 0 auto;
-      padding: 32px 20px 80px;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-flex-direction: column;
-      flex-direction: column;
-      gap: 24px;
+      padding: 28px 18px 100px;
     }
 
     /* CLOCK */
     #clock-section {
       text-align: center;
-      padding: 28px 0 24px;
-      border-bottom: 1px solid;
-      border-color: var(--border);
+      padding: 24px 0 20px;
+      margin-bottom: 20px;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: #a8c4de;
     }
 
-    #period-icon { font-size: 32px; display: block; margin-bottom: 8px; }
+    #period-icon { font-size: 28px; display: block; margin-bottom: 6px; }
 
     #time {
-      font-size: 96px;
+      font-size: 100px;
       font-weight: 200;
       line-height: 1;
-      letter-spacing: -3px;
-      color: inherit;
+      letter-spacing: -4px;
+      color: #0e2040;
+      display: block;
     }
 
     #day {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 300;
       font-style: italic;
-      color: var(--accent);
-      margin-top: 10px;
+      color: #1a5fa8;
+      margin-top: 8px;
+      display: block;
     }
 
     #date {
-      font-size: 17px;
-      color: var(--muted);
+      font-size: 16px;
+      color: #4a6a9a;
       margin-top: 4px;
       font-weight: 300;
+      display: block;
     }
 
     /* NEXT BANNER */
     #next-banner {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-left: 5px solid var(--accent);
-      border-radius: 12px;
-      padding: 16px 18px;
-      display: none;
-    }
-    #next-banner.urgent { border-left-color: var(--danger); }
-    #next-banner.gcal   { border-left-color: #4a8ad4; }
-
-    .banner-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-    .banner-text  { font-size: 20px; font-weight: 500; color: inherit; }
-    .banner-time  { font-size: 14px; color: var(--accent); margin-top: 3px; }
-    #next-banner.urgent .banner-time { color: var(--danger); }
-
-    /* SECTION */
-    .section-label {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-pack: justify;
-      -webkit-justify-content: space-between;
-      justify-content: space-between;
-      -webkit-box-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-    }
-
-    .sync-status     { font-size: 11px; color: var(--muted); }
-    .sync-status.ok  { color: var(--accent2); }
-    .sync-status.err { color: var(--danger); }
-
-    /* REMINDERS */
-    #reminders-list { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-flex-direction: column; flex-direction: column; gap: 8px; }
-
-    .reminder {
-      background: var(--card);
-      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px 16px;
+      margin-bottom: 20px;
+      display: none;
+      border-width: 1px;
+      border-style: solid;
+      border-left-width: 5px;
+    }
+
+    .banner-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+    .banner-text  { font-size: 20px; font-weight: 500; }
+    .banner-time  { font-size: 14px; margin-top: 3px; }
+
+    /* TODAY LABEL */
+    #today-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #sync-status {
+      font-size: 11px;
+      float: right;
+    }
+
+    /* REMINDERS */
+    #reminders-list { margin-bottom: 20px; }
+
+    .reminder {
+      border-radius: 12px;
+      padding: 13px 14px;
+      margin-bottom: 8px;
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
       -webkit-box-align: center;
       -webkit-align-items: center;
       align-items: center;
-      gap: 14px;
+      border-width: 1px;
+      border-style: solid;
+      border-left-width: 5px;
     }
 
-    .reminder.past    { opacity: 0.4; }
-    .reminder.next    { border-left: 5px solid var(--accent); }
-    .reminder.urgent  { border-left: 5px solid var(--danger); }
-    .reminder.gcal-event { border-left: 5px solid #4a8ad4; }
+    .r-time {
+      font-size: 26px;
+      font-weight: 200;
+      width: 72px;
+      min-width: 72px;
+      display: block;
+    }
 
-    .r-time { font-size: 26px; font-weight: 200; min-width: 70px; color: var(--muted); }
-    .reminder.next .r-time       { color: var(--accent); }
-    .reminder.urgent .r-time     { color: var(--danger); }
-    .reminder.gcal-event .r-time { color: #4a8ad4; }
+    .r-body {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+    }
 
-    .r-body { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-    .r-text { font-size: 18px; color: inherit; line-height: 1.3; }
-    .reminder.past .r-text { color: var(--muted); }
-    .r-meta   { font-size: 11px; color: var(--muted); margin-top: 3px; }
-    .r-source { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #4a8ad4; margin-top: 2px; }
+    .r-text   { font-size: 18px; font-weight: 400; line-height: 1.3; display: block; }
+    .r-meta   { font-size: 11px; margin-top: 2px; display: block; }
+    .r-source { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; color: #4a8ad4; display: block; }
 
-    .r-delete { background: none; border: none; color: var(--border); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
-    .r-delete:active { color: var(--danger); }
+    .r-delete {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #ccc;
+    }
 
-    .empty-state { text-align: center; padding: 28px; color: var(--muted); font-size: 15px; font-style: italic; }
+    .empty-state { text-align: center; padding: 28px; font-size: 15px; font-style: italic; }
 
-    /* ADD FORM */
-    #add-section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
+    /* EDIT MODE */
+    #edit-sections { display: none; }
+
+    #add-section, #cal-section, #pin-change {
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    .edit-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: block;
     }
 
     .form-row {
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 8px;
+      margin-bottom: 8px;
       -webkit-flex-wrap: wrap;
       flex-wrap: wrap;
     }
 
     .form-row input,
-    .form-row select {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: inherit;
+    .form-row select,
+    #cal-url,
+    #new-pin {
+      background: #fff;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #a8c4de;
+      color: #0e2040;
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 11px 13px;
       font-size: 16px;
       font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
       outline: none;
       -webkit-appearance: none;
+      display: block;
     }
 
-    #r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 150px; }
-    #r-time   { width: 110px; }
+    #r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 140px; }
+    #r-time   { width: 105px; }
     #r-repeat { width: 140px; }
+    #cal-url  { width: 100%; margin-bottom: 8px; font-size: 13px; }
+    #new-pin  { width: 100%; text-align: center; letter-spacing: 8px; font-size: 22px; margin-bottom: 8px; }
 
-    #add-btn {
+    .edit-btn {
       width: 100%;
-      background: var(--accent);
-      color: var(--bg);
       border: none;
       border-radius: 10px;
-      padding: 14px;
-      font-size: 17px;
+      padding: 13px;
+      font-size: 16px;
       font-weight: 500;
       font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
       cursor: pointer;
+      display: block;
+      background: #1a5fa8;
+      color: #fff;
     }
 
-    /* CALENDAR SECTION */
-    #cal-toggle {
+    #cal-status, #pin-save-status {
+      font-size: 12px;
+      margin-top: 8px;
       text-align: center;
-      font-size: 14px;
-      color: var(--muted);
-      cursor: pointer;
-      padding: 4px;
+      display: block;
     }
-
-    #cal-section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      display: none;
-    }
-
-    #cal-section.open { display: block; }
 
     #cal-section p {
       font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       line-height: 1.5;
     }
 
-    #cal-section input {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: inherit;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 13px;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
-      outline: none;
-      margin-bottom: 10px;
-    }
+    #pin-change p { font-size: 13px; margin-bottom: 10px; line-height: 1.5; }
 
-    #cal-save-btn {
-      width: 100%;
-      background: var(--accent);
-      color: var(--bg);
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    /* LOCK BTN */
+    #lock-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 21px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #a8c4de;
+      background: #eef3f8;
+      color: #4a6a9a;
+      font-size: 18px;
       cursor: pointer;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      opacity: 0.4;
+      z-index: 100;
+    }
+    #lock-btn:active { opacity: 1; }
+
+    /* PIN OVERLAY */
+    #pin-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 200;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
     }
 
-    #cal-status     { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
-    #cal-status.ok  { color: var(--accent2); }
-    #cal-status.err { color: var(--danger); }
+    #pin-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 24px;
+      width: 270px;
+      text-align: center;
+    }
+
+    #pin-card h2 { font-size: 19px; color: #1a1a1a; margin-bottom: 4px; font-weight: 500; }
+    #pin-card p  { font-size: 13px; color: #888; margin-bottom: 18px; }
+
+    #pin-dots {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .pin-dot { width: 13px; height: 13px; border-radius: 7px; background: #ddd; display: block; }
+    .pin-dot.filled { background: #1a5fa8; }
+
+    #pin-keypad {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+      flex-wrap: wrap;
+      gap: 8px;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+    }
+
+    .pin-key {
+      width: 68px;
+      height: 52px;
+      border-radius: 10px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #ddd;
+      background: #f5f5f5;
+      font-size: 22px;
+      font-weight: 300;
+      color: #1a1a1a;
+      cursor: pointer;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .pin-key:active { background: #e0e0e0; }
+    .pin-key.del { font-size: 15px; color: #888; }
+
+    #pin-error  { font-size: 13px; color: #c03020; margin-top: 10px; min-height: 16px; display: block; }
+    #pin-cancel { font-size: 13px; color: #888; margin-top: 12px; cursor: pointer; display: block; }
   </style>
 </head>
-<body class="t-morning">
+<body>
 
 <div id="app">
-
   <div id="clock-section">
     <span id="period-icon">☀️</span>
-    <div id="time">--:--</div>
-    <div id="day">---</div>
-    <div id="date">---</div>
+    <span id="time">--:--</span>
+    <span id="day">---</span>
+    <span id="date">---</span>
   </div>
 
   <div id="next-banner">
-    <div class="banner-label">Prochain</div>
+    <div class="banner-label" id="banner-label">Prochain</div>
     <div class="banner-text" id="banner-text"></div>
     <div class="banner-time" id="banner-time"></div>
   </div>
 
-  <div>
-    <div class="section-label">
-      <span>Aujourd'hui</span>
-      <span class="sync-status" id="sync-status"></span>
+  <span id="today-label">
+    Aujourd'hui <span id="sync-status"></span>
+  </span>
+  <div id="reminders-list"></div>
+
+  <div id="edit-sections">
+    <div id="add-section">
+      <span class="edit-label">Ajouter un rappel</span>
+      <div class="form-row">
+        <input type="text" id="r-text" placeholder="Médicaments, repas…" />
+        <input type="time" id="r-time" />
+      </div>
+      <div class="form-row">
+        <select id="r-repeat">
+          <option value="daily">Tous les jours</option>
+          <option value="once">Une seule fois</option>
+        </select>
+      </div>
+      <button class="edit-btn" onclick="addReminder()">+ Ajouter</button>
     </div>
-    <div id="reminders-list"></div>
-  </div>
 
-  <div id="add-section">
-    <div class="section-label">Ajouter un rappel</div>
-    <div class="form-row">
-      <input type="text" id="r-text" placeholder="Médicaments, repas…" />
-      <input type="time" id="r-time" />
+    <div id="cal-section">
+      <span class="edit-label">Google Calendar</span>
+      <p>Collez l'URL iCal publique de votre calendrier Google.</p>
+      <input type="text" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
+      <button class="edit-btn" onclick="saveCalUrl()">Connecter</button>
+      <span id="cal-status"></span>
     </div>
-    <div class="form-row">
-      <select id="r-repeat">
-        <option value="daily">Tous les jours</option>
-        <option value="once">Une seule fois</option>
-      </select>
+
+    <div id="pin-change">
+      <span class="edit-label">Changer le code PIN</span>
+      <p>Code par défaut : <strong>1234</strong>. Entrez un nouveau code à 4 chiffres.</p>
+      <input type="password" id="new-pin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="····" />
+      <button class="edit-btn" onclick="savePin()">Enregistrer</button>
+      <span id="pin-save-status"></span>
     </div>
-    <button id="add-btn" onclick="addReminder()">+ Ajouter</button>
   </div>
+</div>
 
-  <div id="cal-toggle" onclick="toggleCal()">📅 Connecter Google Calendar (optionnel)</div>
+<button id="lock-btn" onclick="handleLockBtn()">🔒</button>
 
-  <div id="cal-section">
-    <div class="section-label">Google Calendar</div>
-    <p>Collez l'URL iCal publique de votre calendrier Google. Les événements du jour s'afficheront automatiquement.</p>
-    <input type="text" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
-    <button id="cal-save-btn" onclick="saveCalUrl()">Connecter</button>
-    <div id="cal-status"></div>
+<div id="pin-overlay">
+  <div id="pin-card">
+    <h2>Mode soignant</h2>
+    <p>Entrez le code PIN</p>
+    <div id="pin-dots">
+      <span class="pin-dot" id="d0"></span>
+      <span class="pin-dot" id="d1"></span>
+      <span class="pin-dot" id="d2"></span>
+      <span class="pin-dot" id="d3"></span>
+    </div>
+    <div id="pin-keypad">
+      <button class="pin-key" onclick="pinKey('1')">1</button>
+      <button class="pin-key" onclick="pinKey('2')">2</button>
+      <button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button>
+      <button class="pin-key" onclick="pinKey('5')">5</button>
+      <button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button>
+      <button class="pin-key" onclick="pinKey('8')">8</button>
+      <button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key" onclick="pinKey('0')">0</button>
+      <button class="pin-key del" onclick="pinDel()">⌫</button>
+    </div>
+    <span id="pin-error"></span>
+    <span id="pin-cancel" onclick="closePinOverlay()">Annuler</span>
   </div>
-
 </div>
 
 <script>
@@ -315,28 +420,95 @@
   var localReminders = [];
   var gcalEvents = [];
   var calUrl = '';
+  var editMode = false;
+  var pinEntry = '';
+  var storedPin = '1234';
 
-  function getTheme(h) {
-    if (h >= 6  && h < 12) return { cls: 't-morning',   icon: '☀️' };
-    if (h >= 12 && h < 18) return { cls: 't-afternoon', icon: '🌤' };
-    if (h >= 18 && h < 21) return { cls: 't-evening',   icon: '🌅' };
-    return { cls: 't-night', icon: '🌙' };
+  // ── THEMES (no CSS vars — direct style for iOS 9) ──
+  var THEMES = {
+    morning: {
+      bg: '#fdf6e3', color: '#2e1e06', borderColor: '#dfc98a',
+      card: '#f5ebc8', accent: '#c4700a', muted: '#a07840',
+      danger: '#c03020', gcal: '#4a8ad4', accent2: '#4a8a50',
+      icon: '☀️'
+    },
+    afternoon: {
+      bg: '#eef3f8', color: '#0e2040', borderColor: '#a8c4de',
+      card: '#dde8f2', accent: '#1a5fa8', muted: '#4a6a9a',
+      danger: '#c03020', gcal: '#4a8ad4', accent2: '#1a7a50',
+      icon: '🌤'
+    },
+    evening: {
+      bg: '#f5925a', color: '#1a0800', borderColor: 'rgba(90,30,0,0.25)',
+      card: 'rgba(255,255,255,0.25)', accent: '#3d1200', muted: '#5c2200',
+      danger: '#7a0a00', gcal: '#2a5a9a', accent2: '#1a4a20',
+      icon: '🌅'
+    },
+    night: {
+      bg: '#141820', color: '#c8d8f0', borderColor: '#2e3a50',
+      card: '#1e2430', accent: '#7aaae0', muted: '#5a7aaa',
+      danger: '#e07060', gcal: '#4a8ad4', accent2: '#4aaa80',
+      icon: '🌙'
+    }
+  };
+
+  var currentTheme = null;
+
+  function getThemeName(h) {
+    if (h >= 6  && h < 12) return 'morning';
+    if (h >= 12 && h < 18) return 'afternoon';
+    if (h >= 18 && h < 21) return 'evening';
+    return 'night';
   }
 
   function applyTheme() {
-    var t = getTheme(new Date().getHours());
-    document.body.className = t.cls;
+    var name = getThemeName(new Date().getHours());
+    if (name === currentTheme) return;
+    currentTheme = name;
+    var t = THEMES[name];
+
+    document.body.style.background = t.bg;
+    document.body.style.color = t.color;
+
     document.getElementById('period-icon').textContent = t.icon;
+    document.getElementById('day').style.color = t.accent;
+    document.getElementById('date').style.color = t.muted;
+    document.getElementById('sync-status').style.color = t.muted;
+    document.getElementById('today-label').style.color = t.muted;
+
+    // lock btn
+    var lb = document.getElementById('lock-btn');
+    lb.style.background = t.card;
+    lb.style.borderColor = t.borderColor;
+    lb.style.color = t.muted;
+
+    // clock border
+    document.getElementById('clock-section').style.borderBottomColor = t.borderColor;
+
+    // edit sections
+    var editBgs = ['add-section','cal-section','pin-change'];
+    for (var i = 0; i < editBgs.length; i++) {
+      var el = document.getElementById(editBgs[i]);
+      el.style.background = t.card;
+      el.style.borderColor = t.borderColor;
+    }
+    var editLabels = document.querySelectorAll('.edit-label');
+    for (var j = 0; j < editLabels.length; j++) { editLabels[j].style.color = t.muted; }
+    var editBtns = document.querySelectorAll('.edit-btn');
+    for (var k = 0; k < editBtns.length; k++) { editBtns[k].style.background = t.accent; }
+
+    // re-render reminders with new theme colors
+    renderReminders(t);
   }
 
+  // ── UTILS ──
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function toMins(t) {
     if (!t || t === 'Toute la journée') return -1;
-    var parts = t.split(':');
-    return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]);
   }
 
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
+  // ── LOCAL REMINDERS ──
   function loadLocal() {
     try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
     if (!localReminders.length) {
@@ -348,11 +520,10 @@
       saveLocal();
     }
   }
-
   function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
 
   function addReminder() {
-    var text   = document.getElementById('r-text').value.replace(/^\s+|\s+$/g, '');
+    var text   = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
     var time   = document.getElementById('r-time').value;
     var repeat = document.getElementById('r-repeat').value;
     if (!text || !time) { alert('Veuillez entrer un horaire et une description.'); return; }
@@ -373,37 +544,14 @@
     render();
   }
 
-  function toggleCal() {
-    var s = document.getElementById('cal-section');
-    if (s.className.indexOf('open') >= 0) {
-      s.className = s.className.replace(' open', '').replace('open', '');
-    } else {
-      s.className += ' open';
-    }
-    if (s.className.indexOf('open') >= 0 && calUrl) {
-      document.getElementById('cal-url').value = calUrl;
-    }
-  }
-
+  // ── CALENDAR ──
   function saveCalUrl() {
-    var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g, '');
+    var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g,'');
     if (!url) return;
     calUrl = url;
     localStorage.setItem('repere_calurl', calUrl);
-    setCalStatus('Connexion…', '');
+    document.getElementById('cal-status').textContent = 'Connexion…';
     fetchIcal();
-  }
-
-  function setCalStatus(msg, cls) {
-    var el = document.getElementById('cal-status');
-    el.textContent = msg;
-    el.className = cls;
-  }
-
-  function setSync(text, cls) {
-    var el = document.getElementById('sync-status');
-    el.textContent = text;
-    el.className = 'sync-status ' + cls;
   }
 
   function fetchIcal() {
@@ -414,17 +562,21 @@
       if (xhr.status === 200) {
         gcalEvents = parseIcal(xhr.responseText);
         var n = new Date();
-        setSync('Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes()), 'ok');
-        setCalStatus('✓ Calendrier connecté', 'ok');
+        document.getElementById('sync-status').textContent = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
+        document.getElementById('sync-status').style.color = THEMES[currentTheme || 'afternoon'].accent2;
+        document.getElementById('cal-status').textContent = '✓ Calendrier connecté';
+        document.getElementById('cal-status').style.color = THEMES[currentTheme || 'afternoon'].accent2;
         render();
       } else {
-        setSync('Erreur', 'err');
-        setCalStatus('Erreur de connexion. Vérifiez l\'URL.', 'err');
+        document.getElementById('sync-status').textContent = 'Erreur sync';
+        document.getElementById('sync-status').style.color = THEMES[currentTheme || 'afternoon'].danger;
+        document.getElementById('cal-status').textContent = 'Erreur. Calendrier public ?';
+        document.getElementById('cal-status').style.color = THEMES[currentTheme || 'afternoon'].danger;
       }
     };
     xhr.onerror = function() {
-      setSync('Hors ligne', 'err');
-      setCalStatus('Erreur de connexion.', 'err');
+      document.getElementById('sync-status').textContent = 'Hors ligne';
+      document.getElementById('sync-status').style.color = THEMES[currentTheme || 'afternoon'].danger;
     };
     xhr.send();
   }
@@ -432,10 +584,8 @@
   function parseIcal(text) {
     var today = new Date();
     var todayStr = today.getFullYear().toString() + pad(today.getMonth()+1) + pad(today.getDate());
-    var events = [];
+    var events = [], inEvent = false, ev = {};
     var lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
-    var inEvent = false, ev = {};
-
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
       if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
@@ -446,45 +596,93 @@
         if (line.indexOf('SUMMARY:') === 0) ev.summary = line.slice(8).replace(/^\s+|\s+$/g,'');
         else if (line.indexOf('DTSTART') === 0) {
           var val = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
-          var dateStr = val.replace(/T.*/, '').replace('Z','');
+          var dateStr = val.replace(/T.*/,'').replace('Z','');
           if (dateStr === todayStr) {
             ev.today = true;
             if (val.indexOf('T') >= 0) {
-              var timePart = val.replace(/.*T/, '').replace('Z','');
-              var h = parseInt(timePart.slice(0,2));
-              var m = timePart.slice(2,4);
-              if (val.charAt(val.length-1) === 'Z') {
-                var offset = -today.getTimezoneOffset() / 60;
-                h = (h + offset + 24) % 24;
-              }
-              ev.time = pad(Math.floor(h)) + ':' + m;
-              ev.allDay = false;
-            } else {
-              ev.time = 'Toute la journée';
-              ev.allDay = true;
-            }
+              var tp = val.replace(/.*T/,'').replace('Z','');
+              var h = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
+              if (val.charAt(val.length-1) === 'Z') { h = (h + (-today.getTimezoneOffset()/60) + 24) % 24; }
+              ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
+            } else { ev.time = 'Toute la journée'; ev.allDay = true; }
           }
         }
       }
     }
-
-    return events.map(function(e) {
-      return { id: 'ical_' + Math.random(), time: e.time, text: e.summary, source: 'gcal', allDay: e.allDay };
-    });
+    return events.map(function(e) { return { id: 'ical_' + Math.random(), time: e.time, text: e.summary, source: 'gcal', allDay: e.allDay }; });
   }
 
-  function render() {
-    applyTheme();
-    var now = new Date();
-    document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
-    document.getElementById('day').textContent  = DAYS[now.getDay()];
-    document.getElementById('date').textContent = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+  // ── PIN ──
+  function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
 
+  function savePin() {
+    var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
+    var el = document.getElementById('pin-save-status');
+    if (val.length !== 4 || isNaN(Number(val))) {
+      el.textContent = '4 chiffres requis.'; el.style.color = '#c03020'; return;
+    }
+    storedPin = val;
+    localStorage.setItem('repere_pin', storedPin);
+    document.getElementById('new-pin').value = '';
+    el.textContent = '✓ Code enregistré'; el.style.color = '#4a8a50';
+  }
+
+  function handleLockBtn() {
+    if (editMode) {
+      editMode = false;
+      document.getElementById('edit-sections').style.display = 'none';
+      document.getElementById('lock-btn').textContent = '🔒';
+    } else {
+      pinEntry = '';
+      updateDots();
+      document.getElementById('pin-error').textContent = '';
+      document.getElementById('pin-overlay').style.display = '-webkit-box';
+      document.getElementById('pin-overlay').style.display = '-webkit-flex';
+      document.getElementById('pin-overlay').style.display = 'flex';
+    }
+  }
+
+  function pinKey(k) {
+    if (pinEntry.length >= 4) return;
+    pinEntry += k; updateDots();
+    if (pinEntry.length === 4) setTimeout(checkPin, 200);
+  }
+
+  function pinDel() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
+
+  function updateDots() {
+    for (var i = 0; i < 4; i++) {
+      var d = document.getElementById('d' + i);
+      d.className = i < pinEntry.length ? 'pin-dot filled' : 'pin-dot';
+    }
+  }
+
+  function checkPin() {
+    if (pinEntry === storedPin) {
+      closePinOverlay();
+      editMode = true;
+      document.getElementById('edit-sections').style.display = 'block';
+      document.getElementById('lock-btn').textContent = '🔓';
+      if (calUrl) document.getElementById('cal-url').value = calUrl;
+      applyTheme();
+    } else {
+      document.getElementById('pin-error').textContent = 'Code incorrect.';
+      pinEntry = ''; updateDots();
+    }
+  }
+
+  function closePinOverlay() {
+    document.getElementById('pin-overlay').style.display = 'none';
+    pinEntry = ''; updateDots();
+  }
+
+  // ── RENDER ──
+  function renderReminders(t) {
+    var now = new Date();
     var curMins = now.getHours() * 60 + now.getMinutes();
     var all = localReminders.concat(gcalEvents).sort(function(a,b) {
       var am = toMins(a.time), bm = toMins(b.time);
-      if (am === -1) return -1; if (bm === -1) return 1;
-      return am - bm;
+      if (am === -1) return -1; if (bm === -1) return 1; return am - bm;
     });
 
     var next = null;
@@ -493,6 +691,7 @@
       if (rm !== -1 && rm > curMins) { next = all[i]; break; }
     }
 
+    // Banner
     var banner = document.getElementById('next-banner');
     if (next) {
       var diff = toMins(next.time) - curMins;
@@ -500,35 +699,59 @@
       document.getElementById('banner-text').textContent = next.text;
       document.getElementById('banner-time').textContent = next.time + ' · dans ' + (hh ? hh+'h ' : '') + mm + 'min';
       banner.style.display = 'block';
-      banner.className = diff <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
-    } else {
-      banner.style.display = 'none';
-    }
+      var bannerAccent = diff <= 30 ? t.danger : (next.source === 'gcal' ? t.gcal : t.accent);
+      banner.style.background = t.card;
+      banner.style.borderColor = bannerAccent;
+      banner.style.borderLeftColor = bannerAccent;
+      document.getElementById('banner-label').style.color = t.muted;
+      document.getElementById('banner-text').style.color = t.color;
+      document.getElementById('banner-time').style.color = bannerAccent;
+    } else { banner.style.display = 'none'; }
 
+    // List
     var list = document.getElementById('reminders-list');
-    if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>'; return; }
+    if (!all.length) {
+      list.innerHTML = '<div class="empty-state" style="color:' + t.muted + '">Aucun événement aujourd\'hui.</div>';
+      return;
+    }
 
     var html = '';
     for (var j = 0; j < all.length; j++) {
       var r = all[j];
       var rMins = toMins(r.time);
       var diff2 = rMins === -1 ? 999 : rMins - curMins;
-      var cls = r.source === 'gcal' ? 'gcal-event' : '';
+      var isPast = rMins !== -1 && diff2 < 0;
+      var isNext = next && r.id === next.id;
+      var isUrgent = isNext && diff2 <= 30;
+
+      var borderCol = r.source === 'gcal' ? t.gcal : t.borderColor;
+      if (isNext) borderCol = isUrgent ? t.danger : t.accent;
+
+      var timeColor = t.muted;
+      if (isNext) timeColor = isUrgent ? t.danger : t.accent;
+      if (r.source === 'gcal' && !isNext) timeColor = t.gcal;
+
       var meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
-      if (rMins !== -1 && diff2 < 0) { cls += ' past'; }
-      else if (next && r.id === next.id) {
+      if (isNext) {
         var hh2 = Math.floor(diff2/60), mm2 = diff2%60;
-        cls += diff2 <= 30 ? ' urgent' : ' next';
         if (meta) meta += ' · ';
         meta += 'dans ' + (hh2 ? hh2+'h ' : '') + mm2 + 'min';
       }
-      var deleteBtn = r.source === 'local' ? '<button class="r-delete" onclick="deleteReminder(' + r.id + ')">✕</button>' : '';
-      var sourceTag = r.source === 'gcal' ? '<div class="r-source">Google Calendar</div>' : '';
-      html += '<div class="reminder ' + cls.replace(/^\s+|\s+$/g,'') + '">' +
-        '<div class="r-time">' + r.time + '</div>' +
+
+      var deleteBtn = (r.source === 'local' && editMode) ?
+        '<button class="r-delete" onclick="deleteReminder(' + r.id + ')" style="color:#ccc;">✕</button>' : '';
+      var sourceTag = r.source === 'gcal' ?
+        '<span class="r-source">Google Calendar</span>' : '';
+
+      html += '<div class="reminder" style="' +
+        'background:' + t.card + ';' +
+        'border-color:' + borderCol + ';' +
+        'opacity:' + (isPast ? '0.4' : '1') + ';' +
+        '">' +
+        '<span class="r-time" style="color:' + timeColor + ';">' + r.time + '</span>' +
         '<div class="r-body">' +
-          '<div class="r-text">' + r.text + '</div>' +
-          (meta ? '<div class="r-meta">' + meta + '</div>' : '') +
+          '<span class="r-text" style="color:' + (isPast ? t.muted : t.color) + ';">' + r.text + '</span>' +
+          (meta ? '<span class="r-meta" style="color:' + t.muted + ';">' + meta + '</span>' : '') +
           sourceTag +
         '</div>' +
         deleteBtn +
@@ -537,8 +760,19 @@
     list.innerHTML = html;
   }
 
+  function render() {
+    var now = new Date();
+    document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+    document.getElementById('day').textContent  = DAYS[now.getDay()];
+    document.getElementById('date').textContent = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+    applyTheme();
+  }
+
+  // ── INIT ──
+  loadPin();
   loadLocal();
   calUrl = localStorage.getItem('repere_calurl') || '';
+  document.getElementById('edit-sections').style.display = 'none';
   render();
   if (calUrl) fetchIcal();
   setInterval(render, 15000);
