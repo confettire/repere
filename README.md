@@ -1,7 +1,6 @@
 # Repère
 
-**FR** · Une application d'horloge et de rappels pour personnes âgées, conçue pour les vieux iPads.  
-**EN** · A clock and reminder app for elderly users, designed to run on old iPads.
+**A simple clock and daily reminder app for people who need a little extra help staying oriented.**
 
 ---
 
@@ -29,9 +28,16 @@ Pour afficher les événements d'un calendrier Google :
 
 1. Dans Google Calendar sur ordinateur → ⚙️ Paramètres → cliquez sur le calendrier
 2. Descendez jusqu'à **"Integrate calendar"** → copiez l'**URL iCal publique**
-3. Dans l'app, appuyez sur **"📅 Connecter Google Calendar"** → collez l'URL → Connecter
+3. Dans l'app, appuyez sur 🔒 en bas à droite → entrez le code PIN (par défaut : **1234**) → collez l'URL → Connecter
 
 > ⚠️ Le calendrier doit être mis en **public** pour que la sync fonctionne.
+
+### Mode soignant (PIN)
+
+L'app s'ouvre en mode lecture seule. Pour modifier les rappels ou connecter un calendrier :
+- Appuyez sur 🔒 en bas à droite
+- Entrez le code PIN (par défaut : **1234**)
+- Changez le code depuis le mode soignant
 
 ### Rappels locaux
 
@@ -63,9 +69,16 @@ To display events from a Google Calendar:
 
 1. In Google Calendar on desktop → ⚙️ Settings → click the calendar name
 2. Scroll to **"Integrate calendar"** → copy the **public iCal URL**
-3. In the app, tap **"📅 Connecter Google Calendar"** → paste the URL → Connect
+3. In the app, tap 🔒 bottom right → enter PIN (default: **1234**) → paste the URL → Connect
 
 > ⚠️ The calendar must be set to **public** for sync to work.
+
+### Caregiver mode (PIN lock)
+
+The app opens in read-only mode by default. To edit reminders or connect a calendar:
+- Tap 🔒 bottom right
+- Enter the PIN (default: **1234**)
+- Change the PIN from inside caregiver mode
 
 ### Local reminders
 
