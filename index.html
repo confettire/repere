@@ -1,436 +1,293 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Repère" />
-  <title>Repère</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
-      min-height: 100vh;
-      -webkit-transition: background 1.2s ease;
-      transition: background 1.2s ease;
-    }
-
-    /* ── THEMES ── */
-    body.t-morning   { background: #fdf6e3; color: #2e1e06; }
-    body.t-afternoon { background: #eef3f8; color: #0e2040; }
-    body.t-evening   { background: #f5925a; color: #1a0800; }
-    body.t-night     { background: #141820; color: #c8d8f0; }
-
-    /* accent colors per theme */
-    .t-morning   .accent { color: #c4700a; }
-    .t-afternoon .accent { color: #1a5fa8; }
-    .t-evening   .accent { color: #3d1200; }
-    .t-night     .accent { color: #7aaae0; }
-
-    .t-morning   .muted { color: #b08848; }
-    .t-afternoon .muted { color: #5a7aaa; }
-    .t-evening   .muted { color: #6c3210; }
-    .t-night     .muted { color: #5a7aaa; }
-
-    /* ── LAYOUT ── */
-    #app {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 40px 24px 120px;
-    }
-
-    /* ── CLOCK ── */
-    #clock-section {
-      text-align: center;
-      padding: 20px 0 36px;
-      margin-bottom: 8px;
-    }
-
-    #period-icon {
-      font-size: 44px;
-      display: block;
-      margin-bottom: 16px;
-    }
-
-    #time {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 120px;
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -4px;
-    }
-
-    #day {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 36px;
-      font-weight: 700;
-      font-style: italic;
-      margin-top: 14px;
-    }
-
-    .t-morning   #day { color: #c4700a; }
-    .t-afternoon #day { color: #1a5fa8; }
-    .t-evening   #day { color: #3d1200; }
-    .t-night     #day { color: #7aaae0; }
-
-    #date {
-      font-size: 18px;
-      font-weight: 500;
-      margin-top: 6px;
-      letter-spacing: 0.3px;
-    }
-
-    .t-morning   #date { color: #b08848; }
-    .t-afternoon #date { color: #5a7aaa; }
-    .t-evening   #date { color: #6c3210; }
-    .t-night     #date { color: #5a7aaa; }
-
-    /* ── DIVIDER ── */
-    .divider { height: 1px; margin-bottom: 28px; }
-    .t-morning   .divider { background: #dfc98a; }
-    .t-afternoon .divider { background: #a8c4de; }
-    .t-evening   .divider { background: rgba(90,30,0,0.3); }
-    .t-night     .divider { background: #2e3a50; }
-
-    /* ── NEXT BANNER ── */
-    #next-banner {
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-bottom: 28px;
-      display: none;
-      border-left: 6px solid;
-    }
-
-    .t-morning   #next-banner { background: #f5ebc8; border-color: #c4700a; }
-    .t-afternoon #next-banner { background: #dde8f2; border-color: #1a5fa8; }
-    .t-evening   #next-banner { background: rgba(255,255,255,0.28); border-color: #3d1200; }
-    .t-night     #next-banner { background: #1e2430; border-color: #7aaae0; }
-
-    #next-banner.urgent { border-color: #c03020 !important; }
-    #next-banner.gcal   { border-color: #4a8ad4 !important; }
-
-    .banner-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      opacity: 0.6;
-    }
-
-    .banner-text { font-size: 22px; font-weight: 600; }
-    .banner-time { font-size: 15px; font-weight: 500; margin-top: 4px; opacity: 0.75; }
-
-    /* ── SECTION HEADER ── */
-    .section-header {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      display: -webkit-box; display: -webkit-flex; display: flex;
-      -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
-      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-      opacity: 0.6;
-    }
-
-    .sync-ok  { color: #4a8a50 !important; opacity: 1 !important; }
-    .sync-err { color: #c03020 !important; opacity: 1 !important; }
-
-    /* ── REMINDERS ── */
-    #reminders-list { margin-bottom: 32px; }
-
-    .reminder {
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 10px;
-      display: -webkit-box; display: -webkit-flex; display: flex;
-      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-      gap: 16px;
-      border: 1.5px solid;
-    }
-
-    .t-morning   .reminder { background: #f5ebc8; border-color: #e8d090; }
-    .t-afternoon .reminder { background: #dde8f2; border-color: #b8d0e8; }
-    .t-evening   .reminder { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
-    .t-night     .reminder { background: #1e2430; border-color: #2e3a50; }
-
-    .reminder.past { opacity: 0.38; }
-    .reminder.r-next   { border-left-width: 6px; }
-    .reminder.r-urgent { border-left-width: 6px; border-left-color: #c03020 !important; }
-    .reminder.r-gcal   { border-left-width: 6px; border-left-color: #4a8ad4 !important; }
-
-    .t-morning   .reminder.r-next { border-left-color: #c4700a; }
-    .t-afternoon .reminder.r-next { border-left-color: #1a5fa8; }
-    .t-evening   .reminder.r-next { border-left-color: #3d1200; }
-    .t-night     .reminder.r-next { border-left-color: #7aaae0; }
-
-    .r-time {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 30px;
-      font-weight: 700;
-      min-width: 80px;
-      opacity: 0.5;
-    }
-
-    .reminder.r-next .r-time,
-    .reminder.r-urgent .r-time { opacity: 1; }
-    .reminder.r-gcal .r-time   { color: #4a8ad4; opacity: 1; }
-
-    .r-body { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-
-    .r-text {
-      font-size: 19px;
-      font-weight: 600;
-      line-height: 1.3;
-    }
-
-    .reminder.past .r-text { opacity: 0.5; }
-
-    .r-meta {
-      font-size: 12px;
-      font-weight: 500;
-      margin-top: 3px;
-      opacity: 0.55;
-    }
-
-    .r-source {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #4a8ad4;
-      margin-top: 3px;
-    }
-
-    .r-delete {
-      background: none; border: none; font-size: 18px;
-      cursor: pointer; padding: 4px 8px; border-radius: 8px; opacity: 0.3;
-    }
-    .r-delete:active { opacity: 1; color: #c03020; }
-
-    .empty-state {
-      text-align: center; padding: 32px;
-      font-size: 16px; font-style: italic; opacity: 0.4;
-    }
-
-    /* ── EDIT MODE ── */
-    #edit-sections { display: none; }
-    #edit-sections.open { display: block; }
-
-    .card {
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      border: 1.5px solid;
-    }
-
-    .t-morning   .card { background: #f5ebc8; border-color: #e8d090; }
-    .t-afternoon .card { background: #dde8f2; border-color: #b8d0e8; }
-    .t-evening   .card { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
-    .t-night     .card { background: #1e2430; border-color: #2e3a50; }
-
-    .card p { font-size: 13px; font-weight: 400; opacity: 0.6; margin-bottom: 14px; line-height: 1.6; }
-
-    .form-row {
-      display: -webkit-box; display: -webkit-flex; display: flex;
-      gap: 10px; margin-bottom: 12px;
-      -webkit-flex-wrap: wrap; flex-wrap: wrap;
-    }
-
-    .form-row input,
-    .form-row select,
-    .card-input {
-      background: transparent;
-      border: 1.5px solid;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 16px;
-      font-weight: 500;
-      font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
-      outline: none;
-      -webkit-appearance: none;
-      color: inherit;
-      width: 100%;
-      margin-bottom: 12px;
-    }
-
-    .t-morning   .form-row input,
-    .t-morning   .form-row select,
-    .t-morning   .card-input  { border-color: #e8d090; }
-    .t-afternoon .form-row input,
-    .t-afternoon .form-row select,
-    .t-afternoon .card-input  { border-color: #b8d0e8; }
-    .t-evening   .form-row input,
-    .t-evening   .form-row select,
-    .t-evening   .card-input  { border-color: rgba(90,30,0,0.3); }
-    .t-night     .form-row input,
-    .t-night     .form-row select,
-    .t-night     .card-input  { border-color: #2e3a50; }
-
-    #r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 150px; width: auto; margin-bottom: 0; }
-    #r-time   { width: 110px; margin-bottom: 0; }
-    #r-repeat { width: 150px; margin-bottom: 0; }
-
-    .btn {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 15px;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
-      cursor: pointer;
-      letter-spacing: 0.3px;
-    }
-
-    .t-morning   .btn { background: #c4700a; color: #fdf6e3; }
-    .t-afternoon .btn { background: #1a5fa8; color: #eef3f8; }
-    .t-evening   .btn { background: #3d1200; color: #f5925a; }
-    .t-night     .btn { background: #7aaae0; color: #141820; }
-
-    .btn-sm { padding: 12px; font-size: 14px; }
-
-    .status-msg { font-size: 12px; font-weight: 500; margin-top: 10px; text-align: center; opacity: 0.6; }
-    .status-ok  { color: #4a8a50 !important; opacity: 1 !important; }
-    .status-err { color: #c03020 !important; opacity: 1 !important; }
-
-    .disconnect-btn {
-      background: none; border: none;
-      font-size: 12px; font-weight: 500;
-      cursor: pointer; opacity: 0.45;
-      display: block; margin-top: 10px;
-      font-family: 'Inter', -apple-system, sans-serif;
-      color: inherit;
-    }
-    .disconnect-btn:active { opacity: 1; color: #c03020; }
-
-    /* ── LOCK BTN ── */
-    #lock-btn {
-      position: fixed;
-      bottom: 22px; right: 22px;
-      width: 48px; height: 48px;
-      border-radius: 24px;
-      border: 1.5px solid rgba(128,128,128,0.25);
-      background: rgba(128,128,128,0.12);
-      font-size: 20px;
-      cursor: pointer;
-      display: -webkit-box; display: -webkit-flex; display: flex;
-      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-      -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
-      opacity: 0.35;
-      z-index: 100;
-    }
-    #lock-btn:active { opacity: 1; }
-
-    /* ── PIN OVERLAY ── */
-    #pin-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-      -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
-    }
-    #pin-overlay.open {
-      display: -webkit-box; display: -webkit-flex; display: flex;
-    }
-
-    #pin-card {
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 36px 28px 28px;
-      width: 310px;
-      text-align: center;
-      -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-
-    #pin-card h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 4px;
-    }
-
-    .pin-sub { font-size: 13px; font-weight: 500; color: #aaa; margin-bottom: 24px; }
-
-    #pin-dots {
-      display: -webkit-box; display: -webkit-flex; display: flex;
-      -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
-      gap: 16px; margin-bottom: 26px;
-    }
-
-    .dot { width: 15px; height: 15px; border-radius: 50%; background: #e8e8e8; }
-    .dot.on { background: #c4700a; }
-
-    #pin-keypad {
-      display: -webkit-box; display: -webkit-flex; display: flex;
-      -webkit-flex-wrap: wrap; flex-wrap: wrap;
-      gap: 10px;
-      -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
-      margin-bottom: 8px;
-    }
-
-    .k {
-      width: 78px; height: 58px;
-      border-radius: 14px;
-      border: 1.5px solid #e8e8e8;
-      background: #f8f8f8;
-      font-size: 26px;
-      font-weight: 300;
-      color: #1a1a1a;
-      cursor: pointer;
-      font-family: 'Playfair Display', Georgia, serif;
-    }
-    .k:active { background: #ebebeb; }
-    .k.del { font-size: 18px; color: #999; font-family: 'Inter', sans-serif; }
-
-    #pin-err { font-size: 13px; font-weight: 500; color: #c03020; min-height: 20px; margin-top: 8px; }
-    #pin-cancel { font-size: 13px; font-weight: 500; color: #bbb; margin-top: 16px; cursor: pointer; display: block; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Repère" />
+<title>Repère</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  min-height: 100vh;
+  -webkit-transition: background 1.2s ease;
+  transition: background 1.2s ease;
+}
+body.t-morning   { background: #fdf6e3; color: #2e1e06; }
+body.t-afternoon { background: #eef3f8; color: #0e2040; }
+body.t-evening   { background: #f5925a; color: #1a0800; }
+body.t-night     { background: #141820; color: #c8d8f0; }
+body.off-today #clock-section { opacity: 0.55; }
+.t-morning .accent   { color: #c4700a; }
+.t-afternoon .accent { color: #1a5fa8; }
+.t-evening .accent   { color: #3d1200; }
+.t-night .accent     { color: #7aaae0; }
+#app { max-width: 700px; margin: 0 auto; padding: 36px 28px 140px; }
+#clock-section {
+  text-align: center; padding: 16px 0 20px; margin-bottom: 8px;
+  -webkit-transition: opacity 0.4s ease; transition: opacity 0.4s ease;
+}
+#period-icon { font-size: 52px; display: block; margin-bottom: 14px; }
+#time {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 136px; font-weight: 900; line-height: 1; letter-spacing: -4px;
+}
+#day-display { text-align: center; margin-top: 16px; }
+#day {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 46px; font-weight: 700;
+}
+.t-morning #day   { color: #c4700a; }
+.t-afternoon #day { color: #1a5fa8; }
+.t-evening #day   { color: #3d1200; }
+.t-night #day     { color: #7aaae0; }
+#date { font-size: 22px; font-weight: 500; margin-top: 8px; letter-spacing: 0.3px; }
+.t-morning #date   { color: #8a6020; }
+.t-afternoon #date { color: #3a5a8a; }
+.t-evening #date   { color: #4a1a00; }
+.t-night #date     { color: #7090b0; }
+#day-nav {
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: stretch; -webkit-align-items: stretch; align-items: stretch;
+  gap: 12px; margin-top: 20px; margin-bottom: 4px;
+}
+.nav-day-btn {
+  -webkit-box-flex: 1; -webkit-flex: 1; flex: 1;
+  border-radius: 14px; border: 2px solid; background: transparent;
+  font-size: 20px; font-weight: 700; cursor: pointer; color: inherit;
+  padding: 14px 10px; text-align: center; line-height: 1.2;
+  font-family: 'Inter', sans-serif;
+  -webkit-transition: opacity 0.15s; transition: opacity 0.15s;
+}
+.nav-day-btn:active { opacity: 0.6; }
+.t-morning .nav-day-btn   { border-color: #c4700a; color: #c4700a; }
+.t-afternoon .nav-day-btn { border-color: #1a5fa8; color: #1a5fa8; }
+.t-evening .nav-day-btn   { border-color: #3d1200; color: #3d1200; }
+.t-night .nav-day-btn     { border-color: #7aaae0; color: #7aaae0; }
+#today-anchor {
+  width: 100%; border-radius: 16px; border: 3px solid; margin-top: 12px;
+  padding: 16px; font-size: 22px; font-weight: 700; cursor: pointer;
+  font-family: 'Inter', sans-serif; text-align: center;
+  -webkit-transition: opacity 0.2s; transition: opacity 0.2s;
+}
+#today-anchor.is-today { opacity: 0.3; cursor: default; }
+#today-anchor.off-today { opacity: 1; }
+.t-morning #today-anchor   { border-color: #c4700a; color: #c4700a; background: rgba(196,112,10,0.08); }
+.t-afternoon #today-anchor { border-color: #1a5fa8; color: #1a5fa8; background: rgba(26,95,168,0.08); }
+.t-evening #today-anchor   { border-color: #3d1200; color: #3d1200; background: rgba(61,18,0,0.1); }
+.t-night #today-anchor     { border-color: #7aaae0; color: #7aaae0; background: rgba(122,170,224,0.1); }
+.divider { height: 1px; margin: 24px 0 28px; }
+.t-morning .divider   { background: #dfc98a; }
+.t-afternoon .divider { background: #a8c4de; }
+.t-evening .divider   { background: rgba(90,30,0,0.3); }
+.t-night .divider     { background: #2e3a50; }
+#next-banner {
+  border-radius: 18px; padding: 22px 24px; margin-bottom: 30px;
+  display: none; border-left: 7px solid;
+}
+.t-morning #next-banner   { background: #f5ebc8; border-color: #c4700a; }
+.t-afternoon #next-banner { background: #dde8f2; border-color: #1a5fa8; }
+.t-evening #next-banner   { background: rgba(255,255,255,0.28); border-color: #3d1200; }
+.t-night #next-banner     { background: #1e2430; border-color: #7aaae0; }
+#next-banner.urgent { border-color: #c03020 !important; }
+#next-banner.gcal   { border-color: #4a8ad4 !important; }
+.banner-label { font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.65; }
+.banner-text  { font-size: 28px; font-weight: 700; line-height: 1.25; }
+.banner-time  { font-size: 22px; font-weight: 600; margin-top: 6px; }
+.section-header {
+  font-size: 18px; font-weight: 700; letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+}
+#sync-indicator { font-size: 13px; font-weight: 500; opacity: 0.6; }
+.sync-ok  { color: #4a8a50 !important; opacity: 1 !important; }
+.sync-err { color: #c03020 !important; opacity: 1 !important; }
+#reminders-list { margin-bottom: 36px; }
+.reminder {
+  border-radius: 16px; padding: 20px 22px; margin-bottom: 14px;
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  gap: 20px; border: 2px solid;
+}
+.t-morning .reminder   { background: #f5ebc8; border-color: #e8d090; }
+.t-afternoon .reminder { background: #dde8f2; border-color: #b8d0e8; }
+.t-evening .reminder   { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
+.t-night .reminder     { background: #1e2430; border-color: #2e3a50; }
+.reminder.past         { opacity: 0.6; }
+.reminder.past .r-text { text-decoration: line-through; }
+.reminder.r-next       { border-left-width: 7px; }
+.reminder.r-urgent     { border-left-width: 7px; border-left-color: #c03020 !important; }
+.reminder.r-gcal       { border-left-width: 7px; border-left-color: #4a8ad4 !important; }
+.t-morning .reminder.r-next   { border-left-color: #c4700a; }
+.t-afternoon .reminder.r-next { border-left-color: #1a5fa8; }
+.t-evening .reminder.r-next   { border-left-color: #3d1200; }
+.t-night .reminder.r-next     { border-left-color: #7aaae0; }
+.r-time {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 36px; font-weight: 700; min-width: 96px; opacity: 0.55;
+}
+.reminder.r-next .r-time,
+.reminder.r-urgent .r-time { opacity: 1; }
+.reminder.r-gcal .r-time   { color: #4a8ad4; opacity: 1; }
+.reminder.past .r-time     { opacity: 0.55; }
+.r-body  { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
+.r-text  { font-size: 24px; font-weight: 600; line-height: 1.3; }
+.r-meta  { font-size: 16px; font-weight: 500; margin-top: 5px; opacity: 0.65; }
+.r-source { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4a8ad4; margin-top: 4px; }
+.r-delete {
+  background: none; border: 2px solid transparent; font-size: 22px;
+  cursor: pointer; padding: 8px 12px; border-radius: 10px; opacity: 0.35;
+  font-family: 'Inter', sans-serif; color: inherit;
+}
+.r-delete:active { opacity: 1; color: #c03020; border-color: #c03020; }
+.empty-state { text-align: center; padding: 40px; font-size: 20px; opacity: 0.4; }
+#del-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6); z-index: 300;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+}
+#del-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
+#del-card {
+  background: #fff; border-radius: 24px; padding: 36px 28px;
+  width: 320px; text-align: center;
+  -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+#del-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
+#del-card p  { font-size: 17px; color: #555; margin-bottom: 28px; line-height: 1.5; }
+#del-name    { font-weight: 700; color: #1a1a1a; }
+.del-btns { display: -webkit-box; display: -webkit-flex; display: flex; gap: 12px; }
+.del-cancel  { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 16px; border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8; font-size: 17px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #333; }
+.del-confirm { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 16px; border-radius: 12px; border: none; background: #c03020; font-size: 17px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #fff; }
+.del-cancel:active  { background: #eee; }
+.del-confirm:active { background: #a02010; }
+#edit-sections { display: none; }
+#edit-sections.open { display: block; }
+.card { border-radius: 18px; padding: 24px; margin-bottom: 22px; border: 2px solid; }
+.t-morning .card   { background: #f5ebc8; border-color: #e8d090; }
+.t-afternoon .card { background: #dde8f2; border-color: #b8d0e8; }
+.t-evening .card   { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
+.t-night .card     { background: #1e2430; border-color: #2e3a50; }
+.card p { font-size: 16px; font-weight: 400; opacity: 0.65; margin-bottom: 16px; line-height: 1.6; }
+.form-row {
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  gap: 12px; margin-bottom: 14px; -webkit-flex-wrap: wrap; flex-wrap: wrap;
+}
+.form-row input, .form-row select, .card-input {
+  background: transparent; border: 2px solid; border-radius: 12px;
+  padding: 14px 16px; font-size: 18px; font-weight: 500;
+  font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  outline: none; -webkit-appearance: none; color: inherit; width: 100%; margin-bottom: 14px;
+}
+.t-morning .form-row input,   .t-morning .form-row select,   .t-morning .card-input   { border-color: #e8d090; }
+.t-afternoon .form-row input, .t-afternoon .form-row select, .t-afternoon .card-input { border-color: #b8d0e8; }
+.t-evening .form-row input,   .t-evening .form-row select,   .t-evening .card-input   { border-color: rgba(90,30,0,0.3); }
+.t-night .form-row input,     .t-night .form-row select,     .t-night .card-input     { border-color: #2e3a50; }
+#r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 150px; width: auto; margin-bottom: 0; }
+#r-time   { width: 120px; margin-bottom: 0; }
+#r-repeat { width: 160px; margin-bottom: 0; }
+.btn {
+  width: 100%; border: none; border-radius: 14px; padding: 18px;
+  font-size: 18px; font-weight: 700;
+  font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  cursor: pointer;
+}
+.t-morning .btn   { background: #c4700a; color: #fdf6e3; }
+.t-afternoon .btn { background: #1a5fa8; color: #eef3f8; }
+.t-evening .btn   { background: #3d1200; color: #f5925a; }
+.t-night .btn     { background: #7aaae0; color: #141820; }
+.btn-sm { padding: 14px; font-size: 17px; }
+.status-msg { font-size: 15px; font-weight: 500; margin-top: 12px; text-align: center; opacity: 0.65; }
+.status-ok  { color: #4a8a50 !important; opacity: 1 !important; }
+.status-err { color: #c03020 !important; opacity: 1 !important; }
+.disconnect-btn {
+  background: none; border: none; font-size: 15px; font-weight: 500;
+  cursor: pointer; opacity: 0.5; display: block; margin-top: 12px;
+  font-family: 'Inter', sans-serif; color: inherit;
+}
+.disconnect-btn:active { opacity: 1; color: #c03020; }
+#lock-btn {
+  position: fixed; bottom: 26px; right: 26px; width: 60px; height: 60px;
+  border-radius: 30px; border: 2px solid rgba(128,128,128,0.3);
+  background: rgba(128,128,128,0.15); font-size: 26px; cursor: pointer;
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+  opacity: 0.4; z-index: 100;
+}
+#lock-btn:active { opacity: 1; }
+#pin-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65); z-index: 200;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+}
+#pin-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
+#pin-card {
+  background: #fff; border-radius: 28px; padding: 40px 32px 32px;
+  width: 340px; text-align: center;
+  -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+#pin-card h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 28px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.pin-sub { font-size: 16px; font-weight: 500; color: #999; margin-bottom: 28px; }
+#pin-dots { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; gap: 18px; margin-bottom: 30px; }
+.dot    { width: 18px; height: 18px; border-radius: 50%; background: #e8e8e8; }
+.dot.on { background: #c4700a; }
+#pin-keypad { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; margin-bottom: 10px; }
+.k { width: 84px; height: 64px; border-radius: 16px; border: 2px solid #e8e8e8; background: #f8f8f8; font-size: 30px; font-weight: 300; color: #1a1a1a; cursor: pointer; font-family: 'Playfair Display', Georgia, serif; }
+.k:active { background: #ebebeb; }
+.k.del { font-size: 20px; color: #999; font-family: 'Inter', sans-serif; }
+#pin-err { font-size: 15px; font-weight: 500; color: #c03020; min-height: 22px; margin-top: 10px; }
+#pin-cancel-btn {
+  display: block; width: 100%; margin-top: 18px; padding: 14px;
+  border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8;
+  font-size: 17px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif; color: #666;
+}
+#pin-cancel-btn:active { background: #eee; }
+</style>
 </head>
 <body class="t-morning">
-
 <div id="app">
-
   <div id="clock-section">
     <span id="period-icon">☀️</span>
     <div id="time">--:--</div>
-    <div id="day">---</div>
-    <div id="date">---</div>
+    <div id="day-display">
+      <div id="day">---</div>
+      <div id="date">---</div>
+    </div>
   </div>
-
+  <div id="day-nav">
+    <button class="nav-day-btn" onclick="changeDay(-1)">← Hier</button>
+    <button class="nav-day-btn" onclick="changeDay(1)">Demain →</button>
+  </div>
+  <button id="today-anchor" onclick="goToday()">↩ Aujourd'hui</button>
   <div class="divider"></div>
-
   <div id="next-banner">
-    <div class="banner-label">Prochain</div>
+    <div class="banner-label" id="banner-label">À</div>
     <div class="banner-text" id="banner-text"></div>
     <div class="banner-time" id="banner-time"></div>
   </div>
-
   <div class="section-header">
-    <span>Aujourd'hui</span>
-    <span id="sync-status"></span>
+    <span id="section-day-label">Aujourd'hui</span>
+    <span id="sync-indicator"></span>
   </div>
   <div id="reminders-list"></div>
-
   <div id="edit-sections">
-
     <div class="card">
-      <div class="section-header" style="margin-bottom:16px;">Ajouter un rappel</div>
+      <div class="section-header" style="margin-bottom:18px; font-size:16px;">Ajouter un rappel</div>
       <div class="form-row">
-        <input type="text" id="r-text" placeholder="Médicaments, repas…" />
+        <input type="text" id="r-text" placeholder="Médicaments, repas…" autocorrect="off" autocapitalize="off" />
         <input type="time" id="r-time" />
       </div>
-      <div class="form-row" style="margin-bottom:14px;">
+      <div class="form-row" style="margin-bottom:16px;">
         <select id="r-repeat">
           <option value="daily">Tous les jours</option>
           <option value="once">Une seule fois</option>
@@ -438,41 +295,44 @@
       </div>
       <button class="btn" onclick="addReminder()">+ Ajouter</button>
     </div>
-
     <div class="card">
-      <div class="section-header" style="margin-bottom:10px;">
+      <div class="section-header" style="margin-bottom:12px; font-size:16px;">
         <span>Google Calendar</span>
-        <span id="cal-sync-badge"></span>
+        <span id="cal-sync-badge" style="font-size:13px; font-weight:500;"></span>
       </div>
       <p>Collez l'URL iCal publique de votre calendrier Google.</p>
-      <input type="text" class="card-input" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" spellcheck="false" />
+      <input type="text" class="card-input" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
       <button class="btn btn-sm" onclick="saveCalUrl()">Connecter</button>
       <div class="status-msg" id="cal-status"></div>
       <button class="disconnect-btn" id="disconnect-btn" onclick="disconnectCal()" style="display:none;">✕ Déconnecter le calendrier</button>
     </div>
-
     <div class="card">
-      <div class="section-header" style="margin-bottom:10px;">Code PIN</div>
+      <div class="section-header" style="margin-bottom:12px; font-size:16px;">Code PIN</div>
       <p>Code actuel : 4 chiffres. Par défaut : <strong>1234</strong></p>
       <input type="password" class="card-input" id="new-pin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Nouveau code (4 chiffres)" style="letter-spacing:8px; text-align:center;" />
       <button class="btn btn-sm" onclick="savePin()">Enregistrer</button>
       <div class="status-msg" id="pin-change-status"></div>
     </div>
-
   </div>
 </div>
-
 <button id="lock-btn" onclick="handleLock()">🔒</button>
-
+<div id="del-overlay">
+  <div id="del-card">
+    <h3>Supprimer ce rappel ?</h3>
+    <p>« <span id="del-name"></span> »</p>
+    <div class="del-btns">
+      <button class="del-cancel" onclick="cancelDelete()">Annuler</button>
+      <button class="del-confirm" onclick="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>
 <div id="pin-overlay">
   <div id="pin-card">
     <h2>Repère</h2>
     <div class="pin-sub">Code soignant</div>
     <div id="pin-dots">
-      <div class="dot" id="dot0"></div>
-      <div class="dot" id="dot1"></div>
-      <div class="dot" id="dot2"></div>
-      <div class="dot" id="dot3"></div>
+      <div class="dot" id="dot0"></div><div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div><div class="dot" id="dot3"></div>
     </div>
     <div id="pin-keypad">
       <button class="k" onclick="pk('1')">1</button>
@@ -488,283 +348,339 @@
       <button class="k del" onclick="pd()">⌫</button>
     </div>
     <div id="pin-err"></div>
-    <span id="pin-cancel" onclick="closePIN()">Annuler</span>
+    <button id="pin-cancel-btn" onclick="closePIN()">Annuler</button>
   </div>
 </div>
-
 <script>
-  var DAYS   = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-  var MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  var PROXY  = 'https://repere-liard.vercel.app/api/proxy?url=';
-
-  var localReminders = [];
-  var gcalEvents     = [];
-  var calUrl         = '';
-  var editMode       = false;
-  var pinEntry       = '';
-  var storedPin      = '1234';
-
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
-  function toMins(t) {
-    if (!t || t === 'Toute la journée') return -1;
-    var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]);
-  }
-
-  function applyTheme() {
-    var h = new Date().getHours();
-    var cls, icon;
-    if      (h >= 6  && h < 12) { cls = 't-morning';   icon = '☀️'; }
-    else if (h >= 12 && h < 18) { cls = 't-afternoon'; icon = '🌤'; }
-    else if (h >= 18 && h < 21) { cls = 't-evening';   icon = '🌅'; }
-    else                         { cls = 't-night';     icon = '🌙'; }
-    document.body.className = cls;
-    document.getElementById('period-icon').textContent = icon;
-  }
-
-  function loadLocal() {
-    try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
-    if (!localReminders.length) {
-      localReminders = [
-        { id: 1, time: '08:00', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
-        { id: 2, time: '12:30', text: 'Déjeuner',             repeat: 'daily', source: 'local' },
-        { id: 3, time: '20:00', text: 'Médicaments du soir',  repeat: 'daily', source: 'local' }
-      ];
-      saveLocal();
-    }
-  }
-  function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
-
-  function addReminder() {
-    var text   = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
-    var time   = document.getElementById('r-time').value;
-    var repeat = document.getElementById('r-repeat').value;
-    if (!text || !time) { alert('Veuillez entrer un horaire et une description.'); return; }
-    localReminders.push({ id: Date.now(), time: time, text: text, repeat: repeat, source: 'local' });
+var DAYS   = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+var MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+var PROXY  = 'https://repere-liard.vercel.app/api/proxy?url=';
+var XHR_TIMEOUT = 10000;
+var localReminders = [];
+var gcalEvents     = [];
+var lastIcalText   = '';
+var calUrl         = '';
+var editMode       = false;
+var pinEntry       = '';
+var storedPin      = '1234';
+var dayOffset      = 0;
+var pendingDeleteId = null;
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+function toMins(t) {
+  if (!t || t === 'Toute la journée') return -1;
+  var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]);
+}
+function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function sameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+function getViewDate() {
+  var d = startOfDay(new Date());
+  d.setDate(d.getDate() + dayOffset);
+  return d;
+}
+function changeDay(dir) { dayOffset += dir; render(); }
+function goToday() { dayOffset = 0; render(); }
+function applyTheme() {
+  var h = new Date().getHours(), cls, icon;
+  if (h >= 6 && h < 12)       { cls = 't-morning';   icon = '☀️'; }
+  else if (h >= 12 && h < 18) { cls = 't-afternoon'; icon = '🌤'; }
+  else if (h >= 18 && h < 21) { cls = 't-evening';   icon = '🌅'; }
+  else                         { cls = 't-night';     icon = '🌙'; }
+  document.body.className = cls;
+  document.getElementById('period-icon').textContent = icon;
+}
+function loadLocal() {
+  try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
+  if (!localReminders.length) {
+    localReminders = [
+      { id: 1, time: '08:00', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
+      { id: 2, time: '12:30', text: 'Déjeuner',             repeat: 'daily', source: 'local' },
+      { id: 3, time: '20:00', text: 'Médicaments du soir',  repeat: 'daily', source: 'local' }
+    ];
     saveLocal();
-    document.getElementById('r-text').value = '';
-    document.getElementById('r-time').value = '';
-    render();
   }
-
-  function deleteReminder(id) {
-    var arr = [];
-    for (var i = 0; i < localReminders.length; i++) {
-      if (localReminders[i].id !== id) arr.push(localReminders[i]);
+}
+function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
+function addReminder() {
+  var text = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
+  var time = document.getElementById('r-time').value;
+  var repeat = document.getElementById('r-repeat').value;
+  if (!text || !time) { alert('Veuillez entrer un horaire et une description.'); return; }
+  localReminders.push({ id: Date.now(), time: time, text: text, repeat: repeat, source: 'local' });
+  saveLocal();
+  document.getElementById('r-text').value = '';
+  document.getElementById('r-time').value = '';
+  render();
+}
+function askDelete(id, name) {
+  pendingDeleteId = id;
+  document.getElementById('del-name').textContent = name;
+  document.getElementById('del-overlay').className = 'open';
+}
+function cancelDelete() {
+  pendingDeleteId = null;
+  document.getElementById('del-overlay').className = '';
+}
+function confirmDelete() {
+  if (pendingDeleteId === null) return;
+  var arr = [], i;
+  for (i = 0; i < localReminders.length; i++) {
+    if (localReminders[i].id !== pendingDeleteId) arr.push(localReminders[i]);
+  }
+  localReminders = arr;
+  saveLocal();
+  pendingDeleteId = null;
+  document.getElementById('del-overlay').className = '';
+  render();
+}
+function saveCalUrl() {
+  var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g,'');
+  if (!url) return;
+  calUrl = url; localStorage.setItem('repere_calurl', calUrl);
+  document.getElementById('cal-status').textContent = 'Connexion…';
+  document.getElementById('cal-status').className = 'status-msg';
+  fetchIcal();
+}
+function disconnectCal() {
+  calUrl = ''; gcalEvents = []; lastIcalText = '';
+  localStorage.removeItem('repere_calurl');
+  document.getElementById('cal-url').value = '';
+  document.getElementById('cal-status').textContent = 'Calendrier déconnecté.';
+  document.getElementById('cal-status').className = 'status-msg';
+  document.getElementById('disconnect-btn').style.display = 'none';
+  document.getElementById('sync-indicator').textContent = '';
+  document.getElementById('cal-sync-badge').textContent = '';
+  render();
+}
+function fetchIcal() {
+  if (!calUrl) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', PROXY + encodeURIComponent(calUrl), true);
+  xhr.timeout = XHR_TIMEOUT;
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      lastIcalText = xhr.responseText;
+      gcalEvents = parseIcal(xhr.responseText, new Date());
+      var n = new Date();
+      var t = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
+      document.getElementById('sync-indicator').textContent = t;
+      document.getElementById('sync-indicator').className = 'sync-ok';
+      document.getElementById('cal-sync-badge').textContent = t;
+      document.getElementById('cal-status').textContent = '✓ Calendrier connecté';
+      document.getElementById('cal-status').className = 'status-msg status-ok';
+      document.getElementById('disconnect-btn').style.display = 'block';
+      render();
+    } else {
+      document.getElementById('sync-indicator').textContent = 'Erreur sync';
+      document.getElementById('sync-indicator').className = 'sync-err';
+      document.getElementById('cal-status').textContent = "Erreur. Vérifiez l'URL et que le calendrier est public.";
+      document.getElementById('cal-status').className = 'status-msg status-err';
     }
-    localReminders = arr;
-    saveLocal(); render();
-  }
-
-  function saveCalUrl() {
-    var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g,'');
-    if (!url) return;
-    calUrl = url;
-    localStorage.setItem('repere_calurl', calUrl);
-    document.getElementById('cal-status').textContent = 'Connexion…';
-    document.getElementById('cal-status').className = 'status-msg';
-    fetchIcal();
-  }
-
-  function disconnectCal() {
-    calUrl = ''; gcalEvents = [];
-    localStorage.removeItem('repere_calurl');
-    document.getElementById('cal-url').value = '';
-    document.getElementById('cal-status').textContent = 'Calendrier déconnecté.';
-    document.getElementById('cal-status').className = 'status-msg';
-    document.getElementById('disconnect-btn').style.display = 'none';
-    document.getElementById('sync-status').textContent = '';
-    document.getElementById('cal-sync-badge').textContent = '';
-    render();
-  }
-
-  function fetchIcal() {
-    if (!calUrl) return;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', PROXY + encodeURIComponent(calUrl), true);
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        gcalEvents = parseIcal(xhr.responseText);
-        var n = new Date();
-        var t = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
-        document.getElementById('sync-status').textContent = t;
-        document.getElementById('sync-status').className = 'sync-ok';
-        document.getElementById('cal-sync-badge').textContent = t;
-        document.getElementById('cal-status').textContent = '✓ Calendrier connecté';
-        document.getElementById('cal-status').className = 'status-msg status-ok';
-        document.getElementById('disconnect-btn').style.display = 'block';
-        render();
-      } else {
-        document.getElementById('sync-status').textContent = 'Erreur sync';
-        document.getElementById('sync-status').className = 'sync-err';
-        document.getElementById('cal-status').textContent = 'Erreur. Vérifiez l\'URL et que le calendrier est public.';
-        document.getElementById('cal-status').className = 'status-msg status-err';
-      }
-    };
-    xhr.onerror = function() {
-      document.getElementById('sync-status').textContent = 'Hors ligne';
-      document.getElementById('sync-status').className = 'sync-err';
-    };
-    xhr.send();
-  }
-
-  function parseIcal(text) {
-    var today    = new Date();
-    var todayStr = today.getFullYear().toString() + pad(today.getMonth()+1) + pad(today.getDate());
-    var events = [], inEvent = false, ev = {};
-    var lines  = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
-    for (var i = 0; i < lines.length; i++) {
-      var line = lines[i];
-      if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
-      else if (line === 'END:VEVENT') {
-        if (inEvent && ev.summary && ev.today) events.push(ev);
-        inEvent = false; ev = {};
-      } else if (inEvent) {
-        if (line.indexOf('SUMMARY:') === 0) {
-          ev.summary = line.slice(8).replace(/^\s+|\s+$/g,'');
-        } else if (line.indexOf('DTSTART') === 0) {
-          var val     = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
-          var dateStr = val.replace(/T.*/,'').replace('Z','');
-          if (dateStr === todayStr) {
-            ev.today = true;
-            if (val.indexOf('T') >= 0) {
-              var tp = val.replace(/.*T/,'').replace('Z','');
-              var h  = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
-              if (val.charAt(val.length-1) === 'Z') { h = (h + (-today.getTimezoneOffset()/60) + 24) % 24; }
-              ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
-            } else { ev.time = 'Toute la journée'; ev.allDay = true; }
-          }
+  };
+  xhr.ontimeout = function() {
+    document.getElementById('sync-indicator').textContent = 'Délai dépassé';
+    document.getElementById('sync-indicator').className = 'sync-err';
+  };
+  xhr.onerror = function() {
+    document.getElementById('sync-indicator').textContent = 'Hors ligne';
+    document.getElementById('sync-indicator').className = 'sync-err';
+  };
+  xhr.send();
+}
+function parseIcal(text, targetDate) {
+  var tStr = targetDate.getFullYear().toString() + pad(targetDate.getMonth()+1) + pad(targetDate.getDate());
+  var events = [], inEvent = false, ev = {};
+  var lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  var i;
+  for (i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
+    else if (line === 'END:VEVENT') {
+      if (inEvent && ev.summary && ev.today) events.push(ev);
+      inEvent = false; ev = {};
+    } else if (inEvent) {
+      if (line.indexOf('SUMMARY:') === 0) {
+        ev.summary = line.slice(8).replace(/^\s+|\s+$/g,'');
+      } else if (line.indexOf('DTSTART') === 0) {
+        var val = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
+        var dateStr = val.replace(/T.*/,'').replace('Z','');
+        if (dateStr === tStr) {
+          ev.today = true;
+          if (val.indexOf('T') >= 0) {
+            var tp = val.replace(/.*T/,'').replace('Z','');
+            var h = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
+            if (val.charAt(val.length-1) === 'Z') { h = (h + (-targetDate.getTimezoneOffset()/60) + 24) % 24; }
+            ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
+          } else { ev.time = 'Toute la journée'; ev.allDay = true; }
         }
       }
     }
-    return events.map(function(e) {
-      return { id: 'ical_' + Math.random(), time: e.time, text: e.summary, source: 'gcal', allDay: e.allDay };
-    });
   }
-
-  function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
-
-  function savePin() {
-    var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
-    var el  = document.getElementById('pin-change-status');
-    if (val.length !== 4 || isNaN(Number(val))) {
-      el.textContent = 'Le code doit contenir exactement 4 chiffres.';
-      el.className   = 'status-msg status-err'; return;
+  return events.map(function(e) {
+    return { id: 'ical_' + Math.random(), time: e.time, text: e.summary, source: 'gcal', allDay: e.allDay };
+  });
+}
+function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
+function savePin() {
+  var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
+  var el = document.getElementById('pin-change-status');
+  if (val.length !== 4 || isNaN(Number(val))) {
+    el.textContent = 'Le code doit contenir exactement 4 chiffres.';
+    el.className = 'status-msg status-err'; return;
+  }
+  storedPin = val; localStorage.setItem('repere_pin', storedPin);
+  document.getElementById('new-pin').value = '';
+  el.textContent = '✓ Code enregistré'; el.className = 'status-msg status-ok';
+}
+function handleLock() {
+  if (editMode) {
+    editMode = false;
+    document.getElementById('edit-sections').className = '';
+    document.getElementById('lock-btn').textContent = '🔒';
+  } else {
+    pinEntry = ''; updateDots();
+    document.getElementById('pin-err').textContent = '';
+    document.getElementById('pin-overlay').className = 'open';
+  }
+}
+function pk(k) {
+  if (pinEntry.length >= 4) return;
+  pinEntry += k; updateDots();
+  if (pinEntry.length === 4) setTimeout(checkPin, 150);
+}
+function pd() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
+function updateDots() {
+  var i;
+  for (i = 0; i < 4; i++) {
+    document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot';
+  }
+}
+function checkPin() {
+  if (pinEntry === storedPin) {
+    closePIN(); editMode = true;
+    document.getElementById('edit-sections').className = 'open';
+    document.getElementById('lock-btn').textContent = '🔓';
+    if (calUrl) {
+      document.getElementById('cal-url').value = calUrl;
+      document.getElementById('disconnect-btn').style.display = 'block';
     }
-    storedPin = val;
-    localStorage.setItem('repere_pin', storedPin);
-    document.getElementById('new-pin').value = '';
-    el.textContent = '✓ Code enregistré';
-    el.className   = 'status-msg status-ok';
-  }
-
-  function handleLock() {
-    if (editMode) {
-      editMode = false;
-      document.getElementById('edit-sections').className = '';
-      document.getElementById('lock-btn').textContent = '🔒';
-    } else {
-      pinEntry = ''; updateDots();
-      document.getElementById('pin-err').textContent = '';
-      document.getElementById('pin-overlay').className = 'open';
-    }
-  }
-
-  function pk(k) {
-    if (pinEntry.length >= 4) return;
-    pinEntry += k; updateDots();
-    if (pinEntry.length === 4) setTimeout(checkPin, 150);
-  }
-
-  function pd() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
-
-  function updateDots() {
-    for (var i = 0; i < 4; i++) {
-      document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot';
-    }
-  }
-
-  function checkPin() {
-    if (pinEntry === storedPin) {
-      closePIN();
-      editMode = true;
-      document.getElementById('edit-sections').className = 'open';
-      document.getElementById('lock-btn').textContent = '🔓';
-      if (calUrl) { document.getElementById('cal-url').value = calUrl; document.getElementById('disconnect-btn').style.display = 'block'; }
-      render();
-    } else {
-      document.getElementById('pin-err').textContent = 'Code incorrect.';
-      pinEntry = ''; updateDots();
-    }
-  }
-
-  function closePIN() {
-    document.getElementById('pin-overlay').className = '';
+    render();
+  } else {
+    document.getElementById('pin-err').textContent = 'Code incorrect.';
     pinEntry = ''; updateDots();
   }
-
-  function render() {
-    applyTheme();
-    var now = new Date();
-    document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
-    document.getElementById('day').textContent  = DAYS[now.getDay()];
-    document.getElementById('date').textContent = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
-
-    var curMins = now.getHours() * 60 + now.getMinutes();
-    var all = localReminders.concat(gcalEvents).sort(function(a,b) {
-      var am = toMins(a.time), bm = toMins(b.time);
-      if (am === -1) return -1; if (bm === -1) return 1; return am - bm;
-    });
-
-    var next = null;
-    for (var i = 0; i < all.length; i++) {
+}
+function closePIN() {
+  document.getElementById('pin-overlay').className = '';
+  pinEntry = ''; updateDots();
+}
+function render() {
+  applyTheme();
+  var now = new Date();
+  var vd  = getViewDate();
+  var isToday = sameDay(vd, now);
+  document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  document.getElementById('day').textContent  = DAYS[vd.getDay()];
+  document.getElementById('date').textContent = vd.getDate() + ' ' + MONTHS[vd.getMonth()] + ' ' + vd.getFullYear();
+  if (isToday) {
+    document.body.className = document.body.className.replace(' off-today','');
+  } else {
+    if (document.body.className.indexOf('off-today') === -1) {
+      document.body.className += ' off-today';
+    }
+  }
+  var anchor = document.getElementById('today-anchor');
+  if (isToday) {
+    anchor.className = 'is-today';
+    anchor.textContent = "✓ Aujourd'hui";
+  } else {
+    anchor.className = 'off-today';
+    anchor.textContent = "↩ Revenir à aujourd'hui";
+  }
+  var label = document.getElementById('section-day-label');
+  var diff = Math.round((vd - startOfDay(now)) / 86400000);
+  if (diff === 0)       label.textContent = "Aujourd'hui";
+  else if (diff === -1) label.textContent = 'Hier';
+  else if (diff ===  1) label.textContent = 'Demain';
+  else if (diff < 0)    label.textContent = 'Il y a ' + Math.abs(diff) + ' jours';
+  else                  label.textContent = 'Dans ' + diff + ' jours';
+  var eventsToShow = isToday ? gcalEvents : (lastIcalText ? parseIcal(lastIcalText, vd) : []);
+  var curMins = now.getHours() * 60 + now.getMinutes();
+  var all = localReminders.concat(eventsToShow).sort(function(a,b) {
+    var am = toMins(a.time), bm = toMins(b.time);
+    if (am === -1) return -1; if (bm === -1) return 1; return am - bm;
+  });
+  var banner = document.getElementById('next-banner');
+  if (isToday) {
+    var next = null, i;
+    for (i = 0; i < all.length; i++) {
       var rm = toMins(all[i].time);
       if (rm !== -1 && rm > curMins) { next = all[i]; break; }
     }
-
-    var banner = document.getElementById('next-banner');
     if (next) {
-      var diff = toMins(next.time) - curMins;
-      var hh = Math.floor(diff/60), mm = diff%60;
-      document.getElementById('banner-text').textContent = next.text;
-      document.getElementById('banner-time').textContent = next.time + ' · dans ' + (hh ? hh+'h ' : '') + mm + 'min';
+      document.getElementById('banner-label').textContent = 'À ' + next.time;
+      document.getElementById('banner-text').textContent  = next.text;
+      document.getElementById('banner-time').textContent  = '';
       banner.style.display = 'block';
-      banner.className = diff <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
-    } else { banner.style.display = 'none'; }
-
-    var list = document.getElementById('reminders-list');
-    if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement aujourd\'hui.</div>'; return; }
-
-    var html = '';
-    for (var j = 0; j < all.length; j++) {
-      var r     = all[j];
-      var rMins = toMins(r.time);
-      var diff2 = rMins === -1 ? 999 : rMins - curMins;
-      var cls   = r.source === 'gcal' ? 'r-gcal' : '';
-      var meta  = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
-      if (rMins !== -1 && diff2 < 0) { cls += ' past'; }
-      else if (next && r.id === next.id) {
-        var hh2 = Math.floor(diff2/60), mm2 = diff2%60;
-        cls += diff2 <= 30 ? ' r-urgent' : ' r-next';
-        if (meta) meta += ' · ';
-        meta += 'dans ' + (hh2 ? hh2+'h ' : '') + mm2 + 'min';
-      }
-      var delBtn    = (editMode && r.source === 'local') ? '<button class="r-delete" onclick="deleteReminder(' + r.id + ')">✕</button>' : '';
-      var sourceTag = r.source === 'gcal' ? '<div class="r-source">Google Calendar</div>' : '';
-      html += '<div class="reminder ' + cls.replace(/^\s+|\s+$/g,'') + '">'
-        + '<div class="r-time">' + r.time + '</div>'
-        + '<div class="r-body"><div class="r-text">' + r.text + '</div>'
-        + (meta ? '<div class="r-meta">' + meta + '</div>' : '')
-        + sourceTag + '</div>' + delBtn + '</div>';
+      var diff2 = toMins(next.time) - curMins;
+      banner.className = diff2 <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
+    } else {
+      banner.style.display = 'none';
     }
-    list.innerHTML = html;
+  } else {
+    banner.style.display = 'none';
   }
-
-  loadPin(); loadLocal();
-  calUrl = localStorage.getItem('repere_calurl') || '';
-  render();
-  if (calUrl) fetchIcal();
-  setInterval(render, 15000);
-  setInterval(function() { if (calUrl) fetchIcal(); }, 5 * 60 * 1000);
+  var list = document.getElementById('reminders-list');
+  if (!all.length) {
+    list.innerHTML = '<div class="empty-state">Aucun événement ce jour-là.</div>';
+    return;
+  }
+  var next2 = null, j;
+  if (isToday) {
+    for (j = 0; j < all.length; j++) {
+      var jm = toMins(all[j].time);
+      if (jm !== -1 && jm > curMins) { next2 = all[j]; break; }
+    }
+  }
+  var html = '';
+  for (j = 0; j < all.length; j++) {
+    var r = all[j];
+    var rMins = toMins(r.time);
+    var isPast = isToday && rMins !== -1 && rMins < curMins;
+    var isNext = isToday && next2 && r.id === next2.id;
+    var diff3  = isToday && rMins !== -1 ? rMins - curMins : 0;
+    var cls = r.source === 'gcal' ? 'r-gcal' : '';
+    if (isPast)      cls += ' past';
+    else if (isNext) cls += diff3 <= 30 ? ' r-urgent' : ' r-next';
+    var meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
+    var sourceTag = r.source === 'gcal' ? '<div class="r-source">Google Calendar</div>' : '';
+    var delBtn = '';
+    if (editMode && r.source === 'local') {
+      delBtn = '<button class="r-delete" onclick="askDelete(' + r.id + ',\'' + r.text.replace(/'/g,"\\'") + '\')">✕</button>';
+    }
+    html += '<div class="reminder ' + cls.replace(/^\s+|\s+$/g,'') + '">'
+      + '<div class="r-time">' + (r.allDay ? '—' : r.time) + '</div>'
+      + '<div class="r-body"><div class="r-text">' + r.text + '</div>'
+      + (meta ? '<div class="r-meta">' + meta + '</div>' : '')
+      + sourceTag + '</div>'
+      + delBtn + '</div>';
+  }
+  list.innerHTML = html;
+}
+var swipeStartX = 0;
+document.addEventListener('touchstart', function(e) { swipeStartX = e.touches[0].clientX; }, false);
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - swipeStartX;
+  if (Math.abs(dx) > 70) { changeDay(dx < 0 ? 1 : -1); }
+}, false);
+loadPin();
+loadLocal();
+calUrl = localStorage.getItem('repere_calurl') || '';
+render();
+if (calUrl) fetchIcal();
+setInterval(render, 15000);
+setInterval(function() { if (calUrl) fetchIcal(); }, 5 * 60 * 1000);
 </script>
 </body>
 </html>
