@@ -23,30 +23,30 @@ body.t-afternoon { background: #eef3f8; color: #0e2040; }
 body.t-evening   { background: #f5925a; color: #1a0800; }
 body.t-night     { background: #141820; color: #c8d8f0; }
 body.off-today #clock-section { opacity: 0.55; }
-#app { max-width: 700px; margin: 0 auto; padding: 36px 28px 140px; }
+#app { max-width: 700px; margin: 0 auto; padding: 20px 28px 140px; }
 #clock-section {
-  text-align: center; padding: 16px 0 20px; margin-bottom: 8px;
+  text-align: center; padding: 8px 0 10px; margin-bottom: 6px;
   -webkit-transition: opacity 0.4s ease; transition: opacity 0.4s ease;
 }
-#period-icon { font-size: 52px; display: block; margin-bottom: 14px; }
+#period-icon { font-size: 32px; display: block; margin-bottom: 6px; }
 #time {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 136px; font-weight: 900; line-height: 1; letter-spacing: -4px;
+  font-size: 120px; font-weight: 900; line-height: 1; letter-spacing: -4px;
 }
-#day-display { text-align: center; margin-top: 16px; }
-#day { font-family: 'Playfair Display', Georgia, serif; font-size: 46px; font-weight: 700; }
+#day-display { text-align: center; margin-top: 8px; }
+#day { font-family: 'Playfair Display', Georgia, serif; font-size: 38px; font-weight: 700; }
 .t-morning #day   { color: #c4700a; }
 .t-afternoon #day { color: #1a5fa8; }
 .t-evening #day   { color: #3d1200; }
 .t-night #day     { color: #7aaae0; }
-#date { font-size: 22px; font-weight: 500; margin-top: 8px; }
+#date { font-size: 19px; font-weight: 500; margin-top: 4px; }
 .t-morning #date   { color: #8a6020; }
 .t-afternoon #date { color: #3a5a8a; }
 .t-evening #date   { color: #4a1a00; }
 .t-night #date     { color: #7090b0; }
 #today-anchor {
-  width: 100%; border-radius: 16px; border: 3px solid;
-  margin-top: 16px; padding: 18px; font-size: 24px; font-weight: 700;
+  width: 100%; border-radius: 14px; border: 3px solid;
+  margin-top: 12px; padding: 14px; font-size: 22px; font-weight: 700;
   cursor: pointer; font-family: 'Inter', sans-serif; text-align: center;
   -webkit-transition: all 0.25s; transition: all 0.25s;
 }
@@ -62,60 +62,58 @@ body.off-today #clock-section { opacity: 0.55; }
 .t-night #today-anchor.off-today     { background: rgba(122,170,224,0.1);color: #7aaae0; border-color: #7aaae0; }
 #week-strip {
   display: -webkit-box; display: -webkit-flex; display: flex;
-  gap: 6px; margin-top: 16px; overflow-x: auto;
+  gap: 6px; margin-top: 12px; overflow-x: auto;
   -webkit-overflow-scrolling: touch; padding-bottom: 4px;
 }
 #week-strip::-webkit-scrollbar { display: none; }
 .week-day {
-  -webkit-box-flex: 1; -webkit-flex: 1; flex: 1;
-  min-width: 52px; border-radius: 12px; border: 2px solid;
-  padding: 10px 4px; text-align: center; cursor: pointer;
+  -webkit-box-flex: 0; -webkit-flex: 0 0 auto; flex: 0 0 auto;
+  width: 52px; border-radius: 12px; border: 2px solid;
+  padding: 8px 4px; text-align: center; cursor: pointer;
   font-family: 'Inter', sans-serif;
   -webkit-transition: all 0.15s; transition: all 0.15s;
   background: transparent;
 }
 .week-day:active { opacity: 0.7; }
-.week-day .wd-name { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
-.week-day .wd-num  { font-size: 22px; font-weight: 700; margin-top: 4px; font-family: 'Playfair Display', Georgia, serif; }
+.week-day .wd-name { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
+.week-day .wd-num  { font-size: 20px; font-weight: 700; margin-top: 3px; font-family: 'Playfair Display', Georgia, serif; }
 .t-morning .week-day   { border-color: #e8d090; color: #2e1e06; }
 .t-afternoon .week-day { border-color: #b8d0e8; color: #0e2040; }
 .t-evening .week-day   { border-color: rgba(90,30,0,0.3); color: #1a0800; }
 .t-night .week-day     { border-color: #2e3a50; color: #c8d8f0; }
-.week-day.is-today .wd-name { opacity: 1; }
-.t-morning .week-day.is-today   { background: #c4700a; border-color: #c4700a; color: #fdf6e3; }
-.t-afternoon .week-day.is-today { background: #1a5fa8; border-color: #1a5fa8; color: #fff; }
-.t-evening .week-day.is-today   { background: #3d1200; border-color: #3d1200; color: #f5925a; }
-.t-night .week-day.is-today     { background: #7aaae0; border-color: #7aaae0; color: #141820; }
-.week-day.is-selected:not(.is-today) { border-width: 3px; }
-.t-morning .week-day.is-selected:not(.is-today)   { border-color: #c4700a; color: #c4700a; }
-.t-afternoon .week-day.is-selected:not(.is-today) { border-color: #1a5fa8; color: #1a5fa8; }
-.t-evening .week-day.is-selected:not(.is-today)   { border-color: #3d1200; color: #3d1200; }
-.t-night .week-day.is-selected:not(.is-today)     { border-color: #7aaae0; color: #7aaae0; }
+.week-day.is-real-today .wd-name { opacity: 1; }
+.t-morning .week-day.is-real-today   { background: #c4700a; border-color: #c4700a; color: #fdf6e3; }
+.t-afternoon .week-day.is-real-today { background: #1a5fa8; border-color: #1a5fa8; color: #fff; }
+.t-evening .week-day.is-real-today   { background: #3d1200; border-color: #3d1200; color: #f5925a; }
+.t-night .week-day.is-real-today     { background: #7aaae0; border-color: #7aaae0; color: #141820; }
+.week-day.is-selected:not(.is-real-today) { border-width: 3px; }
+.t-morning .week-day.is-selected:not(.is-real-today)   { border-color: #c4700a; color: #c4700a; }
+.t-afternoon .week-day.is-selected:not(.is-real-today) { border-color: #1a5fa8; color: #1a5fa8; }
+.t-evening .week-day.is-selected:not(.is-real-today)   { border-color: #3d1200; color: #3d1200; }
+.t-night .week-day.is-selected:not(.is-real-today)     { border-color: #7aaae0; color: #7aaae0; }
 #quick-nav {
   display: -webkit-box; display: -webkit-flex; display: flex;
-  gap: 10px; margin-top: 10px;
+  gap: 10px; margin-top: 8px;
 }
 .nav-day-btn {
   -webkit-box-flex: 1; -webkit-flex: 1; flex: 1;
   border-radius: 12px; border: 2px solid; background: transparent;
-  font-size: 18px; font-weight: 700; cursor: pointer; color: inherit;
-  padding: 12px 8px; text-align: center;
-  font-family: 'Inter', sans-serif;
-  -webkit-transition: opacity 0.15s; transition: opacity 0.15s;
-  opacity: 0.55;
+  font-size: 17px; font-weight: 700; cursor: pointer; color: inherit;
+  padding: 11px 8px; text-align: center;
+  font-family: 'Inter', sans-serif; opacity: 0.55;
 }
 .nav-day-btn:active { opacity: 1; }
 .t-morning .nav-day-btn   { border-color: #c4700a; color: #c4700a; }
 .t-afternoon .nav-day-btn { border-color: #1a5fa8; color: #1a5fa8; }
 .t-evening .nav-day-btn   { border-color: #3d1200; color: #3d1200; }
 .t-night .nav-day-btn     { border-color: #7aaae0; color: #7aaae0; }
-.divider { height: 1px; margin: 24px 0 28px; }
+.divider { height: 1px; margin: 18px 0 22px; }
 .t-morning .divider   { background: #dfc98a; }
 .t-afternoon .divider { background: #a8c4de; }
 .t-evening .divider   { background: rgba(90,30,0,0.3); }
 .t-night .divider     { background: #2e3a50; }
 #next-banner {
-  border-radius: 18px; padding: 22px 24px; margin-bottom: 30px;
+  border-radius: 16px; padding: 18px 22px; margin-bottom: 24px;
   display: none; border-left: 7px solid;
 }
 .t-morning #next-banner   { background: #f5ebc8; border-color: #c4700a; }
@@ -124,24 +122,23 @@ body.off-today #clock-section { opacity: 0.55; }
 .t-night #next-banner     { background: #1e2430; border-color: #7aaae0; }
 #next-banner.urgent { border-color: #c03020 !important; }
 #next-banner.gcal   { border-color: #4a8ad4 !important; }
-.banner-label { font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.65; }
-.banner-text  { font-size: 28px; font-weight: 700; line-height: 1.25; }
-.banner-time  { font-size: 22px; font-weight: 600; margin-top: 6px; }
+.banner-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; opacity: 0.65; }
+.banner-text  { font-size: 26px; font-weight: 700; line-height: 1.25; }
 .section-header {
-  font-size: 18px; font-weight: 700; margin-bottom: 16px;
+  font-size: 17px; font-weight: 700; margin-bottom: 14px;
   display: -webkit-box; display: -webkit-flex; display: flex;
   -webkit-box-pack: justify; -webkit-justify-content: space-between; justify-content: space-between;
   -webkit-box-align: center; -webkit-align-items: center; align-items: center;
 }
-#sync-indicator { font-size: 13px; font-weight: 500; opacity: 0.6; }
+#sync-indicator { font-size: 12px; font-weight: 500; opacity: 0.6; }
 .sync-ok  { color: #4a8a50 !important; opacity: 1 !important; }
 .sync-err { color: #c03020 !important; opacity: 1 !important; }
-#reminders-list { margin-bottom: 36px; }
+#reminders-list { margin-bottom: 32px; }
 .reminder {
-  border-radius: 16px; padding: 20px 22px; margin-bottom: 14px;
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
   display: -webkit-box; display: -webkit-flex; display: flex;
   -webkit-box-align: center; -webkit-align-items: center; align-items: center;
-  gap: 20px; border: 2px solid;
+  gap: 16px; border: 2px solid;
 }
 .t-morning .reminder   { background: #f5ebc8; border-color: #e8d090; }
 .t-afternoon .reminder { background: #dde8f2; border-color: #b8d0e8; }
@@ -163,26 +160,25 @@ body.off-today #clock-section { opacity: 0.55; }
 .t-night .reminder.r-birthday     { background: rgba(30,36,48,0.5); border-color: #2e3a50; }
 .r-time {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 36px; font-weight: 700; min-width: 96px; opacity: 0.55;
+  font-size: 32px; font-weight: 700; min-width: 86px; opacity: 0.55;
 }
 .reminder.r-next .r-time,
 .reminder.r-urgent .r-time  { opacity: 1; }
 .reminder.r-gcal .r-time    { color: #4a8ad4; opacity: 1; }
-.reminder.r-birthday .r-time{ font-size: 28px; opacity: 0.5; }
-.reminder.past .r-time      { opacity: 0.55; }
+.reminder.r-birthday .r-time{ font-size: 26px; opacity: 0.5; }
 .r-body { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-.r-text { font-size: 24px; font-weight: 600; line-height: 1.3; }
-.reminder.r-birthday .r-text { font-size: 20px; font-weight: 500; }
-.r-meta { font-size: 16px; font-weight: 500; margin-top: 5px; opacity: 0.65; }
-.r-source { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4a8ad4; margin-top: 4px; }
-.r-birthday-tag { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.55; margin-top: 4px; }
+.r-text { font-size: 22px; font-weight: 600; line-height: 1.3; }
+.reminder.r-birthday .r-text { font-size: 18px; font-weight: 500; }
+.r-meta { font-size: 14px; font-weight: 500; margin-top: 4px; opacity: 0.65; }
+.r-source { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4a8ad4; margin-top: 3px; }
+.r-birthday-tag { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.55; margin-top: 3px; }
 .r-delete {
-  background: none; border: 2px solid transparent; font-size: 22px;
-  cursor: pointer; padding: 8px 12px; border-radius: 10px; opacity: 0.35;
+  background: none; border: 2px solid transparent; font-size: 20px;
+  cursor: pointer; padding: 6px 10px; border-radius: 8px; opacity: 0.35;
   font-family: 'Inter', sans-serif; color: inherit;
 }
 .r-delete:active { opacity: 1; color: #c03020; border-color: #c03020; }
-.empty-state { text-align: center; padding: 40px; font-size: 20px; opacity: 0.4; }
+.empty-state { text-align: center; padding: 32px; font-size: 18px; opacity: 0.4; }
 #del-overlay {
   display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.6); z-index: 300;
@@ -191,66 +187,66 @@ body.off-today #clock-section { opacity: 0.55; }
 }
 #del-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
 #del-card {
-  background: #fff; border-radius: 24px; padding: 36px 28px;
-  width: 320px; text-align: center;
+  background: #fff; border-radius: 22px; padding: 32px 26px;
+  width: 310px; text-align: center;
   -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
-#del-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
-#del-card p  { font-size: 17px; color: #555; margin-bottom: 28px; line-height: 1.5; }
+#del-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+#del-card p  { font-size: 16px; color: #555; margin-bottom: 24px; line-height: 1.5; }
 #del-name    { font-weight: 700; color: #1a1a1a; }
-.del-btns { display: -webkit-box; display: -webkit-flex; display: flex; gap: 12px; }
-.del-cancel  { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 16px; border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8; font-size: 17px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #333; }
-.del-confirm { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 16px; border-radius: 12px; border: none; background: #c03020; font-size: 17px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #fff; }
+.del-btns { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; }
+.del-cancel  { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 14px; border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #333; }
+.del-confirm { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 14px; border-radius: 12px; border: none; background: #c03020; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #fff; }
 .del-cancel:active  { background: #eee; }
 .del-confirm:active { background: #a02010; }
 #edit-sections { display: none; }
 #edit-sections.open { display: block; }
-.card { border-radius: 18px; padding: 24px; margin-bottom: 22px; border: 2px solid; }
+.card { border-radius: 16px; padding: 20px; margin-bottom: 18px; border: 2px solid; }
 .t-morning .card   { background: #f5ebc8; border-color: #e8d090; }
 .t-afternoon .card { background: #dde8f2; border-color: #b8d0e8; }
 .t-evening .card   { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
 .t-night .card     { background: #1e2430; border-color: #2e3a50; }
-.card p { font-size: 16px; opacity: 0.65; margin-bottom: 16px; line-height: 1.6; }
+.card p { font-size: 15px; opacity: 0.65; margin-bottom: 14px; line-height: 1.6; }
 .form-row {
   display: -webkit-box; display: -webkit-flex; display: flex;
-  gap: 12px; margin-bottom: 14px; -webkit-flex-wrap: wrap; flex-wrap: wrap;
+  gap: 10px; margin-bottom: 12px; -webkit-flex-wrap: wrap; flex-wrap: wrap;
 }
 .form-row input, .form-row select, .card-input {
-  background: transparent; border: 2px solid; border-radius: 12px;
-  padding: 14px 16px; font-size: 18px; font-weight: 500;
+  background: transparent; border: 2px solid; border-radius: 10px;
+  padding: 12px 14px; font-size: 17px; font-weight: 500;
   font-family: 'Inter', -apple-system, sans-serif;
-  outline: none; -webkit-appearance: none; color: inherit; width: 100%; margin-bottom: 14px;
+  outline: none; -webkit-appearance: none; color: inherit; width: 100%; margin-bottom: 12px;
 }
 .t-morning .form-row input,   .t-morning .form-row select,   .t-morning .card-input   { border-color: #e8d090; }
 .t-afternoon .form-row input, .t-afternoon .form-row select, .t-afternoon .card-input { border-color: #b8d0e8; }
 .t-evening .form-row input,   .t-evening .form-row select,   .t-evening .card-input   { border-color: rgba(90,30,0,0.3); }
 .t-night .form-row input,     .t-night .form-row select,     .t-night .card-input     { border-color: #2e3a50; }
-#r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 150px; width: auto; margin-bottom: 0; }
-#r-time   { width: 120px; margin-bottom: 0; }
-#r-repeat { width: 160px; margin-bottom: 0; }
+#r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 140px; width: auto; margin-bottom: 0; }
+#r-time   { width: 110px; margin-bottom: 0; }
+#r-repeat { width: 150px; margin-bottom: 0; }
 .btn {
-  width: 100%; border: none; border-radius: 14px; padding: 18px;
-  font-size: 18px; font-weight: 700;
+  width: 100%; border: none; border-radius: 12px; padding: 16px;
+  font-size: 17px; font-weight: 700;
   font-family: 'Inter', -apple-system, sans-serif; cursor: pointer;
 }
 .t-morning .btn   { background: #c4700a; color: #fdf6e3; }
 .t-afternoon .btn { background: #1a5fa8; color: #eef3f8; }
 .t-evening .btn   { background: #3d1200; color: #f5925a; }
 .t-night .btn     { background: #7aaae0; color: #141820; }
-.btn-sm { padding: 14px; font-size: 17px; }
-.status-msg { font-size: 15px; font-weight: 500; margin-top: 12px; text-align: center; opacity: 0.65; }
+.btn-sm { padding: 13px; font-size: 16px; }
+.status-msg { font-size: 14px; font-weight: 500; margin-top: 10px; text-align: center; opacity: 0.65; }
 .status-ok  { color: #4a8a50 !important; opacity: 1 !important; }
 .status-err { color: #c03020 !important; opacity: 1 !important; }
 .disconnect-btn {
-  background: none; border: none; font-size: 15px; font-weight: 500;
-  cursor: pointer; opacity: 0.5; display: block; margin-top: 12px;
+  background: none; border: none; font-size: 14px; font-weight: 500;
+  cursor: pointer; opacity: 0.5; display: block; margin-top: 10px;
   font-family: 'Inter', sans-serif; color: inherit;
 }
 .disconnect-btn:active { opacity: 1; color: #c03020; }
 #lock-btn {
-  position: fixed; bottom: 26px; right: 26px; width: 60px; height: 60px;
-  border-radius: 30px; border: 2px solid rgba(128,128,128,0.3);
-  background: rgba(128,128,128,0.15); font-size: 26px; cursor: pointer;
+  position: fixed; bottom: 22px; right: 22px; width: 56px; height: 56px;
+  border-radius: 28px; border: 2px solid rgba(128,128,128,0.3);
+  background: rgba(128,128,128,0.15); font-size: 24px; cursor: pointer;
   display: -webkit-box; display: -webkit-flex; display: flex;
   -webkit-box-align: center; -webkit-align-items: center; align-items: center;
   -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
@@ -265,24 +261,24 @@ body.off-today #clock-section { opacity: 0.55; }
 }
 #pin-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
 #pin-card {
-  background: #fff; border-radius: 28px; padding: 40px 32px 32px;
-  width: 340px; text-align: center;
+  background: #fff; border-radius: 24px; padding: 36px 28px 28px;
+  width: 320px; text-align: center;
   -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.35);
 }
-#pin-card h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 28px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
-.pin-sub { font-size: 16px; font-weight: 500; color: #999; margin-bottom: 28px; }
-#pin-dots { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; gap: 18px; margin-bottom: 30px; }
-.dot    { width: 18px; height: 18px; border-radius: 50%; background: #e8e8e8; }
+#pin-card h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.pin-sub { font-size: 15px; font-weight: 500; color: #999; margin-bottom: 24px; }
+#pin-dots { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; gap: 16px; margin-bottom: 26px; }
+.dot    { width: 16px; height: 16px; border-radius: 50%; background: #e8e8e8; }
 .dot.on { background: #c4700a; }
-#pin-keypad { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 12px; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; margin-bottom: 10px; }
-.k { width: 84px; height: 64px; border-radius: 16px; border: 2px solid #e8e8e8; background: #f8f8f8; font-size: 30px; font-weight: 300; color: #1a1a1a; cursor: pointer; font-family: 'Playfair Display', Georgia, serif; }
+#pin-keypad { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 10px; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; margin-bottom: 8px; }
+.k { width: 80px; height: 60px; border-radius: 14px; border: 2px solid #e8e8e8; background: #f8f8f8; font-size: 28px; font-weight: 300; color: #1a1a1a; cursor: pointer; font-family: 'Playfair Display', Georgia, serif; }
 .k:active { background: #ebebeb; }
-.k.del { font-size: 20px; color: #999; font-family: 'Inter', sans-serif; }
-#pin-err { font-size: 15px; font-weight: 500; color: #c03020; min-height: 22px; margin-top: 10px; }
+.k.del { font-size: 18px; color: #999; font-family: 'Inter', sans-serif; }
+#pin-err { font-size: 14px; font-weight: 500; color: #c03020; min-height: 20px; margin-top: 8px; }
 #pin-cancel-btn {
-  display: block; width: 100%; margin-top: 18px; padding: 14px;
+  display: block; width: 100%; margin-top: 16px; padding: 13px;
   border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8;
-  font-size: 17px; font-weight: 600; cursor: pointer;
+  font-size: 16px; font-weight: 600; cursor: pointer;
   font-family: 'Inter', sans-serif; color: #666;
 }
 #pin-cancel-btn:active { background: #eee; }
@@ -308,7 +304,6 @@ body.off-today #clock-section { opacity: 0.55; }
   <div id="next-banner">
     <div class="banner-label" id="banner-label">À</div>
     <div class="banner-text" id="banner-text"></div>
-    <div class="banner-time" id="banner-time"></div>
   </div>
   <div class="section-header">
     <span id="section-day-label">Aujourd'hui</span>
@@ -317,23 +312,23 @@ body.off-today #clock-section { opacity: 0.55; }
   <div id="reminders-list"></div>
   <div id="edit-sections">
     <div class="card">
-      <div class="section-header" style="margin-bottom:18px; font-size:16px;">Ajouter un rappel</div>
+      <div class="section-header" style="margin-bottom:16px; font-size:15px;">Ajouter un rappel</div>
       <div class="form-row">
         <input type="text" id="r-text" placeholder="Médicaments, repas…" autocorrect="off" autocapitalize="off" />
         <input type="time" id="r-time" />
       </div>
-      <div class="form-row" style="margin-bottom:16px;">
+      <div class="form-row" style="margin-bottom:14px;">
         <select id="r-repeat">
           <option value="daily">Tous les jours</option>
-          <option value="once">Une seule fois</option>
+          <option value="once">Ce jour uniquement</option>
         </select>
       </div>
       <button class="btn" onclick="addReminder()">+ Ajouter</button>
     </div>
     <div class="card">
-      <div class="section-header" style="margin-bottom:12px; font-size:16px;">
+      <div class="section-header" style="margin-bottom:10px; font-size:15px;">
         <span>Google Agenda</span>
-        <span id="cal-sync-badge" style="font-size:13px; font-weight:500;"></span>
+        <span id="cal-sync-badge" style="font-size:12px; font-weight:500;"></span>
       </div>
       <p>Collez l'URL iCal de votre agenda principal.</p>
       <input type="text" class="card-input" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
@@ -342,9 +337,9 @@ body.off-today #clock-section { opacity: 0.55; }
       <button class="disconnect-btn" id="disconnect-btn" onclick="disconnectCal()" style="display:none;">✕ Déconnecter l'agenda</button>
     </div>
     <div class="card">
-      <div class="section-header" style="margin-bottom:12px; font-size:16px;">
+      <div class="section-header" style="margin-bottom:10px; font-size:15px;">
         <span>🎂 Anniversaires</span>
-        <span id="bday-sync-badge" style="font-size:13px; font-weight:500;"></span>
+        <span id="bday-sync-badge" style="font-size:12px; font-weight:500;"></span>
       </div>
       <p>Collez l'URL iCal du calendrier d'anniversaires.</p>
       <input type="text" class="card-input" id="bday-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
@@ -353,7 +348,7 @@ body.off-today #clock-section { opacity: 0.55; }
       <button class="disconnect-btn" id="bday-disconnect-btn" onclick="disconnectBday()" style="display:none;">✕ Déconnecter les anniversaires</button>
     </div>
     <div class="card">
-      <div class="section-header" style="margin-bottom:12px; font-size:16px;">Code PIN</div>
+      <div class="section-header" style="margin-bottom:10px; font-size:15px;">Code PIN</div>
       <p>Code actuel : 4 chiffres. Par défaut : <strong>1234</strong></p>
       <input type="password" class="card-input" id="new-pin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Nouveau code (4 chiffres)" style="letter-spacing:8px; text-align:center;" />
       <button class="btn btn-sm" onclick="savePin()">Enregistrer</button>
@@ -424,6 +419,9 @@ function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDat
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
+function dateStr(d) {
+  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+}
 function getViewDate() {
   var d = startOfDay(new Date());
   d.setDate(d.getDate() + dayOffset);
@@ -443,16 +441,17 @@ function applyTheme() {
 function buildWeekStrip(now, vd) {
   var strip = document.getElementById('week-strip');
   var today = startOfDay(now);
-  var html = '', i;
+  var html  = '', i;
   for (i = -3; i <= 3; i++) {
-    var d = new Date(today.getTime());
+    var d = new Date(vd.getTime());
     d.setDate(d.getDate() + i);
-    var isToday    = i === 0;
-    var isSelected = sameDay(d, vd);
+    var isRealToday = sameDay(d, today);
+    var isSelected  = i === 0;
     var cls = '';
-    if (isToday)    cls += ' is-today';
-    if (isSelected) cls += ' is-selected';
-    html += '<button class="week-day' + cls + '" onclick="jumpToOffset(' + i + ')">'
+    if (isRealToday) cls += ' is-real-today';
+    if (isSelected)  cls += ' is-selected';
+    var diffFromToday = Math.round((startOfDay(d) - today) / 86400000);
+    html += '<button class="week-day' + cls + '" onclick="jumpToOffset(' + diffFromToday + ')">'
       + '<div class="wd-name">' + DAYS_SHORT[d.getDay()] + '</div>'
       + '<div class="wd-num">' + d.getDate() + '</div>'
       + '</button>';
@@ -461,23 +460,27 @@ function buildWeekStrip(now, vd) {
 }
 function jumpToOffset(offset) { dayOffset = offset; render(); }
 function loadLocal() {
+  var initialized = localStorage.getItem('repere_initialized');
   try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
-  if (!localReminders.length) {
+  if (!initialized) {
     localReminders = [
       { id: 1, time: '08:00', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
       { id: 2, time: '12:30', text: 'Déjeuner',             repeat: 'daily', source: 'local' },
       { id: 3, time: '20:00', text: 'Médicaments du soir',  repeat: 'daily', source: 'local' }
     ];
     saveLocal();
+    localStorage.setItem('repere_initialized', '1');
   }
 }
 function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
 function addReminder() {
-  var text = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
-  var time = document.getElementById('r-time').value;
+  var text   = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
+  var time   = document.getElementById('r-time').value;
   var repeat = document.getElementById('r-repeat').value;
   if (!text || !time) { alert('Veuillez entrer un horaire et une description.'); return; }
-  localReminders.push({ id: Date.now(), time: time, text: text, repeat: repeat, source: 'local' });
+  var rem = { id: Date.now(), time: time, text: text, repeat: repeat, source: 'local' };
+  if (repeat === 'once') { rem.date = dateStr(getViewDate()); }
+  localReminders.push(rem);
   saveLocal();
   document.getElementById('r-text').value = '';
   document.getElementById('r-time').value = '';
@@ -553,6 +556,8 @@ function fetchIcal() {
     } else {
       document.getElementById('sync-indicator').textContent = 'Erreur sync';
       document.getElementById('sync-indicator').className = 'sync-err';
+      document.getElementById('cal-status').textContent = "Erreur. Vérifiez l'URL.";
+      document.getElementById('cal-status').className = 'status-msg status-err';
     }
   };
   xhr.ontimeout = function() { document.getElementById('sync-indicator').textContent = 'Délai dépassé'; document.getElementById('sync-indicator').className = 'sync-err'; };
@@ -569,8 +574,7 @@ function fetchBday() {
       lastBdayText = xhr.responseText;
       bdayEvents = parseIcal(xhr.responseText, new Date(), 'birthday');
       var n = new Date();
-      var t = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
-      document.getElementById('bday-sync-badge').textContent = t;
+      document.getElementById('bday-sync-badge').textContent = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
       document.getElementById('bday-status').textContent = '✓ Anniversaires connectés';
       document.getElementById('bday-status').className = 'status-msg status-ok';
       document.getElementById('bday-disconnect-btn').style.display = 'block';
@@ -600,8 +604,8 @@ function parseIcal(text, targetDate, sourceType) {
         ev.summary = line.slice(8).replace(/^\s+|\s+$/g,'');
       } else if (line.indexOf('DTSTART') === 0) {
         var val = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
-        var dateStr = val.replace(/T.*/,'').replace('Z','');
-        if (dateStr === tStr) {
+        var dStr = val.replace(/T.*/,'').replace('Z','');
+        if (dStr === tStr) {
           ev.today = true;
           if (val.indexOf('T') >= 0) {
             var tp = val.replace(/.*T/,'').replace('Z','');
@@ -620,7 +624,7 @@ function parseIcal(text, targetDate, sourceType) {
 function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
 function savePin() {
   var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
-  var el = document.getElementById('pin-change-status');
+  var el  = document.getElementById('pin-change-status');
   if (val.length !== 4 || isNaN(Number(val))) {
     el.textContent = 'Le code doit contenir exactement 4 chiffres.';
     el.className = 'status-msg status-err'; return;
@@ -671,6 +675,7 @@ function render() {
   var now     = new Date();
   var vd      = getViewDate();
   var isToday = sameDay(vd, now);
+  var vdStr   = dateStr(vd);
   document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
   document.getElementById('day').textContent  = DAYS_LONG[vd.getDay()];
   document.getElementById('date').textContent = vd.getDate() + ' ' + MONTHS[vd.getMonth()] + ' ' + vd.getFullYear();
@@ -695,16 +700,25 @@ function render() {
   else if (diff ===  1) label.textContent = 'Demain';
   else if (diff < 0)    label.textContent = 'Il y a ' + Math.abs(diff) + ' jours';
   else                  label.textContent = 'Dans ' + diff + ' jours';
-  var calForDay  = isToday ? gcalEvents : (lastIcalText ? parseIcal(lastIcalText,  vd, 'gcal')     : []);
-  var bdayForDay = isToday ? bdayEvents : (lastBdayText ? parseIcal(lastBdayText,  vd, 'birthday') : []);
-  var curMins    = now.getHours() * 60 + now.getMinutes();
-  var all = localReminders.concat(calForDay).concat(bdayForDay).sort(function(a,b) {
+  var localForDay = [], i;
+  for (i = 0; i < localReminders.length; i++) {
+    var rem = localReminders[i];
+    if (rem.repeat === 'daily') {
+      localForDay.push(rem);
+    } else if (rem.repeat === 'once' && rem.date === vdStr) {
+      localForDay.push(rem);
+    }
+  }
+  var calForDay  = lastIcalText ? parseIcal(lastIcalText,  vd, 'gcal')     : (isToday ? gcalEvents  : []);
+  var bdayForDay = lastBdayText ? parseIcal(lastBdayText,  vd, 'birthday') : (isToday ? bdayEvents  : []);
+  var curMins = now.getHours() * 60 + now.getMinutes();
+  var all = localForDay.concat(calForDay).concat(bdayForDay).sort(function(a,b) {
     var am = toMins(a.time), bm = toMins(b.time);
     if (am === -1) return 1; if (bm === -1) return -1; return am - bm;
   });
   var banner = document.getElementById('next-banner');
   if (isToday) {
-    var next = null, i;
+    var next = null;
     for (i = 0; i < all.length; i++) {
       var rm = toMins(all[i].time);
       if (rm !== -1 && rm > curMins && all[i].source !== 'birthday') { next = all[i]; break; }
@@ -712,7 +726,6 @@ function render() {
     if (next) {
       document.getElementById('banner-label').textContent = 'À ' + next.time;
       document.getElementById('banner-text').textContent  = next.text;
-      document.getElementById('banner-time').textContent  = '';
       banner.style.display = 'block';
       var diff2 = toMins(next.time) - curMins;
       banner.className = diff2 <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
@@ -720,16 +733,16 @@ function render() {
   } else { banner.style.display = 'none'; }
   var list = document.getElementById('reminders-list');
   if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement ce jour-là.</div>'; return; }
-  var next2 = null, j;
+  var next2 = null;
   if (isToday) {
-    for (j = 0; j < all.length; j++) {
-      var jm = toMins(all[j].time);
-      if (jm !== -1 && jm > curMins && all[j].source !== 'birthday') { next2 = all[j]; break; }
+    for (i = 0; i < all.length; i++) {
+      var jm = toMins(all[i].time);
+      if (jm !== -1 && jm > curMins && all[i].source !== 'birthday') { next2 = all[i]; break; }
     }
   }
   var html = '';
-  for (j = 0; j < all.length; j++) {
-    var r      = all[j];
+  for (i = 0; i < all.length; i++) {
+    var r      = all[i];
     var rMins  = toMins(r.time);
     var isPast = isToday && rMins !== -1 && rMins < curMins && r.source !== 'birthday';
     var isNext = isToday && next2 && r.id === next2.id;
@@ -739,20 +752,20 @@ function render() {
       cls = 'r-birthday';
     } else if (r.source === 'gcal') {
       cls = 'r-gcal';
-      if (isPast) cls += ' past';
+      if (isPast)      cls += ' past';
       else if (isNext) cls += diff3 <= 30 ? ' r-urgent' : ' r-next';
     } else {
-      if (isPast) cls = 'past';
+      if (isPast)      cls = 'past';
       else if (isNext) cls = diff3 <= 30 ? 'r-urgent' : 'r-next';
     }
-    var timeDisp = r.allDay ? '🎂' : r.time;
-    var meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Unique') : '';
+    var timeDisp = (r.allDay || r.time === 'Toute la journée') ? '🎂' : r.time;
+    var meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Ce jour') : '';
     var tag = '';
     if (r.source === 'gcal')     tag = '<div class="r-source">Google Agenda</div>';
     if (r.source === 'birthday') tag = '<div class="r-birthday-tag">🎂 Anniversaire</div>';
     var delBtn = '';
     if (editMode && r.source === 'local') {
-      delBtn = '<button class="r-delete" onclick="askDelete(' + r.id + ',\'' + r.text.replace(/'/g,"\\'") + '\')">✕</button>';
+      delBtn = '<button class="r-delete" onclick="askDelete(' + r.id + ',\'' + r.text.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + '\')">✕</button>';
     }
     html += '<div class="reminder ' + cls + '">'
       + '<div class="r-time">' + timeDisp + '</div>'
