@@ -12,23 +12,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
 body {
   font-family: 'Inter', -apple-system, 'Helvetica Neue', Arial, sans-serif;
   min-height: 100vh;
-  -webkit-transition: background 1.2s ease;
-  transition: background 1.2s ease;
+  -webkit-transition: background 1.2s ease, color 1.2s ease;
+  transition: background 1.2s ease, color 1.2s ease;
 }
+
+/* ── THEMES ── */
 body.t-morning   { background: #fdf6e3; color: #2e1e06; }
 body.t-afternoon { background: #eef3f8; color: #0e2040; }
-body.t-evening   { background: #f5925a; color: #1a0800; }
-body.t-night     { background: #141820; color: #c8d8f0; }
-body.off-today #clock-section { opacity: 0.55; }
+body.t-evening   { background: #e8956a; color: #000000; }
+body.t-night     { background: #141820; color: #ffffff; }
+
 #app { max-width: 700px; margin: 0 auto; padding: 20px 28px 140px; }
-#clock-section {
-  text-align: center; padding: 8px 0 10px; margin-bottom: 6px;
-  -webkit-transition: opacity 0.4s ease; transition: opacity 0.4s ease;
-}
-#period-icon { font-size: 32px; display: block; margin-bottom: 6px; }
+
+/* ── CLOCK ── */
+#clock-section { text-align: center; padding: 8px 0 10px; margin-bottom: 6px; }
 #time {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 120px; font-weight: 900; line-height: 1; letter-spacing: -4px;
@@ -37,60 +38,84 @@ body.off-today #clock-section { opacity: 0.55; }
 #day { font-family: 'Playfair Display', Georgia, serif; font-size: 38px; font-weight: 700; }
 .t-morning #day   { color: #c4700a; }
 .t-afternoon #day { color: #1a5fa8; }
-.t-evening #day   { color: #3d1200; }
+.t-evening #day   { color: #1a0000; }
 .t-night #day     { color: #7aaae0; }
 #date { font-size: 19px; font-weight: 500; margin-top: 4px; }
 .t-morning #date   { color: #8a6020; }
 .t-afternoon #date { color: #3a5a8a; }
-.t-evening #date   { color: #4a1a00; }
-.t-night #date     { color: #7090b0; }
+.t-evening #date   { color: #2a0800; }
+.t-night #date     { color: #8090a8; }
+
+/* ── CONSULTING PILL ── */
+#consulting-pill {
+  display: none;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+  gap: 6px; border-radius: 20px; padding: 4px 12px; margin-top: 6px;
+}
+#consulting-pill.show { display: -webkit-inline-box; display: -webkit-inline-flex; display: inline-flex; }
+.t-morning #consulting-pill   { background: rgba(196,112,10,0.12); }
+.t-afternoon #consulting-pill { background: rgba(26,95,168,0.12); }
+.t-evening #consulting-pill   { background: rgba(0,0,0,0.1); }
+.t-night #consulting-pill     { background: rgba(122,170,224,0.1); }
+#cp-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+#cp-day   { font-size: 13px; font-weight: 700; }
+.t-morning #cp-label,  .t-morning #cp-day   { color: #c4700a; }
+.t-afternoon #cp-label,.t-afternoon #cp-day { color: #1a5fa8; }
+.t-evening #cp-label,  .t-evening #cp-day   { color: #1a0800; }
+.t-night #cp-label,    .t-night #cp-day     { color: #7aaae0; }
+
+/* ── AUJOURD'HUI BUTTON ── */
 #today-anchor {
   width: 100%; border-radius: 14px; border: 3px solid;
   margin-top: 12px; padding: 14px; font-size: 22px; font-weight: 700;
   cursor: pointer; font-family: 'Inter', sans-serif; text-align: center;
   -webkit-transition: all 0.25s; transition: all 0.25s;
 }
-#today-anchor.is-today { opacity: 1; cursor: default; }
 .t-morning #today-anchor.is-today   { background: #c4700a; color: #fdf6e3; border-color: #c4700a; }
 .t-afternoon #today-anchor.is-today { background: #1a5fa8; color: #eef3f8; border-color: #1a5fa8; }
-.t-evening #today-anchor.is-today   { background: #3d1200; color: #f5925a; border-color: #3d1200; }
+.t-evening #today-anchor.is-today   { background: #1a0800; color: #e8956a; border-color: #1a0800; }
 .t-night #today-anchor.is-today     { background: #7aaae0; color: #141820; border-color: #7aaae0; }
-#today-anchor.off-today { opacity: 1; }
-.t-morning #today-anchor.off-today   { background: rgba(196,112,10,0.1); color: #c4700a; border-color: #c4700a; }
-.t-afternoon #today-anchor.off-today { background: rgba(26,95,168,0.1);  color: #1a5fa8; border-color: #1a5fa8; }
-.t-evening #today-anchor.off-today   { background: rgba(61,18,0,0.1);    color: #3d1200; border-color: #3d1200; }
-.t-night #today-anchor.off-today     { background: rgba(122,170,224,0.1);color: #7aaae0; border-color: #7aaae0; }
+.t-morning #today-anchor.off-today   { background: rgba(196,112,10,0.1);  color: #c4700a; border-color: #c4700a; }
+.t-afternoon #today-anchor.off-today { background: rgba(26,95,168,0.1);   color: #1a5fa8; border-color: #1a5fa8; }
+.t-evening #today-anchor.off-today   { background: rgba(0,0,0,0.08);      color: #000;    border-color: rgba(0,0,0,0.4); }
+.t-night #today-anchor.off-today     { background: rgba(122,170,224,0.1); color: #7aaae0; border-color: #7aaae0; }
+
+/* ── WEEK STRIP ── */
 #week-strip {
   display: -webkit-box; display: -webkit-flex; display: flex;
   gap: 6px; margin-top: 12px; overflow-x: auto;
   -webkit-overflow-scrolling: touch; padding-bottom: 4px;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
 }
 #week-strip::-webkit-scrollbar { display: none; }
 .week-day {
-  -webkit-box-flex: 0; -webkit-flex: 0 0 auto; flex: 0 0 auto;
-  width: 52px; border-radius: 12px; border: 2px solid;
+  -webkit-box-flex: 1; -webkit-flex: 1; flex: 1;
+  min-width: 44px; max-width: 80px;
+  border-radius: 12px; border: 2px solid;
   padding: 8px 4px; text-align: center; cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  -webkit-transition: all 0.15s; transition: all 0.15s;
-  background: transparent;
+  font-family: 'Inter', sans-serif; background: transparent;
+  -webkit-transition: opacity 0.15s; transition: opacity 0.15s;
 }
 .week-day:active { opacity: 0.7; }
 .week-day .wd-name { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
 .week-day .wd-num  { font-size: 20px; font-weight: 700; margin-top: 3px; font-family: 'Playfair Display', Georgia, serif; }
 .t-morning .week-day   { border-color: #e8d090; color: #2e1e06; }
 .t-afternoon .week-day { border-color: #b8d0e8; color: #0e2040; }
-.t-evening .week-day   { border-color: rgba(90,30,0,0.3); color: #1a0800; }
-.t-night .week-day     { border-color: #2e3a50; color: #c8d8f0; }
+.t-evening .week-day   { border-color: rgba(0,0,0,0.18); color: #000; }
+.t-night .week-day     { border-color: #2e3a50; color: #fff; }
 .week-day.is-real-today .wd-name { opacity: 1; }
 .t-morning .week-day.is-real-today   { background: #c4700a; border-color: #c4700a; color: #fdf6e3; }
 .t-afternoon .week-day.is-real-today { background: #1a5fa8; border-color: #1a5fa8; color: #fff; }
-.t-evening .week-day.is-real-today   { background: #3d1200; border-color: #3d1200; color: #f5925a; }
+.t-evening .week-day.is-real-today   { background: #1a0800; border-color: #1a0800; color: #e8956a; }
 .t-night .week-day.is-real-today     { background: #7aaae0; border-color: #7aaae0; color: #141820; }
 .week-day.is-selected:not(.is-real-today) { border-width: 3px; }
 .t-morning .week-day.is-selected:not(.is-real-today)   { border-color: #c4700a; color: #c4700a; }
 .t-afternoon .week-day.is-selected:not(.is-real-today) { border-color: #1a5fa8; color: #1a5fa8; }
-.t-evening .week-day.is-selected:not(.is-real-today)   { border-color: #3d1200; color: #3d1200; }
+.t-evening .week-day.is-selected:not(.is-real-today)   { border-color: rgba(0,0,0,0.5); color: #000; }
 .t-night .week-day.is-selected:not(.is-real-today)     { border-color: #7aaae0; color: #7aaae0; }
+
+/* ── QUICK NAV ── */
 #quick-nav {
   display: -webkit-box; display: -webkit-flex; display: flex;
   gap: 10px; margin-top: 8px;
@@ -98,32 +123,62 @@ body.off-today #clock-section { opacity: 0.55; }
 .nav-day-btn {
   -webkit-box-flex: 1; -webkit-flex: 1; flex: 1;
   border-radius: 12px; border: 2px solid; background: transparent;
-  font-size: 17px; font-weight: 700; cursor: pointer; color: inherit;
-  padding: 11px 8px; text-align: center;
-  font-family: 'Inter', sans-serif; opacity: 0.55;
+  font-size: 16px; font-weight: 700; cursor: pointer; color: inherit;
+  padding: 11px 8px; text-align: center; font-family: 'Inter', sans-serif;
 }
-.nav-day-btn:active { opacity: 1; }
 .t-morning .nav-day-btn   { border-color: #c4700a; color: #c4700a; }
 .t-afternoon .nav-day-btn { border-color: #1a5fa8; color: #1a5fa8; }
-.t-evening .nav-day-btn   { border-color: #3d1200; color: #3d1200; }
-.t-night .nav-day-btn     { border-color: #7aaae0; color: #7aaae0; }
-.divider { height: 1px; margin: 18px 0 22px; }
+.t-evening .nav-day-btn   { border-color: rgba(0,0,0,0.3); color: #000; }
+.t-night .nav-day-btn     { border-color: #2e3a50; color: #fff; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; margin: 18px 0 20px; }
 .t-morning .divider   { background: #dfc98a; }
 .t-afternoon .divider { background: #a8c4de; }
-.t-evening .divider   { background: rgba(90,30,0,0.3); }
+.t-evening .divider   { background: rgba(0,0,0,0.18); }
 .t-night .divider     { background: #2e3a50; }
-#next-banner {
-  border-radius: 16px; padding: 18px 22px; margin-bottom: 24px;
-  display: none; border-left: 7px solid;
+
+/* ── BANNER ── */
+#ecm-banner {
+  border-radius: 16px; padding: 16px 20px; margin-bottom: 22px;
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  gap: 14px;
 }
-.t-morning #next-banner   { background: #f5ebc8; border-color: #c4700a; }
-.t-afternoon #next-banner { background: #dde8f2; border-color: #1a5fa8; }
-.t-evening #next-banner   { background: rgba(255,255,255,0.28); border-color: #3d1200; }
-.t-night #next-banner     { background: #1e2430; border-color: #7aaae0; }
-#next-banner.urgent { border-color: #c03020 !important; }
-#next-banner.gcal   { border-color: #4a8ad4 !important; }
-.banner-label { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; opacity: 0.65; }
-.banner-text  { font-size: 26px; font-weight: 700; line-height: 1.25; }
+#ecm-banner.b-active { border: none; }
+.t-morning #ecm-banner.b-active   { background: #2e1e06; }
+.t-afternoon #ecm-banner.b-active { background: #0e2040; }
+.t-evening #ecm-banner.b-active   { background: #1a0800; }
+.t-night #ecm-banner.b-active     { background: #ffffff; }
+.t-morning #ecm-banner.b-active .b-label,
+.t-morning #ecm-banner.b-active .b-text,
+.t-morning #ecm-banner.b-active .b-sub   { color: #fdf6e3; }
+.t-afternoon #ecm-banner.b-active .b-label,
+.t-afternoon #ecm-banner.b-active .b-text,
+.t-afternoon #ecm-banner.b-active .b-sub { color: #eef3f8; }
+.t-evening #ecm-banner.b-active .b-label,
+.t-evening #ecm-banner.b-active .b-text,
+.t-evening #ecm-banner.b-active .b-sub   { color: #f5c8a0; }
+.t-night #ecm-banner.b-active .b-label,
+.t-night #ecm-banner.b-active .b-text,
+.t-night #ecm-banner.b-active .b-sub     { color: #141820; }
+#ecm-banner.b-quiet { background: transparent; border: 2px solid; }
+.t-morning #ecm-banner.b-quiet   { border-color: #dfc98a; }
+.t-afternoon #ecm-banner.b-quiet { border-color: #a8c4de; }
+.t-evening #ecm-banner.b-quiet   { border-color: rgba(0,0,0,0.2); }
+.t-night #ecm-banner.b-quiet     { border-color: #2e3a50; }
+#ecm-banner.b-consult { background: transparent; border: 2.5px dashed; }
+.t-morning #ecm-banner.b-consult   { border-color: #c4700a; }
+.t-afternoon #ecm-banner.b-consult { border-color: #1a5fa8; }
+.t-evening #ecm-banner.b-consult   { border-color: rgba(0,0,0,0.4); }
+.t-night #ecm-banner.b-consult     { border-color: #7aaae0; }
+#ecm-banner .b-emoji { font-size: 28px; flex-shrink: 0; }
+#ecm-banner .b-content { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
+#ecm-banner .b-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.7; }
+#ecm-banner .b-text  { font-size: 26px; font-weight: 900; font-family: 'Playfair Display', Georgia, serif; line-height: 1.2; }
+#ecm-banner .b-sub   { font-size: 14px; margin-top: 4px; opacity: 0.75; }
+
+/* ── SECTION HEADER ── */
 .section-header {
   font-size: 17px; font-weight: 700; margin-bottom: 14px;
   display: -webkit-box; display: -webkit-flex; display: flex;
@@ -133,45 +188,48 @@ body.off-today #clock-section { opacity: 0.55; }
 #sync-indicator { font-size: 12px; font-weight: 500; opacity: 0.6; }
 .sync-ok  { color: #4a8a50 !important; opacity: 1 !important; }
 .sync-err { color: #c03020 !important; opacity: 1 !important; }
+
+/* ── EVENT LIST ── */
 #reminders-list { margin-bottom: 32px; }
 .reminder {
-  border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 10px;
   display: -webkit-box; display: -webkit-flex; display: flex;
   -webkit-box-align: center; -webkit-align-items: center; align-items: center;
   gap: 16px; border: 2px solid;
 }
 .t-morning .reminder   { background: #f5ebc8; border-color: #e8d090; }
 .t-afternoon .reminder { background: #dde8f2; border-color: #b8d0e8; }
-.t-evening .reminder   { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
+.t-evening .reminder   { background: rgba(255,255,255,0.25); border-color: rgba(0,0,0,0.12); }
 .t-night .reminder     { background: #1e2430; border-color: #2e3a50; }
-.reminder.past         { opacity: 0.6; }
+.reminder.past { opacity: 0.45; }
 .reminder.past .r-text { text-decoration: line-through; }
-.reminder.r-next       { border-left-width: 7px; }
-.reminder.r-urgent     { border-left-width: 7px; border-left-color: #c03020 !important; }
-.reminder.r-gcal       { border-left-width: 7px; border-left-color: #4a8ad4 !important; }
-.t-morning .reminder.r-next   { border-left-color: #c4700a; }
-.t-afternoon .reminder.r-next { border-left-color: #1a5fa8; }
-.t-evening .reminder.r-next   { border-left-color: #3d1200; }
-.t-night .reminder.r-next     { border-left-color: #7aaae0; }
+.reminder.r-current { border-left-width: 6px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.t-morning .reminder.r-current   { background: #fff3e0; border-color: #c4700a; }
+.t-afternoon .reminder.r-current { background: #dbeeff; border-color: #1a5fa8; }
+.t-evening .reminder.r-current   { background: rgba(255,255,255,0.42); border-color: #1a0800; }
+.t-night .reminder.r-current     { background: #1e2d40; border-color: #7aaae0; }
+.reminder.r-current .r-time  { opacity: 1; font-size: 38px; }
+.reminder.r-current .r-text  { font-size: 26px; }
+.t-morning .reminder.r-current .r-time,  .t-morning .reminder.r-current .r-status   { color: #c4700a; }
+.t-afternoon .reminder.r-current .r-time,.t-afternoon .reminder.r-current .r-status { color: #1a5fa8; }
+.t-evening .reminder.r-current .r-time,  .t-evening .reminder.r-current .r-status   { color: #1a0800; }
+.t-night .reminder.r-current .r-time,    .t-night .reminder.r-current .r-status     { color: #7aaae0; }
+.reminder.r-gcal { border-left-width: 6px; border-left-color: #4a8ad4 !important; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.reminder.r-gcal .r-time { color: #4a8ad4; opacity: 1; }
 .reminder.r-birthday { opacity: 0.75; border-style: dashed; }
 .t-morning .reminder.r-birthday   { background: rgba(245,235,200,0.5); border-color: #e8d090; }
 .t-afternoon .reminder.r-birthday { background: rgba(221,232,242,0.5); border-color: #b8d0e8; }
-.t-evening .reminder.r-birthday   { background: rgba(255,255,255,0.12); border-color: rgba(90,30,0,0.15); }
+.t-evening .reminder.r-birthday   { background: rgba(255,255,255,0.15); border-color: rgba(0,0,0,0.1); }
 .t-night .reminder.r-birthday     { background: rgba(30,36,48,0.5); border-color: #2e3a50; }
-.r-time {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 32px; font-weight: 700; min-width: 86px; opacity: 0.55;
-}
-.reminder.r-next .r-time,
-.reminder.r-urgent .r-time  { opacity: 1; }
-.reminder.r-gcal .r-time    { color: #4a8ad4; opacity: 1; }
-.reminder.r-birthday .r-time{ font-size: 26px; opacity: 0.5; }
+.r-time { font-family: 'Playfair Display', Georgia, serif; font-size: 30px; font-weight: 700; min-width: 82px; opacity: 0.5; flex-shrink: 0; }
+.reminder.r-birthday .r-time { font-size: 24px; }
 .r-body { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-.r-text { font-size: 22px; font-weight: 600; line-height: 1.3; }
-.reminder.r-birthday .r-text { font-size: 18px; font-weight: 500; }
-.r-meta { font-size: 14px; font-weight: 500; margin-top: 4px; opacity: 0.65; }
-.r-source { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4a8ad4; margin-top: 3px; }
-.r-birthday-tag { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.55; margin-top: 3px; }
+.r-text   { font-size: 21px; font-weight: 600; line-height: 1.3; }
+.r-status { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px; opacity: 0.6; }
+.reminder.r-current .r-status { opacity: 1; }
+.reminder.r-birthday .r-text  { font-size: 18px; font-weight: 500; }
+.r-source   { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4a8ad4; margin-top: 3px; }
+.r-bday-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.55; margin-top: 3px; }
 .r-delete {
   background: none; border: 2px solid transparent; font-size: 20px;
   cursor: pointer; padding: 6px 10px; border-radius: 8px; opacity: 0.35;
@@ -179,6 +237,8 @@ body.off-today #clock-section { opacity: 0.55; }
 }
 .r-delete:active { opacity: 1; color: #c03020; border-color: #c03020; }
 .empty-state { text-align: center; padding: 32px; font-size: 18px; opacity: 0.4; }
+
+/* ── DELETE OVERLAY ── */
 #del-overlay {
   display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.6); z-index: 300;
@@ -186,11 +246,7 @@ body.off-today #clock-section { opacity: 0.55; }
   -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
 }
 #del-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
-#del-card {
-  background: #fff; border-radius: 22px; padding: 32px 26px;
-  width: 310px; text-align: center;
-  -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
+#del-card { background: #fff; border-radius: 22px; padding: 32px 26px; width: 310px; text-align: center; -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
 #del-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
 #del-card p  { font-size: 16px; color: #555; margin-bottom: 24px; line-height: 1.5; }
 #del-name    { font-weight: 700; color: #1a1a1a; }
@@ -199,18 +255,17 @@ body.off-today #clock-section { opacity: 0.55; }
 .del-confirm { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 14px; border-radius: 12px; border: none; background: #c03020; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #fff; }
 .del-cancel:active  { background: #eee; }
 .del-confirm:active { background: #a02010; }
+
+/* ── EDIT MODE ── */
 #edit-sections { display: none; }
 #edit-sections.open { display: block; }
 .card { border-radius: 16px; padding: 20px; margin-bottom: 18px; border: 2px solid; }
 .t-morning .card   { background: #f5ebc8; border-color: #e8d090; }
 .t-afternoon .card { background: #dde8f2; border-color: #b8d0e8; }
-.t-evening .card   { background: rgba(255,255,255,0.22); border-color: rgba(90,30,0,0.2); }
+.t-evening .card   { background: rgba(255,255,255,0.2); border-color: rgba(0,0,0,0.15); }
 .t-night .card     { background: #1e2430; border-color: #2e3a50; }
 .card p { font-size: 15px; opacity: 0.65; margin-bottom: 14px; line-height: 1.6; }
-.form-row {
-  display: -webkit-box; display: -webkit-flex; display: flex;
-  gap: 10px; margin-bottom: 12px; -webkit-flex-wrap: wrap; flex-wrap: wrap;
-}
+.form-row { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; margin-bottom: 12px; -webkit-flex-wrap: wrap; flex-wrap: wrap; }
 .form-row input, .form-row select, .card-input {
   background: transparent; border: 2px solid; border-radius: 10px;
   padding: 12px 14px; font-size: 17px; font-weight: 500;
@@ -219,30 +274,27 @@ body.off-today #clock-section { opacity: 0.55; }
 }
 .t-morning .form-row input,   .t-morning .form-row select,   .t-morning .card-input   { border-color: #e8d090; }
 .t-afternoon .form-row input, .t-afternoon .form-row select, .t-afternoon .card-input { border-color: #b8d0e8; }
-.t-evening .form-row input,   .t-evening .form-row select,   .t-evening .card-input   { border-color: rgba(90,30,0,0.3); }
+.t-evening .form-row input,   .t-evening .form-row select,   .t-evening .card-input   { border-color: rgba(0,0,0,0.25); }
 .t-night .form-row input,     .t-night .form-row select,     .t-night .card-input     { border-color: #2e3a50; }
-#r-text   { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 140px; width: auto; margin-bottom: 0; }
-#r-time   { width: 110px; margin-bottom: 0; }
-#r-repeat { width: 150px; margin-bottom: 0; }
-.btn {
-  width: 100%; border: none; border-radius: 12px; padding: 16px;
-  font-size: 17px; font-weight: 700;
-  font-family: 'Inter', -apple-system, sans-serif; cursor: pointer;
-}
+#r-text { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 140px; width: auto; margin-bottom: 0; }
+.form-label { font-size: 13px; font-weight: 600; opacity: 0.6; margin-bottom: 4px; }
+.time-row { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; -webkit-flex-wrap: wrap; flex-wrap: wrap; margin-bottom: 12px; }
+.time-col { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-flex-direction: column; flex-direction: column; -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 90px; }
+.time-col input { margin-bottom: 0; }
+#r-repeat { width: 100%; margin-bottom: 0; }
+.btn { width: 100%; border: none; border-radius: 12px; padding: 16px; font-size: 17px; font-weight: 700; font-family: 'Inter', -apple-system, sans-serif; cursor: pointer; }
 .t-morning .btn   { background: #c4700a; color: #fdf6e3; }
 .t-afternoon .btn { background: #1a5fa8; color: #eef3f8; }
-.t-evening .btn   { background: #3d1200; color: #f5925a; }
+.t-evening .btn   { background: #1a0800; color: #e8956a; }
 .t-night .btn     { background: #7aaae0; color: #141820; }
 .btn-sm { padding: 13px; font-size: 16px; }
 .status-msg { font-size: 14px; font-weight: 500; margin-top: 10px; text-align: center; opacity: 0.65; }
 .status-ok  { color: #4a8a50 !important; opacity: 1 !important; }
 .status-err { color: #c03020 !important; opacity: 1 !important; }
-.disconnect-btn {
-  background: none; border: none; font-size: 14px; font-weight: 500;
-  cursor: pointer; opacity: 0.5; display: block; margin-top: 10px;
-  font-family: 'Inter', sans-serif; color: inherit;
-}
+.disconnect-btn { background: none; border: none; font-size: 14px; font-weight: 500; cursor: pointer; opacity: 0.5; display: block; margin-top: 10px; font-family: 'Inter', sans-serif; color: inherit; }
 .disconnect-btn:active { opacity: 1; color: #c03020; }
+
+/* ── LOCK BUTTON ── */
 #lock-btn {
   position: fixed; bottom: 22px; right: 22px; width: 56px; height: 56px;
   border-radius: 28px; border: 2px solid rgba(128,128,128,0.3);
@@ -253,6 +305,8 @@ body.off-today #clock-section { opacity: 0.55; }
   opacity: 0.4; z-index: 100;
 }
 #lock-btn:active { opacity: 1; }
+
+/* ── PIN OVERLAY ── */
 #pin-overlay {
   display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.65); z-index: 200;
@@ -260,11 +314,7 @@ body.off-today #clock-section { opacity: 0.55; }
   -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
 }
 #pin-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
-#pin-card {
-  background: #fff; border-radius: 24px; padding: 36px 28px 28px;
-  width: 320px; text-align: center;
-  -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-}
+#pin-card { background: #fff; border-radius: 24px; padding: 36px 28px 28px; width: 320px; text-align: center; -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
 #pin-card h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
 .pin-sub { font-size: 15px; font-weight: 500; color: #999; margin-bottom: 24px; }
 #pin-dots { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; gap: 16px; margin-bottom: 26px; }
@@ -275,35 +325,37 @@ body.off-today #clock-section { opacity: 0.55; }
 .k:active { background: #ebebeb; }
 .k.del { font-size: 18px; color: #999; font-family: 'Inter', sans-serif; }
 #pin-err { font-size: 14px; font-weight: 500; color: #c03020; min-height: 20px; margin-top: 8px; }
-#pin-cancel-btn {
-  display: block; width: 100%; margin-top: 16px; padding: 13px;
-  border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8;
-  font-size: 16px; font-weight: 600; cursor: pointer;
-  font-family: 'Inter', sans-serif; color: #666;
-}
+#pin-cancel-btn { display: block; width: 100%; margin-top: 16px; padding: 13px; border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #666; }
 #pin-cancel-btn:active { background: #eee; }
 </style>
 </head>
 <body class="t-morning">
 <div id="app">
   <div id="clock-section">
-    <span id="period-icon">☀️</span>
     <div id="time">--:--</div>
     <div id="day-display">
       <div id="day">---</div>
       <div id="date">---</div>
+      <div id="consulting-pill">
+        <span id="cp-label">Vous regardez →</span>
+        <span id="cp-day"></span>
+      </div>
     </div>
   </div>
   <button id="today-anchor" onclick="goToday()">✓ Aujourd'hui</button>
   <div id="week-strip"></div>
   <div id="quick-nav">
-    <button class="nav-day-btn" onclick="changeDay(-1)">← Hier</button>
-    <button class="nav-day-btn" onclick="changeDay(1)">Demain →</button>
+    <button class="nav-day-btn" onclick="changeDay(-1)">← Jour précédent</button>
+    <button class="nav-day-btn" onclick="changeDay(1)">Jour suivant →</button>
   </div>
   <div class="divider"></div>
-  <div id="next-banner">
-    <div class="banner-label" id="banner-label">À</div>
-    <div class="banner-text" id="banner-text"></div>
+  <div id="ecm-banner">
+    <div class="b-emoji" id="b-emoji">✓</div>
+    <div class="b-content">
+      <div class="b-label" id="b-label">En ce moment</div>
+      <div class="b-text"  id="b-text">Vous êtes à jour</div>
+      <div class="b-sub"   id="b-sub"></div>
+    </div>
   </div>
   <div class="section-header">
     <span id="section-day-label">Aujourd'hui</span>
@@ -315,7 +367,16 @@ body.off-today #clock-section { opacity: 0.55; }
       <div class="section-header" style="margin-bottom:16px; font-size:15px;">Ajouter un rappel</div>
       <div class="form-row">
         <input type="text" id="r-text" placeholder="Médicaments, repas…" autocorrect="off" autocapitalize="off" />
-        <input type="time" id="r-time" />
+      </div>
+      <div class="time-row">
+        <div class="time-col">
+          <div class="form-label">Début</div>
+          <input type="time" id="r-time" />
+        </div>
+        <div class="time-col">
+          <div class="form-label">Fin</div>
+          <input type="time" id="r-timeend" />
+        </div>
       </div>
       <div class="form-row" style="margin-bottom:14px;">
         <select id="r-repeat">
@@ -398,18 +459,19 @@ var DAYS_LONG  = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Same
 var MONTHS     = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 var PROXY      = 'https://repere-liard.vercel.app/api/proxy?url=';
 var XHR_TIMEOUT = 10000;
-var localReminders = [];
-var gcalEvents     = [];
-var bdayEvents     = [];
-var lastIcalText   = '';
-var lastBdayText   = '';
-var calUrl         = '';
-var bdayUrl        = '';
-var editMode       = false;
-var pinEntry       = '';
-var storedPin      = '1234';
-var dayOffset      = 0;
+var localReminders  = [];
+var gcalEvents      = [];
+var bdayEvents      = [];
+var lastIcalText    = '';
+var lastBdayText    = '';
+var calUrl          = '';
+var bdayUrl         = '';
+var editMode        = false;
+var pinEntry        = '';
+var storedPin       = '1234';
+var dayOffset       = 0;
 var pendingDeleteId = null;
+var currentPeriodIcon = '☀️';
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
 function toMins(t) {
   if (!t || t === 'Toute la journée') return -1;
@@ -419,24 +481,21 @@ function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDat
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
-function dateStr(d) {
-  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
-}
-function getViewDate() {
-  var d = startOfDay(new Date());
-  d.setDate(d.getDate() + dayOffset);
-  return d;
-}
+function dateStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+function getViewDate() { var d = startOfDay(new Date()); d.setDate(d.getDate() + dayOffset); return d; }
 function changeDay(dir) { dayOffset += dir; render(); }
 function goToday() { dayOffset = 0; render(); }
+function getTheme() {
+  var h = new Date().getHours();
+  if (h >= 6 && h < 12)  return { cls: 't-morning',   icon: '☀️' };
+  if (h >= 12 && h < 18) return { cls: 't-afternoon', icon: '🌤' };
+  if (h >= 18 && h < 22) return { cls: 't-evening',   icon: '🌅' };
+  return                         { cls: 't-night',     icon: '🌙' };
+}
 function applyTheme() {
-  var h = new Date().getHours(), cls, icon;
-  if (h >= 6 && h < 12)       { cls = 't-morning';   icon = '☀️'; }
-  else if (h >= 12 && h < 18) { cls = 't-afternoon'; icon = '🌤'; }
-  else if (h >= 18 && h < 21) { cls = 't-evening';   icon = '🌅'; }
-  else                         { cls = 't-night';     icon = '🌙'; }
-  document.body.className = cls;
-  document.getElementById('period-icon').textContent = icon;
+  var t = getTheme();
+  currentPeriodIcon = t.icon;
+  document.body.className = t.cls;
 }
 function buildWeekStrip(now, vd) {
   var strip = document.getElementById('week-strip');
@@ -447,11 +506,11 @@ function buildWeekStrip(now, vd) {
     d.setDate(d.getDate() + i);
     var isRealToday = sameDay(d, today);
     var isSelected  = i === 0;
-    var cls = '';
+    var cls = 'week-day';
     if (isRealToday) cls += ' is-real-today';
     if (isSelected)  cls += ' is-selected';
     var diffFromToday = Math.round((startOfDay(d) - today) / 86400000);
-    html += '<button class="week-day' + cls + '" onclick="jumpToOffset(' + diffFromToday + ')">'
+    html += '<button class="' + cls + '" onclick="jumpToOffset(' + diffFromToday + ')">'
       + '<div class="wd-name">' + DAYS_SHORT[d.getDay()] + '</div>'
       + '<div class="wd-num">' + d.getDate() + '</div>'
       + '</button>';
@@ -464,9 +523,9 @@ function loadLocal() {
   try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
   if (!initialized) {
     localReminders = [
-      { id: 1, time: '08:00', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
-      { id: 2, time: '12:30', text: 'Déjeuner',             repeat: 'daily', source: 'local' },
-      { id: 3, time: '20:00', text: 'Médicaments du soir',  repeat: 'daily', source: 'local' }
+      { id: 1, time: '08:00', timeEnd: '08:30', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
+      { id: 2, time: '12:30', timeEnd: '13:30', text: 'Déjeuner',             repeat: 'daily', source: 'local' },
+      { id: 3, time: '20:00', timeEnd: '20:30', text: 'Médicaments du soir',  repeat: 'daily', source: 'local' }
     ];
     saveLocal();
     localStorage.setItem('repere_initialized', '1');
@@ -474,16 +533,18 @@ function loadLocal() {
 }
 function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
 function addReminder() {
-  var text   = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
-  var time   = document.getElementById('r-time').value;
-  var repeat = document.getElementById('r-repeat').value;
-  if (!text || !time) { alert('Veuillez entrer un horaire et une description.'); return; }
-  var rem = { id: Date.now(), time: time, text: text, repeat: repeat, source: 'local' };
+  var text    = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
+  var time    = document.getElementById('r-time').value;
+  var timeEnd = document.getElementById('r-timeend').value;
+  var repeat  = document.getElementById('r-repeat').value;
+  if (!text || !time || !timeEnd) { alert('Veuillez entrer un texte, une heure de début et une heure de fin.'); return; }
+  var rem = { id: Date.now(), time: time, timeEnd: timeEnd, text: text, repeat: repeat, source: 'local' };
   if (repeat === 'once') { rem.date = dateStr(getViewDate()); }
   localReminders.push(rem);
   saveLocal();
-  document.getElementById('r-text').value = '';
-  document.getElementById('r-time').value = '';
+  document.getElementById('r-text').value    = '';
+  document.getElementById('r-time').value    = '';
+  document.getElementById('r-timeend').value = '';
   render();
 }
 function askDelete(id, name) {
@@ -618,17 +679,14 @@ function parseIcal(text, targetDate, sourceType) {
     }
   }
   return events.map(function(e) {
-    return { id: sourceType + '_' + Math.random(), time: e.time, text: e.summary, source: sourceType, allDay: e.allDay };
+    return { id: sourceType + '_' + Math.random(), time: e.time, timeEnd: '', text: e.summary, source: sourceType, allDay: e.allDay };
   });
 }
 function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
 function savePin() {
   var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
   var el  = document.getElementById('pin-change-status');
-  if (val.length !== 4 || isNaN(Number(val))) {
-    el.textContent = 'Le code doit contenir exactement 4 chiffres.';
-    el.className = 'status-msg status-err'; return;
-  }
+  if (val.length !== 4 || isNaN(Number(val))) { el.textContent = 'Le code doit contenir exactement 4 chiffres.'; el.className = 'status-msg status-err'; return; }
   storedPin = val; localStorage.setItem('repere_pin', storedPin);
   document.getElementById('new-pin').value = '';
   el.textContent = '✓ Code enregistré'; el.className = 'status-msg status-ok';
@@ -652,9 +710,7 @@ function pk(k) {
 function pd() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
 function updateDots() {
   var i;
-  for (i = 0; i < 4; i++) {
-    document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot';
-  }
+  for (i = 0; i < 4; i++) { document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot'; }
 }
 function checkPin() {
   if (pinEntry === storedPin) {
@@ -676,25 +732,24 @@ function render() {
   var vd      = getViewDate();
   var isToday = sameDay(vd, now);
   var vdStr   = dateStr(vd);
+  var curMins = now.getHours() * 60 + now.getMinutes();
+  var today   = startOfDay(now);
   document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
-  document.getElementById('day').textContent  = DAYS_LONG[vd.getDay()];
-  document.getElementById('date').textContent = vd.getDate() + ' ' + MONTHS[vd.getMonth()] + ' ' + vd.getFullYear();
-  if (isToday) {
-    document.body.className = document.body.className.replace(' off-today','');
+  document.getElementById('day').textContent  = DAYS_LONG[today.getDay()];
+  document.getElementById('date').textContent = today.getDate() + ' ' + MONTHS[today.getMonth()] + ' ' + today.getFullYear();
+  var pill = document.getElementById('consulting-pill');
+  if (!isToday) {
+    document.getElementById('cp-day').textContent = DAYS_SHORT[vd.getDay()] + ' ' + vd.getDate() + ' ' + MONTHS[vd.getMonth()];
+    pill.className = 'show';
   } else {
-    if (document.body.className.indexOf('off-today') === -1) document.body.className += ' off-today';
+    pill.className = '';
   }
   var anchor = document.getElementById('today-anchor');
-  if (isToday) {
-    anchor.className = 'is-today';
-    anchor.textContent = "✓ Aujourd'hui";
-  } else {
-    anchor.className = 'off-today';
-    anchor.textContent = "↩ Revenir à aujourd'hui";
-  }
+  if (isToday) { anchor.className = 'is-today'; anchor.textContent = "✓ Aujourd'hui"; }
+  else         { anchor.className = 'off-today'; anchor.textContent = "↩ Revenir à aujourd'hui"; }
   buildWeekStrip(now, vd);
   var label = document.getElementById('section-day-label');
-  var diff  = Math.round((vd - startOfDay(now)) / 86400000);
+  var diff  = Math.round((vd - today) / 86400000);
   if (diff === 0)       label.textContent = "Aujourd'hui";
   else if (diff === -1) label.textContent = 'Hier';
   else if (diff ===  1) label.textContent = 'Demain';
@@ -703,74 +758,85 @@ function render() {
   var localForDay = [], i;
   for (i = 0; i < localReminders.length; i++) {
     var rem = localReminders[i];
-    if (rem.repeat === 'daily') {
-      localForDay.push(rem);
-    } else if (rem.repeat === 'once' && rem.date === vdStr) {
-      localForDay.push(rem);
-    }
+    if (rem.repeat === 'daily') { localForDay.push(rem); }
+    else if (rem.repeat === 'once' && rem.date === vdStr) { localForDay.push(rem); }
   }
   var calForDay  = lastIcalText ? parseIcal(lastIcalText,  vd, 'gcal')     : (isToday ? gcalEvents  : []);
   var bdayForDay = lastBdayText ? parseIcal(lastBdayText,  vd, 'birthday') : (isToday ? bdayEvents  : []);
-  var curMins = now.getHours() * 60 + now.getMinutes();
   var all = localForDay.concat(calForDay).concat(bdayForDay).sort(function(a,b) {
     var am = toMins(a.time), bm = toMins(b.time);
     if (am === -1) return 1; if (bm === -1) return -1; return am - bm;
   });
-  var banner = document.getElementById('next-banner');
-  if (isToday) {
-    var next = null;
+  var banner = document.getElementById('ecm-banner');
+  var bEmoji = document.getElementById('b-emoji');
+  var bLabel = document.getElementById('b-label');
+  var bText  = document.getElementById('b-text');
+  var bSub   = document.getElementById('b-sub');
+  if (!isToday) {
+    banner.className   = 'b-consult';
+    bEmoji.textContent = '📅';
+    bLabel.textContent = 'Vous consultez';
+    bText.textContent  = DAYS_LONG[vd.getDay()] + ' ' + vd.getDate() + ' ' + MONTHS[vd.getMonth()];
+    bSub.textContent   = "Ce n'est pas aujourd'hui";
+  } else {
+    var activeEvt = null;
     for (i = 0; i < all.length; i++) {
-      var rm = toMins(all[i].time);
-      if (rm !== -1 && rm > curMins && all[i].source !== 'birthday') { next = all[i]; break; }
+      var r = all[i];
+      if (r.source === 'birthday') continue;
+      var sm = toMins(r.time);
+      var em = r.timeEnd ? toMins(r.timeEnd) : sm + 60;
+      if (sm !== -1 && sm <= curMins && curMins <= em) { activeEvt = r; break; }
     }
-    if (next) {
-      document.getElementById('banner-label').textContent = 'À ' + next.time;
-      document.getElementById('banner-text').textContent  = next.text;
-      banner.style.display = 'block';
-      var diff2 = toMins(next.time) - curMins;
-      banner.className = diff2 <= 30 ? 'urgent' : (next.source === 'gcal' ? 'gcal' : '');
-    } else { banner.style.display = 'none'; }
-  } else { banner.style.display = 'none'; }
-  var list = document.getElementById('reminders-list');
-  if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement ce jour-là.</div>'; return; }
-  var next2 = null;
-  if (isToday) {
-    for (i = 0; i < all.length; i++) {
-      var jm = toMins(all[i].time);
-      if (jm !== -1 && jm > curMins && all[i].source !== 'birthday') { next2 = all[i]; break; }
+    if (activeEvt) {
+      banner.className   = 'b-active';
+      bEmoji.textContent = currentPeriodIcon;
+      bLabel.textContent = 'En ce moment';
+      bText.textContent  = activeEvt.text;
+      bSub.textContent   = activeEvt.timeEnd ? "jusqu'à " + activeEvt.timeEnd : '';
+    } else {
+      banner.className   = 'b-quiet';
+      bEmoji.textContent = currentPeriodIcon;
+      bLabel.textContent = 'En ce moment';
+      bText.textContent  = 'Vous êtes à jour';
+      var nextEvt = null;
+      for (i = 0; i < all.length; i++) {
+        if (all[i].source === 'birthday') continue;
+        var sm2 = toMins(all[i].time);
+        if (sm2 !== -1 && sm2 > curMins) { nextEvt = all[i]; break; }
+      }
+      if (nextEvt) { bSub.textContent = nextEvt.text + ' à ' + nextEvt.time; }
+      else { bSub.textContent = now.getHours() >= 21 ? 'Bonne nuit' : "Rien d'autre prévu aujourd'hui"; }
     }
   }
+  var list = document.getElementById('reminders-list');
+  if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement ce jour-là.</div>'; return; }
   var html = '';
   for (i = 0; i < all.length; i++) {
     var r      = all[i];
-    var rMins  = toMins(r.time);
-    var isPast = isToday && rMins !== -1 && rMins < curMins && r.source !== 'birthday';
-    var isNext = isToday && next2 && r.id === next2.id;
-    var diff3  = isToday && rMins !== -1 ? rMins - curMins : 0;
+    var rStart = toMins(r.time);
+    var rEnd   = r.timeEnd ? toMins(r.timeEnd) : (rStart !== -1 ? rStart + 60 : -1);
+    var isPast    = isToday && rEnd !== -1 && rEnd < curMins && r.source !== 'birthday';
+    var isCurrent = isToday && rStart !== -1 && rStart <= curMins && curMins <= rEnd && r.source !== 'birthday';
+    var statusText = r.source === 'birthday' ? 'Anniversaire' : (isPast ? 'Terminé' : (isCurrent ? 'Maintenant' : 'Ensuite'));
     var cls = '';
-    if (r.source === 'birthday') {
-      cls = 'r-birthday';
-    } else if (r.source === 'gcal') {
-      cls = 'r-gcal';
-      if (isPast)      cls += ' past';
-      else if (isNext) cls += diff3 <= 30 ? ' r-urgent' : ' r-next';
-    } else {
-      if (isPast)      cls = 'past';
-      else if (isNext) cls = diff3 <= 30 ? 'r-urgent' : 'r-next';
-    }
+    if (r.source === 'birthday') { cls = 'r-birthday'; }
+    else if (r.source === 'gcal') { cls = 'r-gcal' + (isPast ? ' past' : '') + (isCurrent ? ' r-current' : ''); }
+    else { cls = isPast ? 'past' : (isCurrent ? 'r-current' : ''); }
     var timeDisp = (r.allDay || r.time === 'Toute la journée') ? '🎂' : r.time;
     var meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Ce jour') : '';
     var tag = '';
     if (r.source === 'gcal')     tag = '<div class="r-source">Google Agenda</div>';
-    if (r.source === 'birthday') tag = '<div class="r-birthday-tag">🎂 Anniversaire</div>';
+    if (r.source === 'birthday') tag = '<div class="r-bday-tag">🎂 Anniversaire</div>';
     var delBtn = '';
     if (editMode && r.source === 'local') {
       delBtn = '<button class="r-delete" onclick="askDelete(' + r.id + ',\'' + r.text.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + '\')">✕</button>';
     }
     html += '<div class="reminder ' + cls + '">'
       + '<div class="r-time">' + timeDisp + '</div>'
-      + '<div class="r-body"><div class="r-text">' + r.text + '</div>'
-      + (meta ? '<div class="r-meta">' + meta + '</div>' : '')
+      + '<div class="r-body">'
+      + '<div class="r-text">' + r.text + '</div>'
+      + (meta ? '<div style="font-size:13px;opacity:0.55;margin-top:3px;">' + meta + '</div>' : '')
+      + '<div class="r-status">' + statusText + '</div>'
       + tag + '</div>'
       + delBtn + '</div>';
   }
