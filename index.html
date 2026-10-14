@@ -472,19 +472,28 @@ var storedPin       = '1234';
 var dayOffset       = 0;
 var pendingDeleteId = null;
 var currentPeriodIcon = '☀️';
+
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
 function toMins(t) {
   if (!t || t === 'Toute la journée') return -1;
   var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]);
 }
+
 function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+
 function sameDay(a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
+
 function dateStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+
 function getViewDate() { var d = startOfDay(new Date()); d.setDate(d.getDate() + dayOffset); return d; }
+
 function changeDay(dir) { dayOffset += dir; render(); }
+
 function goToday() { dayOffset = 0; render(); }
+
 function getTheme() {
   var h = new Date().getHours();
   if (h >= 6 && h < 12)  return { cls: 't-morning',   icon: '☀️' };
@@ -492,11 +501,13 @@ function getTheme() {
   if (h >= 18 && h < 22) return { cls: 't-evening',   icon: '🌅' };
   return                         { cls: 't-night',     icon: '🌙' };
 }
+
 function applyTheme() {
   var t = getTheme();
   currentPeriodIcon = t.icon;
   document.body.className = t.cls;
 }
+
 function buildWeekStrip(now, vd) {
   var strip = document.getElementById('week-strip');
   var today = startOfDay(now);
@@ -517,7 +528,9 @@ function buildWeekStrip(now, vd) {
   }
   strip.innerHTML = html;
 }
+
 function jumpToOffset(offset) { dayOffset = offset; render(); }
+
 function loadLocal() {
   var initialized = localStorage.getItem('repere_initialized');
   try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
@@ -531,7 +544,9 @@ function loadLocal() {
     localStorage.setItem('repere_initialized', '1');
   }
 }
+
 function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
+
 function addReminder() {
   var text    = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
   var time    = document.getElementById('r-time').value;
@@ -547,12 +562,15 @@ function addReminder() {
   document.getElementById('r-timeend').value = '';
   render();
 }
+
 function askDelete(id, name) {
   pendingDeleteId = id;
   document.getElementById('del-name').textContent = name;
   document.getElementById('del-overlay').className = 'open';
 }
+
 function cancelDelete() { pendingDeleteId = null; document.getElementById('del-overlay').className = ''; }
+
 function confirmDelete() {
   if (pendingDeleteId === null) return;
   var arr = [], i;
@@ -563,6 +581,7 @@ function confirmDelete() {
   document.getElementById('del-overlay').className = '';
   render();
 }
+
 function saveCalUrl() {
   var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g,'');
   if (!url) return;
@@ -570,6 +589,7 @@ function saveCalUrl() {
   document.getElementById('cal-status').textContent = 'Connexion…';
   fetchIcal();
 }
+
 function disconnectCal() {
   calUrl = ''; gcalEvents = []; lastIcalText = '';
   localStorage.removeItem('repere_calurl');
@@ -580,6 +600,7 @@ function disconnectCal() {
   document.getElementById('cal-sync-badge').textContent = '';
   render();
 }
+
 function saveBdayUrl() {
   var url = document.getElementById('bday-url').value.replace(/^\s+|\s+$/g,'');
   if (!url) return;
@@ -587,6 +608,7 @@ function saveBdayUrl() {
   document.getElementById('bday-status').textContent = 'Connexion…';
   fetchBday();
 }
+
 function disconnectBday() {
   bdayUrl = ''; bdayEvents = []; lastBdayText = '';
   localStorage.removeItem('repere_bdayurl');
@@ -596,6 +618,7 @@ function disconnectBday() {
   document.getElementById('bday-sync-badge').textContent = '';
   render();
 }
+
 function fetchIcal() {
   if (!calUrl) return;
   var xhr = new XMLHttpRequest();
@@ -625,6 +648,7 @@ function fetchIcal() {
   xhr.onerror   = function() { document.getElementById('sync-indicator').textContent = 'Hors ligne'; document.getElementById('sync-indicator').className = 'sync-err'; };
   xhr.send();
 }
+
 function fetchBday() {
   if (!bdayUrl) return;
   var xhr = new XMLHttpRequest();
@@ -649,6 +673,53 @@ function fetchBday() {
   xhr.onerror   = function() { document.getElementById('bday-status').textContent = 'Hors ligne'; };
   xhr.send();
 }
+
+function matchRRule(rruleStr, dtStart, targetDate) {
+  var rules = {};
+  var parts = rruleStr.split(';');
+  var i;
+  for (i = 0; i < parts.length; i++) {
+    var kv = parts[i].split('=');
+    if (kv.length === 2) { rules[kv[0]] = kv[1]; }
+  }
+  var freq = rules['FREQ'] || 'DAILY';
+  var interval = parseInt(rules['INTERVAL']) || 1;
+  var until = rules['UNTIL'] ? rules['UNTIL'].replace(/T.*/,'').replace('Z','') : null;
+  var count = parseInt(rules['COUNT']) || 0;
+  var byDay = rules['BYDAY'] ? rules['BYDAY'].split(',') : [];
+  var dtStr = dtStart.replace(/T.*/,'').replace('Z','');
+  var dtDate = new Date(parseInt(dtStr.slice(0,4)), parseInt(dtStr.slice(4,6))-1, parseInt(dtStr.slice(6,8)));
+  var targetStr = targetDate.getFullYear().toString() + pad(targetDate.getMonth()+1) + pad(targetDate.getDate());
+  if (until && targetStr > until) return false;
+  var daysDiff = Math.floor((targetDate - dtDate) / 86400000);
+  if (daysDiff < 0) return false;
+  if (freq === 'DAILY') {
+    if (daysDiff % interval !== 0) return false;
+    if (count > 0 && daysDiff >= count * interval) return false;
+    return true;
+  }
+  if (freq === 'WEEKLY') {
+    if (byDay.length === 0) {
+      if (Math.floor(daysDiff / 7) % interval !== 0) return false;
+      if (count > 0 && Math.floor(daysDiff / 7) >= count) return false;
+      return true;
+    }
+    var weeksDiff = Math.floor(daysDiff / 7);
+    if (weeksDiff % interval !== 0) return false;
+    var targetDayNum = targetDate.getDay();
+    var dayNames = ['SU','MO','TU','WE','TH','FR','SA'];
+    var targetDayName = dayNames[targetDayNum];
+    var matches = false;
+    for (var j = 0; j < byDay.length; j++) {
+      if (byDay[j] === targetDayName) { matches = true; break; }
+    }
+    if (!matches) return false;
+    if (count > 0 && weeksDiff >= count) return false;
+    return true;
+  }
+  return false;
+}
+
 function parseIcal(text, targetDate, sourceType) {
   var tStr = targetDate.getFullYear().toString() + pad(targetDate.getMonth()+1) + pad(targetDate.getDate());
   var events = [], inEvent = false, ev = {};
@@ -658,23 +729,42 @@ function parseIcal(text, targetDate, sourceType) {
     var line = lines[i];
     if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
     else if (line === 'END:VEVENT') {
-      if (inEvent && ev.summary && ev.today) events.push(ev);
+      if (inEvent && ev.summary) {
+        if (ev.rrule && ev.dtstart) {
+          if (matchRRule(ev.rrule, ev.dtstart, targetDate)) {
+            ev.today = true;
+            if (ev.dtstart.indexOf('T') >= 0) {
+              var tp = ev.dtstart.replace(/.*T/,'').replace('Z','');
+              var h = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
+              if (ev.dtstart.charAt(ev.dtstart.length-1) === 'Z') {
+                h = (h + (-targetDate.getTimezoneOffset()/60) + 24) % 24;
+              }
+              ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
+            } else { ev.time = 'Toute la journée'; ev.allDay = true; }
+            events.push(ev);
+          }
+        } else if (ev.today) {
+          events.push(ev);
+        }
+      }
       inEvent = false; ev = {};
     } else if (inEvent) {
       if (line.indexOf('SUMMARY:') === 0) {
         ev.summary = line.slice(8).replace(/^\s+|\s+$/g,'');
       } else if (line.indexOf('DTSTART') === 0) {
-        var val = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
-        var dStr = val.replace(/T.*/,'').replace('Z','');
-        if (dStr === tStr) {
-          ev.today = true;
-          if (val.indexOf('T') >= 0) {
-            var tp = val.replace(/.*T/,'').replace('Z','');
-            var h = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
-            if (val.charAt(val.length-1) === 'Z') { h = (h + (-targetDate.getTimezoneOffset()/60) + 24) % 24; }
-            ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
-          } else { ev.time = 'Toute la journée'; ev.allDay = true; }
-        }
+        ev.dtstart = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
+        var dStr = ev.dtstart.replace(/T.*/,'').replace('Z','');
+        if (dStr === tStr) { ev.today = true; }
+        if (ev.dtstart.indexOf('T') >= 0 && !ev.rrule) {
+          var tp = ev.dtstart.replace(/.*T/,'').replace('Z','');
+          var h = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
+          if (ev.dtstart.charAt(ev.dtstart.length-1) === 'Z') {
+            h = (h + (-targetDate.getTimezoneOffset()/60) + 24) % 24;
+          }
+          ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
+        } else if (!ev.rrule) { ev.time = 'Toute la journée'; ev.allDay = true; }
+      } else if (line.indexOf('RRULE:') === 0) {
+        ev.rrule = line.slice(6).replace(/^\s+|\s+$/g,'');
       }
     }
   }
@@ -682,7 +772,9 @@ function parseIcal(text, targetDate, sourceType) {
     return { id: sourceType + '_' + Math.random(), time: e.time, timeEnd: '', text: e.summary, source: sourceType, allDay: e.allDay };
   });
 }
+
 function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
+
 function savePin() {
   var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
   var el  = document.getElementById('pin-change-status');
@@ -691,6 +783,7 @@ function savePin() {
   document.getElementById('new-pin').value = '';
   el.textContent = '✓ Code enregistré'; el.className = 'status-msg status-ok';
 }
+
 function handleLock() {
   if (editMode) {
     editMode = false;
@@ -702,16 +795,20 @@ function handleLock() {
     document.getElementById('pin-overlay').className = 'open';
   }
 }
+
 function pk(k) {
   if (pinEntry.length >= 4) return;
   pinEntry += k; updateDots();
   if (pinEntry.length === 4) setTimeout(checkPin, 150);
 }
+
 function pd() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
+
 function updateDots() {
   var i;
   for (i = 0; i < 4; i++) { document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot'; }
 }
+
 function checkPin() {
   if (pinEntry === storedPin) {
     closePIN(); editMode = true;
@@ -725,7 +822,9 @@ function checkPin() {
     pinEntry = ''; updateDots();
   }
 }
+
 function closePIN() { document.getElementById('pin-overlay').className = ''; pinEntry = ''; updateDots(); }
+
 function render() {
   applyTheme();
   var now     = new Date();
@@ -842,12 +941,14 @@ function render() {
   }
   list.innerHTML = html;
 }
+
 var swipeStartX = 0;
 document.addEventListener('touchstart', function(e) { swipeStartX = e.touches[0].clientX; }, false);
 document.addEventListener('touchend', function(e) {
   var dx = e.changedTouches[0].clientX - swipeStartX;
   if (Math.abs(dx) > 70) { changeDay(dx < 0 ? 1 : -1); }
 }, false);
+
 loadPin(); loadLocal();
 calUrl  = localStorage.getItem('repere_calurl')  || '';
 bdayUrl = localStorage.getItem('repere_bdayurl') || '';
