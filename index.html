@@ -228,4 +228,634 @@ body.t-night     { background: #141820; color: #ffffff; }
 .r-status { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px; opacity: 0.6; }
 .reminder.r-current .r-status { opacity: 1; }
 .reminder.r-birthday .r-text  { font-size: 18px; font-weight: 500; }
-.r-source   { font-size: 11px;
+.r-source   { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #4a8ad4; margin-top: 3px; }
+.r-bday-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.55; margin-top: 3px; }
+.r-delete {
+  background: none; border: 2px solid transparent; font-size: 20px;
+  cursor: pointer; padding: 6px 10px; border-radius: 8px; opacity: 0.35;
+  font-family: 'Inter', sans-serif; color: inherit;
+}
+.r-delete:active { opacity: 1; color: #c03020; border-color: #c03020; }
+.empty-state { text-align: center; padding: 32px; font-size: 18px; opacity: 0.4; }
+
+/* ── DELETE OVERLAY ── */
+#del-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6); z-index: 300;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+}
+#del-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
+#del-card { background: #fff; border-radius: 22px; padding: 32px 26px; width: 310px; text-align: center; -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+#del-card h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+#del-card p  { font-size: 16px; color: #555; margin-bottom: 24px; line-height: 1.5; }
+#del-name    { font-weight: 700; color: #1a1a1a; }
+.del-btns { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; }
+.del-cancel  { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 14px; border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #333; }
+.del-confirm { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; padding: 14px; border-radius: 12px; border: none; background: #c03020; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #fff; }
+.del-cancel:active  { background: #eee; }
+.del-confirm:active { background: #a02010; }
+
+/* ── EDIT MODE ── */
+#edit-sections { display: none; }
+#edit-sections.open { display: block; }
+.card { border-radius: 16px; padding: 20px; margin-bottom: 18px; border: 2px solid; }
+.t-morning .card   { background: #f5ebc8; border-color: #e8d090; }
+.t-afternoon .card { background: #dde8f2; border-color: #b8d0e8; }
+.t-evening .card   { background: rgba(255,255,255,0.2); border-color: rgba(0,0,0,0.15); }
+.t-night .card     { background: #1e2430; border-color: #2e3a50; }
+.card p { font-size: 15px; opacity: 0.65; margin-bottom: 14px; line-height: 1.6; }
+.form-row { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; margin-bottom: 12px; -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+.form-row input, .form-row select, .card-input {
+  background: transparent; border: 2px solid; border-radius: 10px;
+  padding: 12px 14px; font-size: 17px; font-weight: 500;
+  font-family: 'Inter', -apple-system, sans-serif;
+  outline: none; -webkit-appearance: none; color: inherit; width: 100%; margin-bottom: 12px;
+}
+.t-morning .form-row input,   .t-morning .form-row select,   .t-morning .card-input   { border-color: #e8d090; }
+.t-afternoon .form-row input, .t-afternoon .form-row select, .t-afternoon .card-input { border-color: #b8d0e8; }
+.t-evening .form-row input,   .t-evening .form-row select,   .t-evening .card-input   { border-color: rgba(0,0,0,0.25); }
+.t-night .form-row input,     .t-night .form-row select,     .t-night .card-input     { border-color: #2e3a50; }
+#r-text { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 140px; width: auto; margin-bottom: 0; }
+.form-label { font-size: 13px; font-weight: 600; opacity: 0.6; margin-bottom: 4px; }
+.time-row { display: -webkit-box; display: -webkit-flex; display: flex; gap: 10px; -webkit-flex-wrap: wrap; flex-wrap: wrap; margin-bottom: 12px; }
+.time-col { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-orient: vertical; -webkit-flex-direction: column; flex-direction: column; -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; min-width: 90px; }
+.time-col input { margin-bottom: 0; }
+#r-repeat { width: 100%; margin-bottom: 0; }
+.btn { width: 100%; border: none; border-radius: 12px; padding: 16px; font-size: 17px; font-weight: 700; font-family: 'Inter', -apple-system, sans-serif; cursor: pointer; }
+.t-morning .btn   { background: #c4700a; color: #fdf6e3; }
+.t-afternoon .btn { background: #1a5fa8; color: #eef3f8; }
+.t-evening .btn   { background: #1a0800; color: #e8956a; }
+.t-night .btn     { background: #7aaae0; color: #141820; }
+.btn-sm { padding: 13px; font-size: 16px; }
+.status-msg { font-size: 14px; font-weight: 500; margin-top: 10px; text-align: center; opacity: 0.65; }
+.status-ok  { color: #4a8a50 !important; opacity: 1 !important; }
+.status-err { color: #c03020 !important; opacity: 1 !important; }
+.disconnect-btn { background: none; border: none; font-size: 14px; font-weight: 500; cursor: pointer; opacity: 0.5; display: block; margin-top: 10px; font-family: 'Inter', sans-serif; color: inherit; }
+.disconnect-btn:active { opacity: 1; color: #c03020; }
+
+/* ── LOCK BUTTON ── */
+#lock-btn {
+  position: fixed; bottom: 22px; right: 22px; width: 56px; height: 56px;
+  border-radius: 28px; border: 2px solid rgba(128,128,128,0.3);
+  background: rgba(128,128,128,0.15); font-size: 24px; cursor: pointer;
+  display: -webkit-box; display: -webkit-flex; display: flex;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+  opacity: 0.4; z-index: 100;
+}
+#lock-btn:active { opacity: 1; }
+
+/* ── PIN OVERLAY ── */
+#pin-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65); z-index: 200;
+  -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+  -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+}
+#pin-overlay.open { display: -webkit-box; display: -webkit-flex; display: flex; }
+#pin-card { background: #fff; border-radius: 24px; padding: 36px 28px 28px; width: 320px; text-align: center; -webkit-box-shadow: 0 20px 60px rgba(0,0,0,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+#pin-card h2 { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.pin-sub { font-size: 15px; font-weight: 500; color: #999; margin-bottom: 24px; }
+#pin-dots { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; gap: 16px; margin-bottom: 26px; }
+.dot    { width: 16px; height: 16px; border-radius: 50%; background: #e8e8e8; }
+.dot.on { background: #c4700a; }
+#pin-keypad { display: -webkit-box; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; gap: 10px; -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center; margin-bottom: 8px; }
+.k { width: 80px; height: 60px; border-radius: 14px; border: 2px solid #e8e8e8; background: #f8f8f8; font-size: 28px; font-weight: 300; color: #1a1a1a; cursor: pointer; font-family: 'Playfair Display', Georgia, serif; }
+.k:active { background: #ebebeb; }
+.k.del { font-size: 18px; color: #999; font-family: 'Inter', sans-serif; }
+#pin-err { font-size: 14px; font-weight: 500; color: #c03020; min-height: 20px; margin-top: 8px; }
+#pin-cancel-btn { display: block; width: 100%; margin-top: 16px; padding: 13px; border-radius: 12px; border: 2px solid #e0e0e0; background: #f8f8f8; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; color: #666; }
+#pin-cancel-btn:active { background: #eee; }
+</style>
+</head>
+<body class="t-morning">
+<div id="app">
+  <div id="clock-section">
+    <div id="time">--:--</div>
+    <div id="day-display">
+      <div id="day">---</div>
+      <div id="date">---</div>
+      <div id="consulting-pill">
+        <span id="cp-label">Vous regardez →</span>
+        <span id="cp-day"></span>
+      </div>
+    </div>
+  </div>
+  <button id="today-anchor" onclick="goToday()">✓ Aujourd'hui</button>
+  <div id="week-strip"></div>
+  <div id="quick-nav">
+    <button class="nav-day-btn" onclick="changeDay(-1)">← Jour précédent</button>
+    <button class="nav-day-btn" onclick="changeDay(1)">Jour suivant →</button>
+  </div>
+  <div class="divider"></div>
+  <div id="ecm-banner">
+    <div class="b-emoji" id="b-emoji">✓</div>
+    <div class="b-content">
+      <div class="b-label" id="b-label">En ce moment</div>
+      <div class="b-text"  id="b-text">Vous êtes à jour</div>
+      <div class="b-sub"   id="b-sub"></div>
+    </div>
+  </div>
+  <div class="section-header">
+    <span id="section-day-label">Aujourd'hui</span>
+    <span id="sync-indicator"></span>
+  </div>
+  <div id="reminders-list"></div>
+  <div id="edit-sections">
+    <div class="card">
+      <div class="section-header" style="margin-bottom:16px; font-size:15px;">Ajouter un rappel</div>
+      <div class="form-row">
+        <input type="text" id="r-text" placeholder="Médicaments, repas…" autocorrect="off" autocapitalize="off" />
+      </div>
+      <div class="time-row">
+        <div class="time-col">
+          <div class="form-label">Début</div>
+          <input type="time" id="r-time" />
+        </div>
+        <div class="time-col">
+          <div class="form-label">Fin</div>
+          <input type="time" id="r-timeend" />
+        </div>
+      </div>
+      <div class="form-row" style="margin-bottom:14px;">
+        <select id="r-repeat">
+          <option value="daily">Tous les jours</option>
+          <option value="once">Ce jour uniquement</option>
+        </select>
+      </div>
+      <button class="btn" onclick="addReminder()">+ Ajouter</button>
+    </div>
+    <div class="card">
+      <div class="section-header" style="margin-bottom:10px; font-size:15px;">
+        <span>Google Agenda</span>
+        <span id="cal-sync-badge" style="font-size:12px; font-weight:500;"></span>
+      </div>
+      <p>Collez l'URL iCal de votre agenda principal.</p>
+      <input type="text" class="card-input" id="cal-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <button class="btn btn-sm" onclick="saveCalUrl()">Connecter</button>
+      <div class="status-msg" id="cal-status"></div>
+      <button class="disconnect-btn" id="disconnect-btn" onclick="disconnectCal()" style="display:none;">✕ Déconnecter l'agenda</button>
+    </div>
+    <div class="card">
+      <div class="section-header" style="margin-bottom:10px; font-size:15px;">
+        <span>🎂 Anniversaires</span>
+        <span id="bday-sync-badge" style="font-size:12px; font-weight:500;"></span>
+      </div>
+      <p>Collez l'URL iCal du calendrier d'anniversaires.</p>
+      <input type="text" class="card-input" id="bday-url" placeholder="https://calendar.google.com/calendar/ical/..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <button class="btn btn-sm" onclick="saveBdayUrl()">Connecter</button>
+      <div class="status-msg" id="bday-status"></div>
+      <button class="disconnect-btn" id="bday-disconnect-btn" onclick="disconnectBday()" style="display:none;">✕ Déconnecter les anniversaires</button>
+    </div>
+    <div class="card">
+      <div class="section-header" style="margin-bottom:10px; font-size:15px;">Code PIN</div>
+      <p>Code actuel : 4 chiffres. Par défaut : <strong>1234</strong></p>
+      <input type="password" class="card-input" id="new-pin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Nouveau code (4 chiffres)" style="letter-spacing:8px; text-align:center;" />
+      <button class="btn btn-sm" onclick="savePin()">Enregistrer</button>
+      <div class="status-msg" id="pin-change-status"></div>
+    </div>
+  </div>
+</div>
+<button id="lock-btn" onclick="handleLock()">🔒</button>
+<div id="del-overlay">
+  <div id="del-card">
+    <h3>Supprimer ce rappel ?</h3>
+    <p>« <span id="del-name"></span> »</p>
+    <div class="del-btns">
+      <button class="del-cancel" onclick="cancelDelete()">Annuler</button>
+      <button class="del-confirm" onclick="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>
+<div id="pin-overlay">
+  <div id="pin-card">
+    <h2>Repère</h2>
+    <div class="pin-sub">Code soignant</div>
+    <div id="pin-dots">
+      <div class="dot" id="dot0"></div><div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div><div class="dot" id="dot3"></div>
+    </div>
+    <div id="pin-keypad">
+      <button class="k" onclick="pk('1')">1</button>
+      <button class="k" onclick="pk('2')">2</button>
+      <button class="k" onclick="pk('3')">3</button>
+      <button class="k" onclick="pk('4')">4</button>
+      <button class="k" onclick="pk('5')">5</button>
+      <button class="k" onclick="pk('6')">6</button>
+      <button class="k" onclick="pk('7')">7</button>
+      <button class="k" onclick="pk('8')">8</button>
+      <button class="k" onclick="pk('9')">9</button>
+      <button class="k" onclick="pk('0')">0</button>
+      <button class="k del" onclick="pd()">⌫</button>
+    </div>
+    <div id="pin-err"></div>
+    <button id="pin-cancel-btn" onclick="closePIN()">Annuler</button>
+  </div>
+</div>
+<script>
+var DAYS_SHORT = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+var DAYS_LONG  = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+var MONTHS     = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+var PROXY      = 'https://repere-liard.vercel.app/api/proxy?url=';
+var XHR_TIMEOUT = 10000;
+var localReminders  = [];
+var gcalEvents      = [];
+var bdayEvents      = [];
+var lastIcalText    = '';
+var lastBdayText    = '';
+var calUrl          = '';
+var bdayUrl         = '';
+var editMode        = false;
+var pinEntry        = '';
+var storedPin       = '1234';
+var dayOffset       = 0;
+var pendingDeleteId = null;
+var currentPeriodIcon = '☀️';
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+function toMins(t) {
+  if (!t || t === 'Toute la journée') return -1;
+  var p = t.split(':'); return parseInt(p[0]) * 60 + parseInt(p[1]);
+}
+function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function sameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+function dateStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+function getViewDate() { var d = startOfDay(new Date()); d.setDate(d.getDate() + dayOffset); return d; }
+function changeDay(dir) { dayOffset += dir; render(); }
+function goToday() { dayOffset = 0; render(); }
+function getTheme() {
+  var h = new Date().getHours();
+  if (h >= 6 && h < 12)  return { cls: 't-morning',   icon: '☀️' };
+  if (h >= 12 && h < 18) return { cls: 't-afternoon', icon: '🌤' };
+  if (h >= 18 && h < 22) return { cls: 't-evening',   icon: '🌅' };
+  return                         { cls: 't-night',     icon: '🌙' };
+}
+function applyTheme() {
+  var t = getTheme();
+  currentPeriodIcon = t.icon;
+  document.body.className = t.cls;
+}
+function buildWeekStrip(now, vd) {
+  var strip = document.getElementById('week-strip');
+  var today = startOfDay(now);
+  var html  = '', i;
+  for (i = -3; i <= 3; i++) {
+    var d = new Date(vd.getTime());
+    d.setDate(d.getDate() + i);
+    var isRealToday = sameDay(d, today);
+    var isSelected  = i === 0;
+    var cls = 'week-day';
+    if (isRealToday) cls += ' is-real-today';
+    if (isSelected)  cls += ' is-selected';
+    var diffFromToday = Math.round((startOfDay(d) - today) / 86400000);
+    html += '<button class="' + cls + '" onclick="jumpToOffset(' + diffFromToday + ')">'
+      + '<div class="wd-name">' + DAYS_SHORT[d.getDay()] + '</div>'
+      + '<div class="wd-num">' + d.getDate() + '</div>'
+      + '</button>';
+  }
+  strip.innerHTML = html;
+}
+function jumpToOffset(offset) { dayOffset = offset; render(); }
+function loadLocal() {
+  var initialized = localStorage.getItem('repere_initialized');
+  try { localReminders = JSON.parse(localStorage.getItem('repere_reminders') || '[]'); } catch(e) { localReminders = []; }
+  if (!initialized) {
+    localReminders = [
+      { id: 1, time: '08:00', timeEnd: '08:30', text: 'Médicaments du matin', repeat: 'daily', source: 'local' },
+      { id: 2, time: '12:30', timeEnd: '13:30', text: 'Déjeuner',             repeat: 'daily', source: 'local' },
+      { id: 3, time: '20:00', timeEnd: '20:30', text: 'Médicaments du soir',  repeat: 'daily', source: 'local' }
+    ];
+    saveLocal();
+    localStorage.setItem('repere_initialized', '1');
+  }
+}
+function saveLocal() { localStorage.setItem('repere_reminders', JSON.stringify(localReminders)); }
+function addReminder() {
+  var text    = document.getElementById('r-text').value.replace(/^\s+|\s+$/g,'');
+  var time    = document.getElementById('r-time').value;
+  var timeEnd = document.getElementById('r-timeend').value;
+  var repeat  = document.getElementById('r-repeat').value;
+  if (!text || !time || !timeEnd) { alert('Veuillez entrer un texte, une heure de début et une heure de fin.'); return; }
+  var rem = { id: Date.now(), time: time, timeEnd: timeEnd, text: text, repeat: repeat, source: 'local' };
+  if (repeat === 'once') { rem.date = dateStr(getViewDate()); }
+  localReminders.push(rem);
+  saveLocal();
+  document.getElementById('r-text').value    = '';
+  document.getElementById('r-time').value    = '';
+  document.getElementById('r-timeend').value = '';
+  render();
+}
+function askDelete(id, name) {
+  pendingDeleteId = id;
+  document.getElementById('del-name').textContent = name;
+  document.getElementById('del-overlay').className = 'open';
+}
+function cancelDelete() { pendingDeleteId = null; document.getElementById('del-overlay').className = ''; }
+function confirmDelete() {
+  if (pendingDeleteId === null) return;
+  var arr = [], i;
+  for (i = 0; i < localReminders.length; i++) {
+    if (localReminders[i].id !== pendingDeleteId) arr.push(localReminders[i]);
+  }
+  localReminders = arr; saveLocal(); pendingDeleteId = null;
+  document.getElementById('del-overlay').className = '';
+  render();
+}
+function saveCalUrl() {
+  var url = document.getElementById('cal-url').value.replace(/^\s+|\s+$/g,'');
+  if (!url) return;
+  calUrl = url; localStorage.setItem('repere_calurl', calUrl);
+  document.getElementById('cal-status').textContent = 'Connexion…';
+  fetchIcal();
+}
+function disconnectCal() {
+  calUrl = ''; gcalEvents = []; lastIcalText = '';
+  localStorage.removeItem('repere_calurl');
+  document.getElementById('cal-url').value = '';
+  document.getElementById('cal-status').textContent = 'Agenda déconnecté.';
+  document.getElementById('disconnect-btn').style.display = 'none';
+  document.getElementById('sync-indicator').textContent = '';
+  document.getElementById('cal-sync-badge').textContent = '';
+  render();
+}
+function saveBdayUrl() {
+  var url = document.getElementById('bday-url').value.replace(/^\s+|\s+$/g,'');
+  if (!url) return;
+  bdayUrl = url; localStorage.setItem('repere_bdayurl', bdayUrl);
+  document.getElementById('bday-status').textContent = 'Connexion…';
+  fetchBday();
+}
+function disconnectBday() {
+  bdayUrl = ''; bdayEvents = []; lastBdayText = '';
+  localStorage.removeItem('repere_bdayurl');
+  document.getElementById('bday-url').value = '';
+  document.getElementById('bday-status').textContent = 'Anniversaires déconnectés.';
+  document.getElementById('bday-disconnect-btn').style.display = 'none';
+  document.getElementById('bday-sync-badge').textContent = '';
+  render();
+}
+function fetchIcal() {
+  if (!calUrl) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', PROXY + encodeURIComponent(calUrl), true);
+  xhr.timeout = XHR_TIMEOUT;
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      lastIcalText = xhr.responseText;
+      gcalEvents = parseIcal(xhr.responseText, new Date(), 'gcal');
+      var n = new Date();
+      var t = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
+      document.getElementById('sync-indicator').textContent = t;
+      document.getElementById('sync-indicator').className = 'sync-ok';
+      document.getElementById('cal-sync-badge').textContent = t;
+      document.getElementById('cal-status').textContent = '✓ Agenda connecté';
+      document.getElementById('cal-status').className = 'status-msg status-ok';
+      document.getElementById('disconnect-btn').style.display = 'block';
+      render();
+    } else {
+      document.getElementById('sync-indicator').textContent = 'Erreur sync';
+      document.getElementById('sync-indicator').className = 'sync-err';
+      document.getElementById('cal-status').textContent = "Erreur. Vérifiez l'URL.";
+      document.getElementById('cal-status').className = 'status-msg status-err';
+    }
+  };
+  xhr.ontimeout = function() { document.getElementById('sync-indicator').textContent = 'Délai dépassé'; document.getElementById('sync-indicator').className = 'sync-err'; };
+  xhr.onerror   = function() { document.getElementById('sync-indicator').textContent = 'Hors ligne'; document.getElementById('sync-indicator').className = 'sync-err'; };
+  xhr.send();
+}
+function fetchBday() {
+  if (!bdayUrl) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', PROXY + encodeURIComponent(bdayUrl), true);
+  xhr.timeout = XHR_TIMEOUT;
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      lastBdayText = xhr.responseText;
+      bdayEvents = parseIcal(xhr.responseText, new Date(), 'birthday');
+      var n = new Date();
+      document.getElementById('bday-sync-badge').textContent = 'Sync ' + pad(n.getHours()) + ':' + pad(n.getMinutes());
+      document.getElementById('bday-status').textContent = '✓ Anniversaires connectés';
+      document.getElementById('bday-status').className = 'status-msg status-ok';
+      document.getElementById('bday-disconnect-btn').style.display = 'block';
+      render();
+    } else {
+      document.getElementById('bday-status').textContent = 'Erreur. Vérifiez le lien.';
+      document.getElementById('bday-status').className = 'status-msg status-err';
+    }
+  };
+  xhr.ontimeout = function() { document.getElementById('bday-status').textContent = 'Délai dépassé'; };
+  xhr.onerror   = function() { document.getElementById('bday-status').textContent = 'Hors ligne'; };
+  xhr.send();
+}
+function parseIcal(text, targetDate, sourceType) {
+  var tStr = targetDate.getFullYear().toString() + pad(targetDate.getMonth()+1) + pad(targetDate.getDate());
+  var events = [], inEvent = false, ev = {};
+  var lines = text.replace(/\r\n /g,'').replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  var i;
+  for (i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line === 'BEGIN:VEVENT') { inEvent = true; ev = {}; }
+    else if (line === 'END:VEVENT') {
+      if (inEvent && ev.summary && ev.today) events.push(ev);
+      inEvent = false; ev = {};
+    } else if (inEvent) {
+      if (line.indexOf('SUMMARY:') === 0) {
+        ev.summary = line.slice(8).replace(/^\s+|\s+$/g,'');
+      } else if (line.indexOf('DTSTART') === 0) {
+        var val = line.split(':').slice(1).join(':').replace(/^\s+|\s+$/g,'');
+        var dStr = val.replace(/T.*/,'').replace('Z','');
+        if (dStr === tStr) {
+          ev.today = true;
+          if (val.indexOf('T') >= 0) {
+            var tp = val.replace(/.*T/,'').replace('Z','');
+            var h = parseInt(tp.slice(0,2)), m = tp.slice(2,4);
+            if (val.charAt(val.length-1) === 'Z') { h = (h + (-targetDate.getTimezoneOffset()/60) + 24) % 24; }
+            ev.time = pad(Math.floor(h)) + ':' + m; ev.allDay = false;
+          } else { ev.time = 'Toute la journée'; ev.allDay = true; }
+        }
+      }
+    }
+  }
+  return events.map(function(e) {
+    return { id: sourceType + '_' + Math.random(), time: e.time, timeEnd: '', text: e.summary, source: sourceType, allDay: e.allDay };
+  });
+}
+function loadPin() { storedPin = localStorage.getItem('repere_pin') || '1234'; }
+function savePin() {
+  var val = document.getElementById('new-pin').value.replace(/^\s+|\s+$/g,'');
+  var el  = document.getElementById('pin-change-status');
+  if (val.length !== 4 || isNaN(Number(val))) { el.textContent = 'Le code doit contenir exactement 4 chiffres.'; el.className = 'status-msg status-err'; return; }
+  storedPin = val; localStorage.setItem('repere_pin', storedPin);
+  document.getElementById('new-pin').value = '';
+  el.textContent = '✓ Code enregistré'; el.className = 'status-msg status-ok';
+}
+function handleLock() {
+  if (editMode) {
+    editMode = false;
+    document.getElementById('edit-sections').className = '';
+    document.getElementById('lock-btn').textContent = '🔒';
+  } else {
+    pinEntry = ''; updateDots();
+    document.getElementById('pin-err').textContent = '';
+    document.getElementById('pin-overlay').className = 'open';
+  }
+}
+function pk(k) {
+  if (pinEntry.length >= 4) return;
+  pinEntry += k; updateDots();
+  if (pinEntry.length === 4) setTimeout(checkPin, 150);
+}
+function pd() { pinEntry = pinEntry.slice(0,-1); updateDots(); }
+function updateDots() {
+  var i;
+  for (i = 0; i < 4; i++) { document.getElementById('dot'+i).className = i < pinEntry.length ? 'dot on' : 'dot'; }
+}
+function checkPin() {
+  if (pinEntry === storedPin) {
+    closePIN(); editMode = true;
+    document.getElementById('edit-sections').className = 'open';
+    document.getElementById('lock-btn').textContent = '🔓';
+    if (calUrl)  { document.getElementById('cal-url').value  = calUrl;  document.getElementById('disconnect-btn').style.display = 'block'; }
+    if (bdayUrl) { document.getElementById('bday-url').value = bdayUrl; document.getElementById('bday-disconnect-btn').style.display = 'block'; }
+    render();
+  } else {
+    document.getElementById('pin-err').textContent = 'Code incorrect.';
+    pinEntry = ''; updateDots();
+  }
+}
+function closePIN() { document.getElementById('pin-overlay').className = ''; pinEntry = ''; updateDots(); }
+function render() {
+  applyTheme();
+  var now     = new Date();
+  var vd      = getViewDate();
+  var isToday = sameDay(vd, now);
+  var vdStr   = dateStr(vd);
+  var curMins = now.getHours() * 60 + now.getMinutes();
+  var today   = startOfDay(now);
+  document.getElementById('time').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  document.getElementById('day').textContent  = DAYS_LONG[today.getDay()];
+  document.getElementById('date').textContent = today.getDate() + ' ' + MONTHS[today.getMonth()] + ' ' + today.getFullYear();
+  var pill = document.getElementById('consulting-pill');
+  if (!isToday) {
+    document.getElementById('cp-day').textContent = DAYS_SHORT[vd.getDay()] + ' ' + vd.getDate() + ' ' + MONTHS[vd.getMonth()];
+    pill.className = 'show';
+  } else {
+    pill.className = '';
+  }
+  var anchor = document.getElementById('today-anchor');
+  if (isToday) { anchor.className = 'is-today'; anchor.textContent = "✓ Aujourd'hui"; }
+  else         { anchor.className = 'off-today'; anchor.textContent = "↩ Revenir à aujourd'hui"; }
+  buildWeekStrip(now, vd);
+  var label = document.getElementById('section-day-label');
+  var diff  = Math.round((vd - today) / 86400000);
+  if (diff === 0)       label.textContent = "Aujourd'hui";
+  else if (diff === -1) label.textContent = 'Hier';
+  else if (diff ===  1) label.textContent = 'Demain';
+  else if (diff < 0)    label.textContent = 'Il y a ' + Math.abs(diff) + ' jours';
+  else                  label.textContent = 'Dans ' + diff + ' jours';
+  var localForDay = [], i;
+  for (i = 0; i < localReminders.length; i++) {
+    var rem = localReminders[i];
+    if (rem.repeat === 'daily') { localForDay.push(rem); }
+    else if (rem.repeat === 'once' && rem.date === vdStr) { localForDay.push(rem); }
+  }
+  var calForDay  = lastIcalText ? parseIcal(lastIcalText,  vd, 'gcal')     : (isToday ? gcalEvents  : []);
+  var bdayForDay = lastBdayText ? parseIcal(lastBdayText,  vd, 'birthday') : (isToday ? bdayEvents  : []);
+  var all = localForDay.concat(calForDay).concat(bdayForDay).sort(function(a,b) {
+    var am = toMins(a.time), bm = toMins(b.time);
+    if (am === -1) return 1; if (bm === -1) return -1; return am - bm;
+  });
+  var banner = document.getElementById('ecm-banner');
+  var bEmoji = document.getElementById('b-emoji');
+  var bLabel = document.getElementById('b-label');
+  var bText  = document.getElementById('b-text');
+  var bSub   = document.getElementById('b-sub');
+  if (!isToday) {
+    banner.className   = 'b-consult';
+    bEmoji.textContent = '📅';
+    bLabel.textContent = 'Vous consultez';
+    bText.textContent  = DAYS_LONG[vd.getDay()] + ' ' + vd.getDate() + ' ' + MONTHS[vd.getMonth()];
+    bSub.textContent   = "Ce n'est pas aujourd'hui";
+  } else {
+    var activeEvt = null;
+    for (i = 0; i < all.length; i++) {
+      var r = all[i];
+      if (r.source === 'birthday') continue;
+      var sm = toMins(r.time);
+      var em = r.timeEnd ? toMins(r.timeEnd) : sm + 60;
+      if (sm !== -1 && sm <= curMins && curMins <= em) { activeEvt = r; break; }
+    }
+    if (activeEvt) {
+      banner.className   = 'b-active';
+      bEmoji.textContent = currentPeriodIcon;
+      bLabel.textContent = 'En ce moment';
+      bText.textContent  = activeEvt.text;
+      bSub.textContent   = activeEvt.timeEnd ? "jusqu'à " + activeEvt.timeEnd : '';
+    } else {
+      banner.className   = 'b-quiet';
+      bEmoji.textContent = currentPeriodIcon;
+      bLabel.textContent = 'En ce moment';
+      bText.textContent  = 'Vous êtes à jour';
+      var nextEvt = null;
+      for (i = 0; i < all.length; i++) {
+        if (all[i].source === 'birthday') continue;
+        var sm2 = toMins(all[i].time);
+        if (sm2 !== -1 && sm2 > curMins) { nextEvt = all[i]; break; }
+      }
+      if (nextEvt) { bSub.textContent = nextEvt.text + ' à ' + nextEvt.time; }
+      else { bSub.textContent = now.getHours() >= 21 ? 'Bonne nuit' : "Rien d'autre prévu aujourd'hui"; }
+    }
+  }
+  var list = document.getElementById('reminders-list');
+  if (!all.length) { list.innerHTML = '<div class="empty-state">Aucun événement ce jour-là.</div>'; return; }
+  var html = '';
+  for (i = 0; i < all.length; i++) {
+    var r      = all[i];
+    var rStart = toMins(r.time);
+    var rEnd   = r.timeEnd ? toMins(r.timeEnd) : (rStart !== -1 ? rStart + 60 : -1);
+    var isPast    = isToday && rEnd !== -1 && rEnd < curMins && r.source !== 'birthday';
+    var isCurrent = isToday && rStart !== -1 && rStart <= curMins && curMins <= rEnd && r.source !== 'birthday';
+    var statusText = r.source === 'birthday' ? 'Anniversaire' : (isPast ? 'Terminé' : (isCurrent ? 'Maintenant' : 'Ensuite'));
+    var cls = '';
+    if (r.source === 'birthday') { cls = 'r-birthday'; }
+    else if (r.source === 'gcal') { cls = 'r-gcal' + (isPast ? ' past' : '') + (isCurrent ? ' r-current' : ''); }
+    else { cls = isPast ? 'past' : (isCurrent ? 'r-current' : ''); }
+    var timeDisp = (r.allDay || r.time === 'Toute la journée') ? '🎂' : r.time;
+    var meta = r.source === 'local' ? (r.repeat === 'daily' ? 'Quotidien' : 'Ce jour') : '';
+    var tag = '';
+    if (r.source === 'gcal')     tag = '<div class="r-source">Google Agenda</div>';
+    if (r.source === 'birthday') tag = '<div class="r-bday-tag">🎂 Anniversaire</div>';
+    var delBtn = '';
+    if (editMode && r.source === 'local') {
+      delBtn = '<button class="r-delete" onclick="askDelete(' + r.id + ',\'' + r.text.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + '\')">✕</button>';
+    }
+    html += '<div class="reminder ' + cls + '">'
+      + '<div class="r-time">' + timeDisp + '</div>'
+      + '<div class="r-body">'
+      + '<div class="r-text">' + r.text + '</div>'
+      + (meta ? '<div style="font-size:13px;opacity:0.55;margin-top:3px;">' + meta + '</div>' : '')
+      + '<div class="r-status">' + statusText + '</div>'
+      + tag + '</div>'
+      + delBtn + '</div>';
+  }
+  list.innerHTML = html;
+}
+var swipeStartX = 0;
+document.addEventListener('touchstart', function(e) { swipeStartX = e.touches[0].clientX; }, false);
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - swipeStartX;
+  if (Math.abs(dx) > 70) { changeDay(dx < 0 ? 1 : -1); }
+}, false);
+loadPin(); loadLocal();
+calUrl  = localStorage.getItem('repere_calurl')  || '';
+bdayUrl = localStorage.getItem('repere_bdayurl') || '';
+render();
+if (calUrl)  fetchIcal();
+if (bdayUrl) fetchBday();
+setInterval(render, 15000);
+setInterval(function() { if (calUrl) fetchIcal(); if (bdayUrl) fetchBday(); }, 5 * 60 * 1000);
+</script>
+</body>
+</html>
